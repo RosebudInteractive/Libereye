@@ -1,0 +1,57 @@
+{literal}
+<script>
+$(function() {
+	var tabs = $('.showings-schedule-tab');
+	tabs.click(function(){
+		tabs.removeClass('active');
+		$(this).addClass('active');
+		$('.showings-schedule-tables table').attr('hidden', 'hidden');
+		$('.showings-schedule-tables table#'+$(this).attr('for')).attr('hidden', null);
+	});
+});
+</script>
+{/literal}
+
+<div class="showings-schedule">
+	<header class="showings-schedule-header">
+		<h2 class="showings-schedule-title">Расписание показов</h2>
+	</header>
+	<div class="showings-schedule-days tabs">
+	{foreach from=$aProduct.movies item=aItem key=day name=sch}
+		<label for="day-{$day}" class="showings-schedule-tab tab{if $smarty.foreach.sch.first} active{/if}">
+			<span class="showings-schedule-tab-date">{$day|date_format:"%d.%m"}</span>
+			<span class="showings-schedule-tab-small">{$day|date_format:"%A"}</span>
+		</label>
+	{/foreach}		
+	</div>
+	<div class="showings-schedule-tables">
+	{foreach from=$aProduct.movies item=aItem key=day name=sch}
+		<table id="day-{$day}" class="showings-schedule-table{if $smarty.foreach.sch.first} active{/if}" {if !$smarty.foreach.sch.first}hidden="hidden"{/if}>
+			<tbody>
+			{foreach from=$aItem item=aSubItems}
+			{if $aSubItems.1d}
+			<tr class="showings-schedule-showing">
+				<td class="showings-schedule-date">{$aSubItems.t}{if $aSubItems.i}<br> {foreach from=$aSubItems.i item=sImage}<a data-lightbox="m-{$day}-{$aSubItems.m}" data-title="{$aSubItems.t}" href="/imgs/{$sImage}"><img alt="{$aSubItems.t}" title="{$aSubItems.t}" src="/imgs/t{$sImage}" style="padding-right:5px;height:20px" /></a>{/foreach}{/if}</td>
+				<td class="showings-schedule-cinema"><span>{$aSubItems.1d}</span></td>
+			</tr>
+			{/if}
+			{if $aSubItems.2d}
+			<tr class="showings-schedule-showing">
+				<td class="showings-schedule-date">{$aSubItems.t}{if $aSubItems.i}<br> {foreach from=$aSubItems.i item=sImage}<a data-lightbox="m-{$day}-{$aSubItems.m}" data-title="{$aSubItems.t}" href="/imgs/{$sImage}"><img alt="{$aSubItems.t}" title="{$aSubItems.t}" src="/imgs/t{$sImage}" style="padding-right:5px;height:20px" /></a>{/foreach}{/if}</td>
+				<td class="showings-schedule-cinema"><span>{$aSubItems.2d}</span></td>
+				<td class="showings-schedule-features"><span class="showing-schedule-feature-2d">2D</span></td>
+			</tr>
+			{/if}
+			{if $aSubItems.3d}
+			<tr class="showings-schedule-showing">
+				<td class="showings-schedule-date">{$aSubItems.t}{if $aSubItems.i}<br> {foreach from=$aSubItems.i item=sImage}<a data-lightbox="m-{$day}-{$aSubItems.m}" data-title="{$aSubItems.t}" href="/imgs/{$sImage}"><img alt="{$aSubItems.t}" title="{$aSubItems.t}" src="/imgs/t{$sImage}" style="padding-right:5px;height:20px" /></a>{/foreach}{/if}</td>
+				<td class="showings-schedule-cinema"><span>{$aSubItems.3d}</span></td>
+				<td class="showings-schedule-features"><span class="showing-schedule-feature">3D</span></td>
+			</tr>
+			{/if}
+			{/foreach}		
+			</tbody>
+		</table>
+	{/foreach}		
+	</div>
+</div>

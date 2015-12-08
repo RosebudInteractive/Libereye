@@ -1,0 +1,55 @@
+<!--<aside class="aside-col">
+<div class="widget ad">
+	<div class="banner aside big">
+	</div>
+</div>
+</aside>-->
+			
+<div class="main-col">
+
+				
+				<div class="profile-container">
+				<header class="profile-header">
+				<h1 class="profile-name">{$aPhrases['Password recovery']}</h1>
+					</header>
+					
+					{if $bSuccess}
+					<form enctype="multipart/form-data" action="" method="POST" class="profile-header">
+					<div class="profile-data">	
+				    {$aPhrases['The new password has been sent']}
+				    </div>
+				</form>
+			{else}
+					<form enctype="multipart/form-data" action="" method="POST" class="profile-header">
+					
+	
+		<input type="hidden" name="act" value="login" />
+		<div class="profile-data">	
+			{if $aErrors}{literal}<style>.profile-header .errorlist:after{border-width:0;}</style>{/literal}<span class="info"><ul class="errorlist">{foreach from=$aErrors item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
+			
+			
+			<div>
+				<label for="id_email">{$aPhrases['Email']}<span class="required">*</span></label>
+				<span class="offset"><input id="id_email" maxlength="75" name="email"  type="text" value="{$sLogin}">
+					<span class="info"></span>
+				</span>
+			</div>
+			
+		</div>
+		<footer style="width: 550px;">
+			<input type="submit" value="{$aPhrases['Send']}" class="button big">
+
+		
+		
+		</footer>
+		
+
+	
+</form>
+{/if}
+
+					
+				</div>
+				
+			</div>
+			<br>

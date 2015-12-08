@@ -1,0 +1,44 @@
+<aside class="aside-col">
+<div class="widget ad">
+	<div class="banner aside big">
+	</div>
+</div>
+<div class="widget ad">
+	<div class="banner aside big">
+	</div>
+</div>
+</aside>
+
+<div class="main-col">
+				<header class="search-header">
+					<form class="input big">
+						<i class="icon-search inside-left"></i>
+						<input type="text" autofocus="" placeholder="Поиск…" id="search-input" value="{$sQuery}" class="big search" name="q">
+					</form>
+					{if $aPaging.totalPages > 1}
+					<div class="static-pagination">
+						<nav data-pages="{$aPaging.totalPages}" class="pagination is-stuck" data-sticky-id="0" style="position: fixed; top: 10px; width: 353px; left: 728.85px; margin-left: 0px;">
+							{if $aPaging.firstUrl}<a class="pagination-link {if $iPage==1}inactive{/if}" href="{$aPaging.firstUrl}" data-page="1">← <span>в начало</span></a>{/if}
+							{foreach from=$aPaging.urls key=sUrl item=iPage}
+							<a class="pagination-link {if $aPaging.current==$iPage}active{/if}" data-page="{$iPage}" href="{$sUrl}"><span>{$iPage}</span></a>
+							{/foreach}
+							{if $aPaging.lastUrl}<a class="pagination-link {if $iPage==$aPaging.totalPages}inactive{/if}" href="{$aPaging.lastUrl}" data-page="{$aPaging.totalPages}"><span>в конец</span> →</a>{/if}
+						</nav>
+					</div>
+					{/if}
+				</header>
+				<div class="search-results-container">
+					<ul class="post-list-big feed">
+					{foreach from=$aProducts item=aItem}<li>
+					{if $aItem.image}<a class="thumb" href="/{$aCity.alias}/place/{$aItem.alias}/" rel="nofollow"><img class="centrize old" src="/images/{$aItem.image}" title="{$aItem.title}" alt="{$aItem.title}" /></a>{/if}
+					<div class="desc">
+	<h4>
+		<a class="search-item-title-link" title="{$aItem.title}" href="/{$aCity.alias}/place/{$aItem.alias}/"><span>{$aItem.title}</span></a>
+	</h4>
+	
+	<p>{$aItem.annotation}</p>
+
+</div></li>{/foreach}</ul>
+				</div>
+				
+			</div>

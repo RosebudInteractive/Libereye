@@ -1,0 +1,20 @@
+<div class="main-col">
+    <div class="profile-container">
+        <header class="profile-header">
+            <h1 class="profile-name">{$aPhrases['Register']}</h1>
+        </header>
+        <form enctype="multipart/form-data" action="" method="POST" class="profile-header">
+
+            <div class="content">
+                {if $bConfirmed}
+                    {$aPhrases['Thank you for registering']}
+                {else}
+                    {$aPhrases['An incorrect code is confirmed']}
+                {/if}
+
+            </div>
+
+        </form>
+    </div>
+</div>
+<br>

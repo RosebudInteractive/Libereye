@@ -1,0 +1,42 @@
+Options -Indexes
+
+ErrorDocument 404 /page/404.html
+
+RewriteEngine On
+
+RewriteCond %{HTTP_HOST} ^libereye.com
+RewriteRule (.*) https://www.libereye.com/$1 [R=301,L]
+
+RewriteCond %{SERVER_PORT} !=443
+RewriteCond %{HTTP_HOST} ^www\.libereye\.com$ [NC]
+RewriteRule ^$ https://www.libereye.com%{REQUEST_URI} [R,L]
+
+#RewriteCond %{HTTPS} on
+#RewriteCond %{HTTP_HOST} ^libereye.com
+#RewriteRule (.*) https://www.libereye.com/$1 [R=301,L]
+
+#RewriteCond %{HTTPS} off
+#RewriteCond %{HTTP_HOST} ^libereye.com
+#RewriteRule (.*) http://www.libereye.com/$1 [R=301,L]
+
+#RewriteRule ^$ /visitor/index.php [L]
+RewriteRule ^$ /visitor/index.php/part_public/sect_page/?content=main [L,QSA]
+RewriteRule ^([a-z]{2})/$ /visitor/index.php/part_public/sect_page/?lang=$1&content=main [L,QSA]
+RewriteRule ^([a-z]{2})/page/([^/]+)/?$ /visitor/index.php/part_public/sect_page/?lang=$1&content=$2 [L,QSA]
+RewriteRule ^([a-z]{2})/search/$ /visitor/index.php/part_public/sect_search/?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/register/$ /visitor/index.php/part_public/sect_register/?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/register/success/$ /visitor/index.php/part_public/sect_register/success_1?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/login/$ /visitor/index.php/part_public/sect_login?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/sitemap/$ /visitor/index.php/part_public/sect_sitemap?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/account/profile/$ /visitor/index.php/part_private/sect_profile/?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/account/logout/$ /visitor/index.php/part_private/sect_logout/?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/account/remind/$ /visitor/index.php/part_public/sect_remind/?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/account/remind/success/$ /visitor/index.php/part_public/sect_remind/success_1?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/account/booking/$ /visitor/index.php/part_private/sect_booking?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/account/meetings/$ /visitor/index.php/part_private/sect_meetings?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/account/purchases/$ /visitor/index.php/part_private/sect_purchases?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/account/mypurchases/$ /visitor/index.php/part_private/sect_mypurchases?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/account/purchase/add/$ /visitor/index.php/part_private/sect_purchase?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/account/purchase/edit/$ /visitor/index.php/part_private/sect_purchase?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/confirm/$ /visitor/index.php/part_public/sect_confirm?lang=$1 [L,QSA]
+

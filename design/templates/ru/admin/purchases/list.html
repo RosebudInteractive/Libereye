@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="design/js/extjs/resources/css/ext-all-gray.css" /> 
+<script type="text/javascript" src="design/js/extjs/bootstrap.js"></script>
+<script type="text/javascript" src="design/js/extjs/locale/ext-lang-ru.js"></script>
+<script>var aLoginUserData = {$aLoginUserDataJson};</script>
+<script language='JavaScript' src='design/templates/ru/admin/purchases/purchases.js'></script>
+
+<form name="list" action="{url link='admin.accounts.list'}" method="POST">
+		<input type="hidden" value="" name="act">
+		<input type="hidden" value="0" name="id">
+</form>		
+
+<div id="main">
+	<div id="left" style="width:0;">
+	</div>
+	<div id="middle2" style="margin-left: 0px;">
+	{include file="blocks/errors.html"}
+			<div id="purchases" style="height:100%"></div>
+	</div>
+</div>

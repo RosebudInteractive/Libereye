@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{foreach from=$aContentsTree item=aItem}
+<url>
+  <loc>{$sBaseUrl}{if $aItem.uri!='main.html'}{$aItem.uri}{/if}</loc>
+  <changefreq>monthly</changefreq>
+  <priority>{if $aItem.uri=='main.html'}1.0{else}0.9{/if}</priority>
+</url>
+{foreach from=$aItem.childs item=aChild}
+<url>
+  <loc>{$sBaseUrl}{if $aItem.uri!='main.html'}{$aChild.uri}{/if}</loc>
+  <changefreq>monthly</changefreq>
+  <priority>{if $aItem.uri=='main.html'}1.0{else}0.9{/if}</priority>
+</url>
+{/foreach}   
+{/foreach}
+</urlset>

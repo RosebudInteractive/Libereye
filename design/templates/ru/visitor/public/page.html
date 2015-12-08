@@ -1,0 +1,63 @@
+<!--<aside class="post-big-aside">
+		<div class="widget ad">
+			<div class="banner aside big">
+			</div>
+		</div>
+		<div class="widget ad">
+			<div class="banner aside big">
+			</div>
+		</div>
+		<br>
+</aside>-->
+{if $aPage.uri=='main'}
+{$aPage.content}
+{else}
+<article class="post-big post-big-single" style="margin-right:0;">
+	<header class="post-big-header">
+		<nav itemprop="breadcrumb" class="page-crumbs">
+			<ul>
+				<li itemtype="http://data-vocabulary.org/Breadcrumb" itemscope=""><a itemprop="url" title="LiberEye" href="/"><span itemprop="title">LiberEye</span></a></li>
+				<li>{$aPage.title}</li>
+			</ul>
+		</nav>
+		<h1>{$aPage.meta_h1}</h1>
+	</header>
+	<div class="post-big-content" style="padding: 10px; margin:10px;">
+		{$aPage.content}
+        {if $aChildPages}
+        <div class="main-col">
+            <div class="feeds-container">
+                <div data-feed="feed" data-wait-load="true" data-col-min-width="260" data-autoresize="true" class="feed feed-news">
+                    {foreach from=$aChildPages item=aItem}
+                    <article class="post post-news"><div class="post-wrapper">
+
+                        <div class="post-content">
+                            <div class="post-news-meta-top">
+                                <time title="{$aItem.cdate_time}" class="post-news-date">
+                                    {$aItem.cdate|date_format:"%d/%m/%Y %H:%M"}
+                                </time>
+                            </div>
+                            <header class="post-header">
+                                <h3 class="post-title post-title-small"><a title="{$aItem.title}" class="post-title-link" href="/page/{$aItem.uri}"><span>{$aItem.title}</span></a></h3>
+                            </header>
+                            <div class="post-description">
+                                <p>{$aItem.description}</p>
+                            </div>
+                            <div class="post-more-button-container"><a class="post-more-button" href="/page/{$aItem.uri}">Читать больше </a></div>
+                        </div>
+                        <footer class="post-footer"></footer>
+                    </div>
+                    </article>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+        {/if}
+	</div>
+</article>
+</div>
+
+
+<br>
+<br>
+{/if}

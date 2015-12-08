@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="design/js/extjs/resources/css/ext-all-gray.css" /> 
+<script type="text/javascript" src="design/js/extjs/bootstrap.js"></script>
+<script type="text/javascript" src="design/js/extjs/locale/ext-lang-ru.js"></script>
+<script>var aLoginUserData = {$aLoginUserDataJson};</script>
+<script language='JavaScript' src='design/templates/ru/admin/phrases/phrases.js'></script>
+
+<form name="list" action="{url link='admin.phrases.list'}" method="POST">
+		<input type="hidden" value="" name="act">
+		<input type="hidden" value="0" name="id">
+</form>		
+
+<div id="main">
+	<div id="left" style="width:0;">
+	</div>
+	<div id="middle2" style="margin-left: 0px;">
+	<!--<a href="{url link='admin.phrases.booking_edit'}">Добавить бронирование</a><br><br>-->
+	{include file="blocks/errors.html"}
+			<div id="phrases" style="height:100%"></div>
+	</div>
+</div>

@@ -1,0 +1,12 @@
+{if $aPaging.totalPages}
+{$aPhrases['Pages']}:&nbsp;
+{if $aPaging.firstUrl}<a href="{$aPaging.firstUrl}">{$aPhrases['First']}</a> &nbsp;{/if}
+{if $aPaging.prevUrl}<a href="{$aPaging.prevUrl}">&lt; {$aPhrases['Previous']}</a> &nbsp;{/if}
+{foreach from=$aPaging.urls key=sUrl item=iPage}
+{if $sUrl}<a href="{$sUrl}">{$iPage}</a>{else}{$iPage}{/if}
+{if $aPaging.totalPages > 1}&nbsp;{/if}
+{/foreach}
+{if $aPaging.nextUrl} <a href="{$aPaging.nextUrl}">{$aPhrases['Next']} &gt;</a>&nbsp;{/if}
+{if $aPaging.lastUrl} <a href="{$aPaging.lastUrl}">{$aPhrases['Last']}</a>{/if}
+{else}
+{/if}

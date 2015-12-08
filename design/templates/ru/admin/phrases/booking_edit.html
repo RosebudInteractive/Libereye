@@ -1,0 +1,136 @@
+<form name="list" action="{$sUrl}" method="POST">
+		<input type="hidden" value="" name="act">
+		<input type="hidden" value="0" name="id">
+</form>		
+
+<div id="main">
+<!-- left menu -->
+<div id="left">
+	<div id="left_menu" class="left bluediv">
+		<div class="top">
+			<div>
+
+				<div>
+					<!--header-->
+				</div>
+			</div>
+		</div>
+		<div class="header">
+			<div class="wrap">
+				<div><a href="/admin/index.php/part_bookings" class="n"><img src="/design/pic/admin/up.gif" class="icon" alt="&#8592;" /></a><a href="{url link='admin.bookings'}">Назад</a></div>
+			</div>
+		</div>
+		<div class="middle">
+			<div class="list_swap" id="list_swap">
+				
+		  </div>
+		</div>
+		<div class="bottom">
+			<div>
+				<div>
+					<!--footer-->
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="bluediv">
+		<div class="topsm">
+			<div>
+				<div>
+					<!--header-->
+				</div>
+			</div>
+
+		</div>
+		<div class="middle" style="padding: 2px">
+			<div class="menuitem"><img src="/design/pic/admin/floppy.gif" class="icon green big" alt="&#9632;" /><a href="#" onclick="document.content.submit(); return false;" class="green">Cохранить</a></div>
+		</div>
+		<div class="bottom">
+			<div>
+				<div>
+
+					<!--footer-->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="tip" class="tipdiv">
+		<div class="top">
+			<div>
+
+				<div>
+					<!--header-->
+				</div>
+			</div>
+		</div>
+		<div class="header">
+			<div class="wrap"><img src="/design/pic/admin/bulb.gif" alt="!" class="icon big dark" /><span class="dark"><strong>Подсказка</strong></span></div>
+		</div>
+
+		<div class="middle">
+			<div class="wrap" id="tiptext">Отредактируйте и нажмите &laquo;Сохранить&raquo;</div>
+		</div>
+		<div class="bottom">
+			<div>
+				<div>
+					<!--footer-->
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+<hr class="hidden" />
+<!-- //left menu -->
+<!-- middle -->
+<div id="middle2">
+	
+	{include file="blocks/errors.html"}
+
+	<div id="hk"><a href="{url link='admin.bookings'}">Пользователи</a>&nbsp;&gt;&nbsp;{if $aBooking.booking_id}Редактирование пользователя: {$aBooking.email}{else}Добавление пользователя{/if} <hr /></div>
+	<h1 class="first">{if $aBooking.booking_id}Редактирование пользователя: {$aContent.title}{else}Добавление пользователя{/if}</h1>
+
+<form method="POST" action="{$sUrl}" onsubmit="{$sJs}" enctype="multipart/form-data" name="content">
+<input type="hidden" name="act" value="{if $aBooking.booking_id}Сохранить{else}Создать{/if}" />
+
+<fieldset>
+
+	<div id="ru_fields">
+        <label for="status"><span class="def">Роль:</span>
+            <select name="aBooking[status]" id="status">{html_options options=$aStatuses selected=$aBooking.status}</select>
+        </label><br />
+			<label for="title"><span class="def">Имя:</span>
+			<input type="text"  id="title" name="aBooking[fname]" value="{$aBooking.fname}" />
+		</label><br />
+			<label for="uri"><span class="def">Email:</span>
+			<input type="text"  name="aBooking[email]" value="{$aBooking.email}" />
+		</label><br />
+			<label for="uri"><span class="def">Пароль{if !$aBooking.booking_id}<span class="red_star">*</span>{/if}:</span>
+			<input type="password"  name="aBooking[pass]" value="" />
+		</label><br />
+			<label for="uri"><span class="def">Повторить пароль{if !$aBooking.booking_id}<span class="red_star">*</span>{/if}:</span>
+			<input type="password"  name="pass_confirm" value="" />
+		</label><br />
+
+				
+		
+
+
+
+
+
+		<label class="pad r2">
+
+			<input type="submit" class="button" name="data" value="Сохранить" />
+		</label><br />
+
+
+</fieldset></form>
+
+</div>
+<!-- //middle --><div class="clr"></div>
+
+</div>

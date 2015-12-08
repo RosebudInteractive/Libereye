@@ -1,0 +1,144 @@
+<form name="list" action="{$sUrl}" method="POST">
+		<input type="hidden" value="" name="act">
+		<input type="hidden" value="0" name="id">
+</form>		
+
+<div id="main">
+<!-- left menu -->
+<div id="left">
+	<div id="left_menu" class="left bluediv">
+		<div class="top">
+			<div>
+
+				<div>
+					<!--header-->
+				</div>
+			</div>
+		</div>
+		<div class="header">
+			<div class="wrap">
+				<div><a href="/admin/index.php/part_news" class="n"><img src="/design/pic/admin/up.gif" class="icon" alt="&#8592;" /></a><a href="{url link='admin.news.list'}">Назад</a></div>
+			</div>
+		</div>
+		<div class="middle">
+			<div class="list_swap" id="list_swap">
+				
+		  </div>
+		</div>
+		<div class="bottom">
+			<div>
+				<div>
+					<!--footer-->
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="bluediv">
+		<div class="topsm">
+			<div>
+				<div>
+					<!--header-->
+				</div>
+			</div>
+
+		</div>
+		<div class="middle" style="padding: 2px">
+			<div class="menuitem"><img src="/design/pic/admin/floppy.gif" class="icon green big" alt="&#9632;" /><a href="#" onclick="document.content.submit(); return false;" class="green">Cохранить</a></div>
+		</div>
+		<div class="bottom">
+			<div>
+				<div>
+
+					<!--footer-->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="tip" class="tipdiv">
+		<div class="top">
+			<div>
+
+				<div>
+					<!--header-->
+				</div>
+			</div>
+		</div>
+		<div class="header">
+			<div class="wrap"><img src="/design/pic/admin/bulb.gif" alt="!" class="icon big dark" /><span class="dark"><strong>Подсказка</strong></span></div>
+		</div>
+
+		<div class="middle">
+			<div class="wrap" id="tiptext">Отредактируйте и нажмите &laquo;Сохранить&raquo;</div>
+		</div>
+		<div class="bottom">
+			<div>
+				<div>
+					<!--footer-->
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+<hr class="hidden" />
+<!-- //left menu -->
+<!-- middle -->
+<div id="middle2">
+	
+	{include file="blocks/errors.html"}
+
+	<div id="hk"><a href="{url link='admin.news'}">Новости</a>&nbsp;&gt;&nbsp;{if $aNews.news_id}Редактирование новости: {$aNews.email}{else}Добавление новости{/if} <hr /></div>
+	<h1 class="first">{if $aNews.news_id}Редактирование новости: {$aContent.title}{else}Добавление новости{/if}</h1>
+
+<form method="POST" action="{$sUrl}" onsubmit="{$sJs}" enctype="multipart/form-data" name="content">
+<input type="hidden" name="act" value="{if $aNews.news_id}Сохранить{else}Создать{/if}" />
+
+<fieldset>
+
+	<div id="ru_fields">
+			<label for="city_id"><span class="def">Город:</span>
+			<select name="aNews[city_id]" id="city_id">{html_options options=$aCities selected=$aNews.city_id}</select>
+		</label><br />
+		<label for="title"><span class="def">Заголовок:</span>
+			<input type="text"  id="title" name="aNews[title]" value="{$aNews.title}" />
+		</label><br />
+		<label for="image"><span class="def">Картинка:</span>
+			<input type="file"  id="image" name="image" style="background: none repeat scroll 0 0 rgba(0, 0, 0, 0);border: 0 none;height: auto;" />
+		</label><br />
+		
+		{if $aNews.image}<img title="{$aNews.name_rus}" src="/images/{$aNews.image}" style="padding:1em 0 0 10em;clear:both;max-width:300px;" ><br>
+
+			<input type="checkbox" name="image_delete" id="image_delete" style="width: 264px; background: none repeat scroll 0 0 rgba(0, 0, 0, 0);border: 0 none;height: auto;" />
+			<label for="image_delete" style="display:inline;background: none repeat scroll 0 0 rgba(0, 0, 0, 0);border: 0 none;height: auto;width:auto;">Удалить картинку</label><br>
+{/if}
+		
+		<div class="clr"></div>
+			
+		<label class="pad" for="text">Аннотация</span><br />
+			<textarea style="height: 200px; font-family: 'Courier New', Courier, monospace; font-size: 13px; background: url(/design/pic/admin/html_textarea.png) 0 0 repeat; padding: 5px;; max-width: 99%; width: 99%"  id="text" name="aNews[annotation]" class="allow_tab mceAdvanced">{$aNews.annotation}</textarea>
+		</label><br />
+
+		<div class="clr"></div>
+			
+		<label class="pad" for="full_news">Полный текст новости</span><br />
+			<textarea style="height: 400px; font-family: 'Courier New', Courier, monospace; font-size: 13px; background: url(/design/pic/admin/html_textarea.png) 0 0 repeat; padding: 5px;; max-width: 99%; width: 99%"  id="full_news" name="aNews[full_news]" class="allow_tab mceAdvanced">{$aNews.full_news}</textarea>
+		</label><br />
+
+		<label class="pad r2">
+
+			<input type="submit" class="button" name="data" value="{if $aNews.news_id}Сохранить{else}Создать{/if}" />
+		</label><br />
+
+
+</fieldset></form>
+
+</div>
+<!-- //middle --><div class="clr"></div>
+
+</div>
+
+
+

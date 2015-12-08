@@ -1,0 +1,11 @@
+{if $aPaging.totalPages>1}
+<div class="paging">
+	{if $aPaging.firstUrl}<a class="next" href="{$aPaging.firstUrl}">&lt;&lt;</a>{/if}
+	{if $aPaging.prevUrl}<a class="next" href="{$aPaging.prevUrl}">&lt;</a>{/if}
+	{foreach from=$aPaging.urls key=sUrl item=iPage}
+	{if $sUrl}<a class="next" href="{$sUrl}">{$iPage}</a>{else}<span>{$iPage}</span>{/if}
+	{/foreach}
+	{if $aPaging.nextUrl} <a class="next" href="{$aPaging.nextUrl}">&gt;</a>{/if}
+	{if $aPaging.lastUrl} <a class="next" href="{$aPaging.lastUrl}">&gt;&gt;</a>{/if}
+</div>
+{/if}

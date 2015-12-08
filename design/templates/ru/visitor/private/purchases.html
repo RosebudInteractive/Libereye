@@ -1,0 +1,83 @@
+{literal}
+<script>
+    function delItem(id) {
+        if (confirm('{/literal}{$aPhrases['Are you sure you want to delete purchase']}{literal} #'+id)){
+            $('#purId').val(id);
+            $('#formPur').submit();
+        }
+        return false;
+    }
+</script>
+{/literal}
+
+{literal}
+<script src="/design/js/lightbox/js/lightbox.min.js"></script>
+<link href="/design/js/lightbox/css/lightbox.css" rel="stylesheet" />
+{/literal}
+
+
+<!--
+<aside class="aside-col">
+    <div class="widget ad">
+        <div class="banner aside big">
+        </div>
+    </div>
+</aside>-->
+
+<div class="main-col">
+
+
+    <div class="profile-container">
+        <header class="profile-header">
+            <h1 class="profile-name">{$aPhrases['Shopping clients']}</h1>
+        </header>
+
+
+
+        <form id="formPur" action="" method="POST" class="profile-header" style="padding-top:0px;">
+
+            <input type="hidden" name="act" value="del" />
+            <input type="hidden" name="id" id="purId" value="" />
+            <div class="profile-data" style="margin-left:30px;">
+                {if $aErrors}<span class="info"><ul class="errorlist">{foreach from=$aErrors item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
+                {if $aSessErr}{literal}{/literal}<span class="info"><ul class="help-text">{foreach from=$aSessErr item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
+
+                <table width="100%" class="purchases">
+                    <tr valign="top"  class="column-header">
+                        <td width="70">{$aPhrases['Number']}</td>
+                        <td width="155">{$aPhrases['Date']}</td>
+                        <td width="100">{$aPhrases['Client']}</td>
+                        <td>{$aPhrases['Description']}</td>
+                        <td width="120">{$aPhrases['Price']}</td>
+                        <td width="70">{$aPhrases['VAT']}</td>
+                        <td width="115">{$aPhrases['Delivery']}</td>
+                        <td width="120">{$aPhrases['Total']}</td>
+                        <td width="100">{$aPhrases['Status']}</td>
+                        <td width="100"></td>
+                    </tr>
+                    {foreach from=$aPurchases item=aItem}
+                    <tr valign="top">
+                        <td>{$aItem.purchase_id}</td>
+                        <td>{$aItem.cdate|date_format:'%d/%m/%Y %H:%M'}</td>
+                        <td><span title="{$aItem.fname} ({$aItem.email})">{$aItem.fname}</span></td>
+                        <td>{$aItem.description}{if $aPurchaseImages[$aItem.purchase_id]}<p>{foreach from=$aPurchaseImages[$aItem.purchase_id] item=aImage}<a class="img" href="/images/purchase/{$aImage.name}" target="_blank"  data-lightbox="gallery[{$aItem.purchase_id}]"><img src="/images/purchase/{$aImage.name}" height="30" ></a> {/foreach}</p>{/if}</td>
+                        <td>{$aItem.price}  {$aItem.currency}</td>
+                        <td>{$aItem.vat}%</td>
+                        <td>{$aItem.delivery} {$aItem.currency}</td>
+                        <td>{$aItem.amount} {$aItem.currency}</td>
+                        <td>{$aItem.status}</td>
+                        <td>{if $aItem.status!='paid'}<a href="/{$aLanguage.alias}/account/purchase/edit/?id={$aItem.purchase_id}">{$aPhrases['Edit']}</a> <a href="#" onclick="return delItem({$aItem.purchase_id});">{$aPhrases['Delete']}</a>{/if}</td>
+                    </tr>
+                    {/foreach}
+                    <tr  class="column-header"><td colspan="16" align="left" class="text">{include file='blocks/pager.html'}</td></tr>
+                </table>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+<br>
+			

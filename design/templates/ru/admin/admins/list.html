@@ -1,0 +1,68 @@
+<form name="list" action="{$sUrl}" method="POST">
+		<input type="hidden" value="" name="act">
+		<input type="hidden" value="0" name="id">
+</form>		
+
+{include file="blocks/errors.html"}
+
+
+<div id="main">
+<div id="left">
+	<div class="left bluediv" id="left_menu">
+		<div class="top">
+			<div>
+
+				<div>
+					<!--header-->
+				</div>
+			</div>
+		</div>
+		<div class="header">
+			<div class="wrap">
+				<div>
+				<a class="n" href="{url link='admin.admins.admin_edit'}"><img alt="+" class="icon big green" src="/design/pic/admin/plusg.gif"></a><a href="{url link='admin.admins.admin_edit'}">Добавить админа</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="bottom">
+			<div>
+				<div>
+					<!--footer-->
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+
+</div>
+
+<div id="middle2">
+
+
+<h1>Вы редактируете раздел «Администраторы»</h1>
+<table class="table1" width="99%">
+	<thead>
+		<tr>
+		<td class="l" align="right" width="26" style="width: 34px; "><a href="{$aSorting.account_id.url}" class="sortheader{if $aSorting.account_id.img=='up.gif' or  $aSorting.account_id.img=='down.gif'} act{/if}">ID{if $aSorting.account_id.img=='up.gif'}&nbsp;&#9650;{elseif $aSorting.account_id.img=='down.gif'}&nbsp;&#9660;{/if}</a></td>
+		<td width="40%" style="width: 410px; "><a href="{$aSorting.annotation.url}" class="sortheader{if $aSorting.annotation.img=='up.gif' or  $aSorting.annotation.img=='down.gif'} act{/if}">Логин{if $aSorting.annotation.img=='up.gif'}&nbsp;&#9650;{elseif $aSorting.annotation.img=='down.gif'}&nbsp;&#9660;{/if}</a></td>
+		<td style="width: 68px; "><td class="r" width="20%" style="width: 210px; "></tr>
+	</thead>
+	<tbody>
+		{foreach from=$aAdmins item=aItem}
+		<tr class="h1{if !($key%2)} o{/if}">
+			<td class="l" align="right">{$aItem.account_id}</td>
+			<td align="left" class="href"><a href="{url link='admin.admins.admin_edit' id=$aItem.account_id}">{$aItem.email}</a></td>
+			<td align="center"><div style="width: 55px"><a href="#" onclick="if (confirm('Вы действительно хотите удалить этого администратора?')) {literal}{{/literal}document.list.act.value = 'del'; document.list.id.value = '{$aItem.account_id}'; document.list.submit();{literal}}{/literal} return false;" class="n"><img title="Удалить" src="/design/pic/admin/xred.gif" class="red big" alt="x" /></a></div></td>
+			<td class="r">
+		</tr>
+		{/foreach}
+		<tr class="h1">
+			<td colspan="10">{include file='blocks/pager.html'}</td>
+		</tr>	
+		
+	</tbody>
+</table>
+</div>
+</div>

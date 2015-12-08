@@ -1,0 +1,34 @@
+<!--<aside class="aside-col">
+<div class="widget ad">
+   <div class="banner aside big">
+   </div>
+</div>
+</aside>-->
+
+<div class="main-col">
+
+
+    <div class="profile-container">
+        <header class="profile-header">
+            <h1 class="profile-name">{$aPhrases['Site Map']}</h1>
+        </header>
+        <form enctype="multipart/form-data" action="" method="POST" class="profile-header" style="padding-top:0px;">
+            <div class="profile-data">
+                <ul>
+                {foreach from=$aContentsTree item=aItem}
+                    <li><a href="/page/{$aItem.uri}/">{$aItem.title}</a></li>
+                    <ul>
+                    {foreach from=$aItem.childs item=aChild}
+                        <li><a href="/page/{$aChild.uri}/">{$aChild.title}</a></li>
+                    {/foreach}
+                    </ul>
+                {/foreach}
+                </ul>
+            </div>
+        </form>
+
+
+    </div>
+
+</div>
+<br>

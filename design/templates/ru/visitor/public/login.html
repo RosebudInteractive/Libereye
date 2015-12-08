@@ -1,0 +1,50 @@
+<!--<aside class="aside-col">
+<div class="widget ad">
+	<div class="banner aside big">
+	</div>
+</div>
+</aside>-->
+			
+<div class="main-col">
+
+				
+				<div class="profile-container">
+				<header class="profile-header">
+				<h1 class="profile-name">{$aPhrases['Enter the site']}</h1>
+					</header>
+					<form enctype="multipart/form-data" action="" method="POST" class="profile-header">
+					
+	
+		<input type="hidden" name="act" value="login" />
+		<div class="profile-data">	
+			{if $aErrors}{literal}<style>.profile-header .errorlist:after{border-width:0;}</style>{/literal}<span class="info"><ul class="errorlist">{foreach from=$aErrors item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
+			
+			<div>
+				<label for="id_email">{$aPhrases['Email']}<span class="required">*</span></label>
+				<span class="offset"><input id="id_email" maxlength="75" name="email"  type="text" value="{$sLogin}">
+					<span class="info"></span>
+				</span>
+			</div>
+			<div>
+				<label for="id_pass">{$aPhrases['Password']}<span class="required">*</span></label>
+				<span class="offset"><input id="id_pass" maxlength="20" name="pass" type="password">
+					<span class="info"></span>
+				</span>
+			</div>
+		</div>
+		<footer style="width: 550px;">
+			<input type="submit" value="{$aPhrases['Login']}" class="button big">
+			<a href="/{$aLanguage.alias}/account/remind/"><span>{$aPhrases['Forgot your password']}</span></a>
+
+		
+		
+		</footer>
+
+	
+</form>
+
+					
+				</div>
+				
+			</div>
+			<br>

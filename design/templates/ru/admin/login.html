@@ -1,0 +1,66 @@
+<html>
+<head>
+    <title>Вход</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <base href="{$sBaseUrl}">
+    <link rel="stylesheet" type="text/css" href="design/css/admin.css">
+    <script language='JavaScript' src='design/js/common.js'></script>
+    <script language='JavaScript' src='design/js/validator.js'></script>
+    {$jsValidatorMess}
+    {$sJsMessages}
+</head>
+<body>
+<br>
+<br>
+
+<div id="wrap" style="min-width: 300px">
+	<h1 style="text-align: center; width: 100%; margin-top: -10px; font-size: 300%; position: absolute"><a href="http://libereye.com/" target="_blank">libereye.com</a></h1>
+
+	<div class="bluediv" style="width: 300px; position: absolute; top: 30%; left: 50%; margin-left: -150px; margin-top: -70px;">
+
+		<div class="top">
+			<div>
+				<div>
+					<!--header-->
+				</div>
+			</div>
+		</div>
+ 
+		<div class="header">
+			<div class="wrap"><h1 class="first" style="color: black; margin: 0;">Авторизация</h1></div>
+
+		</div>
+		<div class="middle"><div class="wrap">
+			<form action="/admin/login.php" method="post" onsubmit="{$aValidator}">
+                <input type="hidden" name="act[login]" value="1">
+                <span>{include file="blocks/errors.html"}</span>
+				<fieldset>
+				<label><span class="def" style="width: 4.5em">Логин:</span>
+
+					<input type="text" name="login" style="width: 200px" value="" />
+				</label><br />
+				<label><span class="def" style="width: 4.5em">Пароль:</span>
+
+					<input type="password" name="pass" style="width: 200px" value="" />
+				</label><br />
+				<label class="r2" style="padding-left: 5.1em">
+					<input type="submit" value="Ok" class="button" />
+				</label><br />
+
+				</fieldset>
+			</form>
+		</div></div>
+		<div class="bottom">
+
+			<div>
+				<div>
+					<!--footer-->
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

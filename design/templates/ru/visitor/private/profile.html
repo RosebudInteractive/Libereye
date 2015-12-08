@@ -1,0 +1,92 @@
+{literal}
+<script>
+$(function(){
+	setTimeout(function(){
+	$('.profile-header #id_pass').val('');
+	$('.profile-header #id_pass2').val('');
+	}, 10);
+});
+</script>
+{/literal}
+
+
+<aside class="aside-col">
+<div class="widget ad">
+	<div class="banner aside big">
+	</div>
+</div>
+</aside>
+			
+<div class="main-col">
+
+				
+				<div class="profile-container">
+				<header class="profile-header">
+				<h1 class="profile-name">{$aPhrases['Settings']}</h1>
+					</header>
+					<form enctype="multipart/form-data" action="" method="POST" class="profile-header">
+					
+		<input type="hidden" name="act" value="register" />
+		<div class="profile-data">	
+			{if $aErrors}<span class="info"><ul class="errorlist">{foreach from=$aErrors item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
+			{if $aSessErr}{literal}{/literal}<span class="info"><ul class="help-text">{foreach from=$aSessErr item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
+			
+			<div>
+				<label for="id_name">{$aPhrases['Name']}<span class="required">*</span></label>
+				<span class="offset"><input type="text" name="aUser[fname]" maxlength="255" id="id_name" value="{$aUserReg.fname}"></span>
+			</div>
+			<div>
+				<label for="id_lname">{$aPhrases['Surname']}<span class="required">*</span></label>
+				<span class="offset"><input type="text" name="aUser[lname]" maxlength="255" id="id_lname" value="{$aUserReg.lname}"></span>
+			</div>
+			<div>
+				<label for="id_email">{$aPhrases['Email']}<span class="required">*</span></label>
+				<span class="offset">{if $aAccount.status=='seller'}{$aAccount.email}{else}<input id="id_email" maxlength="75" name="aUser[email]"  type="text" value="{$aUserReg.email}">{/if}
+					<span class="info"></span>
+				</span>
+			</div>
+            <div>
+                <label for="id_phone">{$aPhrases['Phone']}<span class="required">*</span></label>
+				<span class="offset"><input id="id_phone" maxlength="75" name="aUser[phone]"  type="text" value="{$aUserReg.phone}">
+					<span class="info"></span>
+				</span>
+            </div>
+            <div>
+                <label for="id_address">{$aPhrases['Delivery address']}<span class="required">*</span></label>
+				<span class="offset"><input id="id_address" maxlength="75" name="aUser[address]"  type="text" value="{$aUserReg.address}">
+					<span class="info"></span>
+				</span>
+            </div>
+            <div>
+                <label for="timezone">{$aPhrases['Time zone']}<span class="required">*</span></label>
+				<span class="offset"><select name="aUser[timezone]" id="timezone"><option value=""></option>{html_options options=$aTimezones selected=$aUserReg.timezone}</select>
+					<span class="info"></span>
+				</span>
+            </div>
+			<div>
+				<label for="id_pass">{$aPhrases['Password']}<span class="required">*</span></label>
+				<span class="offset"><input id="id_pass" maxlength="20" name="aUser[pass]" type="password">
+					<span class="info"></span>
+				</span>
+			</div>
+			<div>
+				<label for="id_pass2">{$aPhrases['The password again']}<span class="required">*</span></label>
+				<span class="offset"><input id="id_pass2" maxlength="20" name="pass_confirm" type="password">
+					<span class="info"></span>
+				</span>
+			</div>
+		</div>
+		<footer>
+			<input type="submit" value="{$aPhrases['Save']}" class="button big">
+			<!--<a href="/account/profile/"><span>Отмена</span></a>-->
+		</footer>
+
+	
+</form>
+
+					
+				</div>
+				
+			</div>
+			<br>
+			

@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML><HEAD><TITLE>Не удается найти требуемую страницу</TITLE>
+<META HTTP-EQUIV="Content-Type" Content="text/html; charset=windows-1251">
+<STYLE type="text/css">
+  BODY { font: 8pt/12pt verdana }
+  H1 { font: 13pt/15pt verdana }
+  H2 { font: 8pt/12pt verdana }
+  A:link { color: red }
+  A:visited { color: maroon }
+</STYLE>
+</HEAD><BODY><TABLE width=500 border=0 cellspacing=10><TR><TD>
+
+<h1>Не удается найти требуемую страницу</h1>
+Запрошенная страница удалена, переименована или временно недоступна.
+<hr>
+<p>Попробуйте выполнить следующее.</p>
+<ul>
+<li>Убедитесь, что отображаемый  в адресной строке обозревателя адрес веб-узла написан правильно и не содержит ошибок форматирования.</li>
+<li>Если вы попали на эту страницу, выбрав ссылку, то свяжитесь с администратором веб-узла и предупредите его о неправильно форматированной ссылке. 
+</li>
+<li>Нажмите кнопку <a href="javascript:history.back(1)">Назад</a>, чтобы проверить другую ссылку.</li>
+</ul>
+<h2>HTTP Error 404 - File or directory not found.<br>Internet Information Services (IIS)</h2>
+<hr>
+<p>Технические сведения (для сотрудников службы поддержки)</p>
+<ul>
+<li>Проведите поиск по ключевым словам <b>HTTP</b> и <b>404</b> на <a href="http://go.microsoft.com/fwlink/?linkid=8180">веб-узле технической поддержки корпорации Microsoft</a>.</li>
+<li>Изучите разделы под названием <b>Установка веб-узла</b>, <b>Решение задач администрирования</b> и <b>О специальных сообщениях об ошибках</b>, которые содержатся в <b>Справке IIS</b>. <b>Справка IIS</b> доступна в программе «Диспетчер IIS» (inetmgr).  </li>
+</ul>
+
+</TD></TR></TABLE></BODY></HTML>

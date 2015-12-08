@@ -1,0 +1,125 @@
+<form name="list" action="{$sUrl}" method="POST">
+		<input type="hidden" value="" name="act">
+		<input type="hidden" value="0" name="id">
+</form>		
+
+<div id="main">
+
+<div id="middle2" style="margin:0;">
+	
+	{include file="blocks/errors.html"}
+
+	<div id="hk"><a href="{url link='admin.content.list'}">Контент</a>&nbsp;&gt;&nbsp;{if $aContent.content_id}Редактирование раздела: {$aContent.title}{else}Добавление подраздела {if !$aParent.content_id}в корневой раздел{else}в раздел: {$aParent.title}{/if}{/if}   <hr /></div>
+	<h1 class="first">{if $aContent.content_id}Редактирование раздела: {$aContent.title} ({$aContent.lang_alias}){else}Добавление подраздела {if !$aParent.content_id}в корневой раздел{else}в раздел: {$aParent.title}{/if}{/if}</h1>
+
+<form method="POST" action="{$sUrl}" onsubmit="{$sJs}" name="content">
+<input type="hidden" name="act" value="{if $aContent.content_id}save{else}add{/if}" />
+
+<fieldset>
+
+	<div id="ru_fields">
+			<label for="language_id"><span class="def">Язык:</span>
+			<select id="language_id" name="aContent[language_id]">{html_options options=$aLanguages selected=$aContent.language_id}</select>
+		</label><br />
+			<label for="title"><span class="def">Заголовок:</span>
+			<input type="text" {if !$aContent.content_id}class="req"{/if} onkeyup="if(this.value!='') $(this).removeClass('req'); else $(this).addClass('req');"  id="title" name="aContent[title]"  value="{$aContent.title}" />
+		</label><br />
+			<label for="uri"><span class="def">URI:</span>
+			<input type="text" onkeyup="if(this.value=='' && !$('#uri_autocomplete').checked) $(this).addClass('req'); else $(this).removeClass('req');"  id="uri"  name="aContent[uri]"  value="{$aContent.uri}" />
+		</label><br />
+
+			<label class="r2">
+			<input type="hidden" name="uri_autocomplete" value="0" /><input type="checkbox" onclick="$('#uri').disabled = (this.checked);  if($('#uri').value!='' && this.checked) $('#uri').removeClass('req'); else $('#uri').addClass('req');" class="checkbox" id="uri_autocomplete" name="uri_autocomplete" value="1" checked="checked" /><span>&nbsp;Автозаполнение</span>
+		</label><br />
+
+<table>
+
+<tr><td style="width: 16em">
+		<label for="priority"><span class="def">Приоритет:</span>
+			<input type="text" id="priority" style="width: 4.12em" maxlength="7"  name="aContent[priority]"  value="{$aContent.priority}" />
+		</label><br />
+</td></tr>
+
+<tr><td style="width: 28em">
+		<label for="date"><span class="def">Дата:</span>
+			<input type="text" id="date" style="width: 10.12em" maxlength="20"  name="aContent[cdate]"  value="{$aContent.cdate}" />
+		</label><br />
+</td></tr>
+
+</table>
+
+<!-- META -->
+		<h3 id="h3_meta" class="href tab">META <img class="big" src="/design/pic/admin/minus_dark.gif" alt="&ndash;" title="" width="12" height="12" /></h3><div class="tab_field">
+						<label for="meta_title"><span class="def">Title:</span>
+			<input type="text"   id="meta_title"  name="aContent[meta_title]"  value="{$aContent.meta_title}" />
+		</label><br />
+						<label for="h1"><span class="def">Заголовок&nbsp;&lt;H1&gt;:</span>
+
+			<input type="text"   id="h1"  name="aContent[meta_h1]"  value="{$aContent.meta_h1}" />
+		</label><br />
+						<label for="meta_keywords"><span class="def">Keywords:<br /></span>
+			<textarea style="height: 3.8em"  id="meta_keywords"  name="aContent[meta_keys]">{$aContent.meta_keys}</textarea>
+			
+		</label><br />
+						<label for="meta_description"><span class="def">Description:<br /></span>
+			<textarea style="height: 3.8em"  id="meta_description" name="aContent[meta_desc]">{$aContent.meta_desc}</textarea>
+
+		</label><br />
+		</div>
+		<div class="clr"></div>
+<!-- /META -->
+			<label class="pad" for="text">Текст страницы</span><br />
+			<textarea style="height: 400px; font-family: 'Courier New', Courier, monospace; font-size: 13px; background: url(/design/pic/admin/html_textarea.png) 0 0 repeat; padding: 5px;; max-width: 100%; width: 100%"  id="text" name="aContent[content]" class="allow_tab mceAdvanced">{$aContent.content}</textarea>
+
+		</label><br />
+			<label class="r2">
+			<!--<input type="hidden" name="add_another" value="0" /><input type="checkbox" class="checkbox" name="add_another" value="1" /><span>&nbsp;Вернуться к добавлению нового подраздела?</span>-->
+		</label><br />
+</div>		
+
+
+		
+		<!--	<h3 id="h3_settings" style="background: #ffffe9;" class="href tab">Опции <img class="big" src="/design/pic/admin/minus_dark.gif" alt="&ndash;" width="12" height="12" /></h3><div class="tab_field" style="background: #ffffe9; overflow: hidden" id="tr_settings">-->
+
+			<div style="margin-left: -6em;">
+					
+						<!--<label class="r2">
+			<input type="hidden" name="aContent[is_can_delete]" value="0" /><input type="checkbox" class="checkbox" name="aContent[is_can_delete]" value="1" {if $aContent.is_can_delete}checked="checked"{/if} /><span>&nbsp;Можно удалить</span>
+		</label><br />
+						<label class="r2">
+			<input type="hidden" name="aContent[is_can_parent]" value="0" /><input type="checkbox" class="checkbox" name="aContent[is_can_parent]" value="1" {if $aContent.is_can_parent}checked="checked"{/if} /><span>&nbsp;Можно добавлять подразделы</span>
+
+		</label><br />
+						<label class="r2">
+			<input type="hidden" name="aContent[is_can_hide]" value="0" /><input type="checkbox" class="checkbox" name="aContent[is_can_hide]" value="1" {if $aContent.is_can_hide}checked="checked"{/if} /><span>&nbsp;Можно скрывать</span>
+		</label><br />
+						
+						<label class="r2">
+
+			<input type="hidden" name="aContent[is_can_index]" value="0" /><input type="checkbox" class="checkbox" name="aContent[is_can_index]" value="1" {if $aContent.is_can_index}checked="checked"{/if} /><span>&nbsp;Индексировать поисковниками</span>
+		</label><br />
+		
+		
+						<label class="r2">
+		</label><br />-->
+				
+		</div></div>
+		
+
+
+
+
+
+		<label class="pad r2" style="    display: block;
+    padding-left: 22em;">
+
+			<input type="submit" class="button" value="Сохранить" />
+		</label><br />
+
+
+</fieldset></form>
+
+</div>
+<!-- //middle --><div class="clr"></div>
+
+</div>

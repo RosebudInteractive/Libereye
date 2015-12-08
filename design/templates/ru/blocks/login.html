@@ -1,0 +1,29 @@
+<div id="loginForm" class="modal-overlay active" style="display: none;">
+<nav data-modal="" data-id="login" class="login-icons transparent-modal modal active">
+<header class="login-header">
+<h1 onclick="
+document.getElementById('signup-title').className = 'login-title'
+document.getElementById('signin-title').className = 'login-title active'
+" id="signin-title" class="login-title active">Вход</h1> /
+<h1 onclick="
+document.getElementById('signup-title').className = 'login-title active'
+document.getElementById('signin-title').className = 'login-title'
+" id="signup-title" class="login-title">Регистрация</h1></header>
+
+<a class="login-icon google-oauth2" rel="nofollow" href="/account/login/google-oauth2/?next=/pages/about/company/"><i class="icon-google-oauth2"></i></a>
+
+<a class="login-icon odnoklassniki-oauth2" rel="nofollow" href="/account/login/odnoklassniki-oauth2/?next=/pages/about/company/"><i class="icon-odnoklassniki-oauth2"></i></a>
+
+<a class="login-icon twitter" rel="nofollow" href="/account/login/twitter/?next=/pages/about/company/"><i class="icon-twitter"></i></a>
+
+<a class="login-icon facebook" rel="nofollow" href="/account/login/facebook/?next=/pages/about/company/"><i class="icon-facebook"></i></a>
+
+<a class="login-icon vk-oauth2" rel="nofollow" href="/account/login/vk-oauth2/?next=/pages/about/company/"><i class="icon-vk-oauth2"></i></a>
+
+<!--<div class="under-links">
+<a id="manual-signin" rel="nofollow" title="Войти с паролем" href="/account/login/password/?next=/pages/about/company/"><span>Войти с паролем</span></a>
+<a hidden="" id="manual-signup" rel="nofollow" title="Зарегистрироваться с email" href="/account/register/?next=/pages/about/company/"><span>Зарегистрироваться с email</span></a>
+</div>-->
+<a href="#" class="modal-close"></a>
+</nav>
+</div>

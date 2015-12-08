@@ -1,0 +1,51 @@
+<form name="list" action="{$sUrl}" method="POST">
+		<input type="hidden" value="" name="act">
+		<input type="hidden" value="0" name="id">
+</form>		
+
+{include file="blocks/errors.html"}
+
+<div id="main">
+<div id="left">
+	<div class="bluediv" style="width: 700px;">
+		<div class="top">
+			<div>
+				<div>
+					<!--header-->
+				</div>
+			</div>
+		</div>
+		<div class="header">
+			<div class="wrap">
+				<div>
+				<a href="{url link='admin.content.content_edit'}" class="n"><img src="/design/pic/admin/plusg.gif" class="icon big green" alt="+" /></a><a href="{url link='admin.content.content_edit'}">Добавить новый раздел</a>
+				</div>
+			</div>
+			
+		</div>
+		<div class="middle">
+			<div class="list_swap" id="list_swap">
+				{foreach from=$aContentsTree item=aItem}
+				<div style="margin-left:{$aItem.level*10}px;">
+				<div class="item">
+					<div class="right">
+						<img alt="" src="/design/pic/admin/b.gif" width="13" height="16" /><a href="./page/{$aItem.uri}" target="_blank" class="n"><img title="Просмотр" src="/design/pic/admin/preview.gif" alt="&#8362;" class="big" /></a>{if $aItem.is_can_parent}<a href="{url link='admin.content.content_edit' parent=$aItem.content_id}" class="n"><img title="Добавить подраздел" src="/design/pic/admin/plus_green.gif" class="green big" alt="+" /></a>{else}<img src="/design/pic/admin/b.gif" alt="" width="16" height="16" />{/if}{if $aItem.is_can_hide}{if $aItem.is_hide}<a href="#" onclick="if (confirm('Вы действительно хотите показать этот раздел?')) {literal}{{/literal}document.list.act.value = 'show'; document.list.id.value = '{$aItem.content_id}'; document.list.submit();{literal}}{/literal} return false;" class="n"><img title="Показать" src="/design/pic/admin/eye2.gif" alt="&#927;" class="dark big" /></a>{else}<a href="#" onclick="if (confirm('Вы действительно хотите скрыть этот раздел?')) {literal}{{/literal}document.list.act.value = 'hide'; document.list.id.value = '{$aItem.content_id}'; document.list.submit();{literal}}{/literal} return false;" class="n"><img title="Скрыть" src="/design/pic/admin/eye1.gif" alt="&#927;" class="dark big" /></a>{/if}{else}<img src="/design/pic/admin/b.gif" alt="" width="16" height="16" />{/if}{if $aItem.is_can_delete}<a href="#" onclick="if (confirm('Вы действительно хотите удалить этот раздел?')) {literal}{{/literal}document.list.act.value = 'del'; document.list.id.value = '{$aItem.content_id}'; document.list.submit();{literal}}{/literal} return false;" class="n"><img title="Удалить" src="/design/pic/admin/xred.gif" class="red big" alt="x" /></a>{else}<img src="/design/pic/admin/b.gif" alt="" width="16" height="16" />{/if}
+					</div>
+					{if $aItem.childs_num}<img src="/design/pic/admin/plus.gif" alt="+" class="icon big a left" />{else}<img src="/design/pic/admin/dot.gif" alt="&#9642;" class="icon big left" />{/if}
+					<span  class="owr"><a title="{$aItem.title}" href="{url link='admin.content.content_edit' id=$aItem.content_id}" class="name">{$aItem.title} {$aItem.lang_alias}</a></span>
+				</div>
+				</div>
+				{/foreach}
+		  </div>
+		</div>
+		<div class="bottom">
+			<div>
+				<div>
+					<!--footer-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="debug"></div><div class="clr"></div>
+</div>

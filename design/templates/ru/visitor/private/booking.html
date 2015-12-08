@@ -1,0 +1,206 @@
+{literal}
+<script>
+
+    var sLangAlias = '{/literal}{$aLanguage.alias}{literal}';
+    var xhr = null;
+    var action = null;
+    var args = null;
+    $(function(){
+        $("#modalwindow").dialog({
+            modal: true,
+            // height: 90,
+            // width: 300,
+            zIndex: 999,
+            resizable: false,
+            closeOnEscape: false,
+            title: "{/literal}{$aPhrases['Wait']}{literal}",
+            autoOpen: false,
+            close: function( event, ui ) {
+                if (xhr) //kill the request
+                    xhr.abort();
+            }
+        });
+        $("#dialog-confirm").dialog({
+            resizable: false,
+            // height:200,
+            modal: true,
+            autoOpen: false,
+            title: "{/literal}{$aPhrases['Acknowledgement']}{literal}",
+            buttons: {
+                "Ок": function() {
+                    if (action == 'remove') {
+                        $( this ).dialog( "close" );
+                        removeBooking.apply(this, args);
+                    } else {
+                        $( this ).dialog( "close" );
+                        args.push($('#booking_desc').val());
+                        addBooking.apply(this, args);
+                    }
+                },
+                "{/literal}{$aPhrases['Cancel']}{literal}": function() {
+                    $( this ).dialog( "close" );
+                }
+            },
+            zIndex: 999
+        });
+
+        $(document).ajaxStart(function(){
+            viewDialog('{/literal}{$aPhrases['Wait']}{literal}', '{/literal}{$aPhrases['Loading ...']}{literal}');
+        });
+        $(document).ajaxStop(function(){
+            $("#modalwindow").dialog("close");
+        });
+
+    });
+
+    function viewDialog(title, html) {
+        $("#modalwindow").html(html);
+        $("#modalwindow").dialog( "option", "title", title );
+        $("#modalwindow").dialog("open");
+    }
+
+    function addBooking(obj, seller, time, stime, desc) {
+        xhr = $.ajax({
+            method: "POST",
+            url: "/"+sLangAlias+"/account/booking/",
+            data: { act: "add", time: time, seller: seller, desc:desc}
+        })
+                .done(function( msg ) {
+                    msg = JSON.parse(msg);
+
+                    if (msg.errors.length==0) {
+                        var parent = $(obj).parent();
+                        parent.empty();
+                        var app = $('<div class="book own"><a title="{/literal}{$aPhrases['Join Conferencing']}{literal}" href="'+msg.item.zoom_join_url+'" target="_blank">{/literal}{$aPhrases['Join Conferencing']}{literal}</a> &nbsp; <span title="{/literal}{$aPhrases['Cancel']}{literal} '+stime+'"  onclick="confirmRemove(this, '+seller+','+time+', \''+stime+'\');">{/literal}{$aPhrases['Cancel']}{literal}</span><span class="desc"></span></div>');
+                        app.find('span.desc').text(msg.item.description);
+                        parent.append(app);
+                    } else {
+                        setTimeout(function(){
+                            viewDialog('{/literal}{$aPhrases['Errors']}{literal}', msg.errors.join('\n'));
+                        }, 100);
+                    }
+                });
+    }
+    function removeBooking(obj, seller, time, stime) {
+
+
+
+        xhr = $.ajax({
+            method: "POST",
+            url: "/"+sLangAlias+"/account/booking/",
+            data: { act: "del", time: time, seller: seller}
+        })
+                .done(function( msg ) {
+                    msg = JSON.parse(msg);
+
+                    if (msg.errors.length==0) {
+                        var parent = $(obj).parent();
+                        parent.empty();
+                        parent.append('<div class="book free" title="{/literal}{$aPhrases['Book']}{literal} '+stime+'"  onclick="confirmAdd(this, '+seller+','+time+', \''+stime+'\');">+</div>')
+                    } else {
+                        setTimeout(function(){
+                            viewDialog('{/literal}{$aPhrases['Errors']}{literal}', msg.errors.join('\n'));
+                        }, 100);
+                    }
+                });
+    }
+
+    function confirmAdd(obj, seller, time, stime) {
+        args = [obj, seller, time, stime];
+        action = 'add';
+        $("#dialog-confirm .confText").html('{/literal}{$aPhrases['Book']}{literal} '+stime+' <br><br> {/literal}{$aPhrases['The purpose of your video shopping?']}{literal} <br><textarea id="booking_desc" style="width: 250px;height: 77px;"></textarea>');
+        $("#dialog-confirm").dialog("open");
+    }
+
+    function confirmRemove(obj, seller, time, stime) {
+        args = [obj, seller, time, stime];
+        action = 'remove';
+        $("#dialog-confirm .confText").html('{/literal}{$aPhrases['Do you really want to cancel the booking?']}{literal} <br> '+stime+'?');
+        $("#dialog-confirm").dialog("open");
+    }
+
+
+</script>
+
+{/literal}
+
+<!--
+<aside class="aside-col">
+<div class="widget ad">
+	<div class="banner aside big">
+	</div>
+</div>
+</aside>-->
+
+<div class="main-col">
+
+
+    <div class="profile-container">
+        <header class="profile-header">
+            {if $aAccount.status=='seller'}
+                <h1 class="profile-name">{$aPhrases['My scheduled meetings']}</h1>
+            {else}
+                <h1 class="profile-name">{$aPhrases['Booking time']}</h1>
+            {/if}
+        </header>
+        <form action="" method="GET" class="profile-header" style="padding-top:0px;">
+
+            <div class="profile-data" style="margin-left:30px;">
+                {if $aAccount.status=='seller'}
+                {else}
+                    <b style="line-height: 40px;font-size: 24px;">{$aPhrases['Seller']}: <select name="seller" style="font-size: 19px;">{html_options options=$aSellers selected=$aSeller.account_id}</select> <input type="submit" value="{$aPhrases['Look']}">
+                        {if $aSeller.description}<p>{$aSeller.description}</p>{/if}
+                        {if $aSeller}<div class="calendar" style="height: 42px;margin: 0 2px;"><a href="/{$aLanguage.alias}/account/booking/?seller={$iSellerId}&date={$sPrevWeek}"><div class="prev"><span>?</span></div></a><a href="/{$aLanguage.alias}/account/booking/?seller={$iSellerId}&date={$sNextWeek}"><div class="next"><span>?</span></div></a></div>{/if}</b>
+                {/if}
+                {if $aSeller}
+                <table class="booking" width="100%">
+                    <tr>
+                        <td></td>
+                        {foreach from=$aWeekTimes item=iTime key=nWeekDay}
+                        <td class="column-header"><div>{$iTime|date_format:"%d/%m"} {$aWeekDays[$nWeekDay]}</div></td>
+                        {/foreach}
+                    </tr>
+                    {foreach from=$aTimes item=aTime key=key}
+                    <tr>
+                        <td width="60"><div class="time">{$aTime.time}</div></td>
+                        {foreach from=$aWeekTimes item=iTime key=nWeekDay}
+                        {assign var=fTime value=$iTime+$key}
+                        <td>
+                        {if $aAccount.status=='seller'}
+                        {else}
+                            {if $fTime<$smarty.now}
+                            <div class="book old"></div>
+                            {elseif $aTime.dinner}
+                            <div class="book dinner"></div>
+                            {else}
+                            {if $aBookingsItems[$fTime]}
+                            {if $aBookingsItems[$fTime].type=='own'}
+                            <div class="book own"><a title="{$aPhrases['Join Conferencing']}" href="{$aBookingsItems[$fTime].item.zoom_join_url}" target="_blank">{$aPhrases['Start']}</a> &nbsp; <span title="{$aPhrases['Cancel']} {$fTime|date_format:"%d/%m %H:%M"}"  onclick="confirmRemove(this, {$aSeller.account_id},{$fTime}, '{$fTime|date_format:"%d/%m %H:%M"}');">{$aPhrases['Cancel']}</span><span class="desc">{$aBookingsItems[$fTime].item.description}</span></div>
+                            {else}
+                            <div class="book busy" title="{$aPhrases['Unavailable']}">&nbsp;</div>
+                            {/if}
+                            {else}
+                            <div title="{$aPhrases['Book']} {$fTime|date_format:"%d/%m %H:%M"}" class="book free" onclick="confirmAdd(this, {$aSeller.account_id},{$fTime}, '{$fTime|date_format:"%d/%m %H:%M"}');">+</div>
+                            {/if}
+                            {/if}
+                        {/if}
+    </td>
+    {/foreach}
+    </tr>
+    {/foreach}
+    </table>
+    {/if}
+</div>
+</form>
+
+
+</div>
+
+</div>
+<br>
+
+
+<div id="modalwindow"></div>
+<div id="dialog-confirm">
+    <span class="confText"></span>
+</div>

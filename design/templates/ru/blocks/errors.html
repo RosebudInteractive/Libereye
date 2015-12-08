@@ -1,0 +1,15 @@
+<div id="{$sJsDiv|default:'jsErr'}" align="left">
+{if $aErrors or $aSessErr}
+{if $aErrors}<br>{/if}
+{foreach from=$aErrors item=sError}
+<b  class="error">{$sError}</b><br>
+{/foreach}
+{if !$bNoMessage}
+{foreach from=$aSessErr item=sError}
+<b style="color:{if $bSessErr}#FFF{else}#0A9A41{/if};">{$sError}</b><br>
+{/foreach}
+{/if}
+<br>
+
+{/if}
+</div>

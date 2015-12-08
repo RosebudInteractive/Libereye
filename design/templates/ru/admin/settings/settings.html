@@ -1,0 +1,79 @@
+
+<div id="main">
+<div id="left">
+	<div class="bluediv" style="width: 700px;">
+		<div class="top">
+			<div>
+				<div>
+					<!--header-->
+				</div>
+			</div>
+		</div>
+		<div class="header">
+			<div class="wrap">
+				<div>
+				<b>Настройки</b>
+				<!--<a href="{url link='admin.companies.company_edit'}" class="n"><img src="/design/pic/admin/plusg.gif" class="icon big green" alt="+" /></a><a href="{url link='admin.companies.company_edit'}">Добавить компанию</a>-->
+				</div>
+			</div>
+			
+		</div>
+		<div class="middle">
+			<div class="list_swap" id="list_swap">
+				<table cellspacing="0" cellpadding="0" border="0">
+				<form action="{$sUrl}" method="post" onsubmit="{$sJS}">
+				    <tr>
+				      <td>
+				      {include file="blocks/errors.html"}
+				      </td>
+				    </tr>
+				    <tr><td class="line"></td></tr>
+				    <tr><td height="2"></td></tr>
+				    <tr>
+				    <td>
+				          <table border="0" class="admin_form">
+				{assign var='iLastBlock' value=0} 
+				{foreach from=$aSettings item=aSetting}
+				{if $iLastBlock!=$aSetting.block}
+				            {assign var='iLastBlock' value=$aSetting.block}
+				            <tr class=""><td colspan="2" height="1"></td></tr>
+				{/if}
+				            <tr>
+				              <td class="">{$aSetting.name}&nbsp;</td>
+				              <td class="">
+				                  {if $aSetting.validation=='bool'}
+				                        <input type="hidden" name="settings[{$aSetting.code}]" value="0">
+				                        <input type="checkbox" name="settings[{$aSetting.code}]" value="1" {if $aSetting.val}checked{/if}>
+				                  {elseif $aSetting.code=='PAYMENT_MODE'}                  
+				                  <select name="settings[{$aSetting.code}]">
+				                    <option value="0" {if $aSetting.val=="0"}selected{/if}>Payment is live</option>
+				                    <option value="1" {if $aSetting.val=="1"}selected{/if}>All payments are successful</option>
+				                    <option value="2" {if $aSetting.val=="2"}selected{/if}>All payments fail</option>
+				                  </select>
+				                  {else}
+				                        <input type="text" name="settings[{$aSetting.code}]" value="{$aSetting.val}" size="30" class="textfield">
+				                  {/if} 
+				              </td>
+				            </tr>
+				{/foreach}
+				          </table>
+				     </td>
+				  </tr>
+				</table>        
+				<input type="submit" name="act[update]" value="Сохранить" class="button" style="margin-top: 8px;">
+				</form>
+
+		  </div>
+		</div>
+		<div class="bottom">
+			<div>
+				<div>
+					<!--footer-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="debug"></div><div class="clr"></div>
+</div>
+
