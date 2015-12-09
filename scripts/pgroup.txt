@@ -1,0 +1,10 @@
+Женская Одежда|Women's Clothing|Vêtements pour femmes
+Мужская Одежда|Men's Clothes|Vêtements pour homme
+Обувь|Footwear|Chaussures
+Аксессуары|Accessories|Accessoires
+Украшения|Decorations|Décorations
+Косметика & Духи|Cosmetics & Fragrances|Cosmétiques et Parfums
+Товары для дома|Household products|Linge de maison
+Смартфоны|Smartphones|Smartphones
+Товары для Детей|Products for children|Enfant en bas âge
+Сумки|Bags|Sacs

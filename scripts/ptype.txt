@@ -1,0 +1,157 @@
+Платья|Dresses|Robes|1
+Пальто|Coat|Manteaux|1
+Пуховики|Jackets|Vestes|1
+Куртки|Jackets|Vestes|1
+Парки|Parks|parcs|1
+Юбки|Skirts|Jupes|1
+Брюки|Pants|pantalon|1
+Блузы и рубашки|Blouses and shirts|Blouses et chemises|1
+Джинсы|Jeans|toile de jean|1
+Свитеры и трикотаж|Sweaters and Knitwear|Pulls et Tricots|1
+Комбинезоны|coveralls|combinaisons|1
+Топы|Tops|Tops|1
+Нижнее белье|Underwear|sous-vêtements|1
+вечерние платья|evening dresses|Robes de soirée|1
+вечерние юбки|evening skirt|Soirée Jupe|1
+дубленки|coats|manteaux|1
+Вечерние блузки|Evening blouses|blouses de soirée|1
+коктельные платья |cocktail dress|robes de cocktail|1
+вечерние штаны|evening pants|pantalon de soirée|1
+купальники|swimwear|maillots de bain|1
+меховые изделия|fur|fourrure|1
+пиджаки|jackets|vestes|1
+майки|T-shirts|T-shirts|1
+шорты|shorts|short|1
+парео|pareos|paréos|1
+шубы|coats|manteaux|1
+Штаны|Pants|Culotte|1
+Футболки|Shirts|shirts|2
+Поло|Polo|polo|2
+Пуховики|Jackets|Vestes|2
+Куртки|Jackets|Vestes|2
+Пальто|Coat|Manteaux|2
+Парки|Parks|parcs|2
+Рубашки|Shirts|shirts|2
+Джинсы|Jeans|toile de jean|2
+Брюки|Pants|pantalon|2
+Костюмы|Costumes|costumes|2
+Свитеры и трикотаж|Sweaters and Knitwear|Pulls et Tricots|2
+Нижнее белье и носки|Underwear and socks|Sous-vêtements et chaussettes|2
+Пиджаки|Blazers|Blazers|2
+Смокинг|The tuxedo|Tuxedo|2
+Шубы|Shuba|Shuba|2
+Штаны|Pants|Culotte|2
+Туфли|Shoes|Chaussures|3
+Сапоги и ботильоны|Boots and ankle boots|Bottes et bottines|3
+Ботинки|Shoes|Chaussures|3
+Кроссовки|Sneakers|formateurs|3
+Балетки|Ballet shoes|Ballerines|3
+Лоферы|Lofer|Lofer|3
+Слиперы|sleepers|Sleepers|3
+Спортивная обувь|Sport shoes|Chaussures de sport|3
+Хайтопы|Haytopy|Haytopy|3
+Туфли|Shoes|Chaussures|3
+Сандали|Sandals|sandales|3
+Эспадрилы|espadrilles|Espadrilles|3
+Босоножки|Sandals|sandales|3
+Шлепанцы|Thongs|Tongs|3
+Боты|Bots|Moteurs de recherche|3
+Головные уборы|Hats|Couvre-chef|4
+Шарфы|Scarves|Echarpes|4
+Перчатки и варежки|Gloves and mittens|Gants et mitaines|4
+Ремни|Belts|Ceintures|4
+Солнцезащитные очки|Sunglasses|Lunettes de soleil|4
+Очки и оправы|Glasses and rims|Lunettes et jantes|4
+Галстуки|neckties|Cravates|4
+Запонки|Cufflinks|Boutons de manchette|4
+Мужские косметички|Men beauticians|hommes esthéticiennes|4
+Кошельки и визитницы|Wallets and business card holders|Portefeuilles et les détenteurs de cartes de visite|4
+Чехлы для телефонов и планшетов|Cases for phones and tablets|Étuis pour téléphones et tablettes|4
+платки и шали|scarves and shawls|écharpes et châles|4
+Зажигалки|Lighters|Briquets|4
+Ручки|Pens|poignées|4
+Колье и подвески|Necklaces and pendants|Colliers et pendentifs|5
+Серьги|Earrings|Boucles d'oreilles|5
+Браслеты|Bracelets|Bracelets|5
+Кольца|Rings|anneaux|5
+Броши и декоративные булавки|Brooches and decorative pins|Broches et épingles décoratifs|5
+Ювелирные украшения|Jewelry|bijoux|5
+Часы|Clock|Montres|5
+Винтажные украшения|Vintage ornaments|ornements Vintage|5
+Категория|Category|catégorie|5
+Запонки (ювелирные изделия) |Cufflinks (Jewelry)|Boutons de manchette (Bijoux)|5
+Цепочки|chain|Chain|5
+Кольцо|Ring|anneau|5
+Духи|Spirits|spiritueux|6
+Помада|Pomade|pommade|6
+Макияж|Makeup|composition|6
+Пудра|Powder|Dust|6
+Крем|Cream|crème|6
+тени|shadows|ombres|6
+румяна|rouge|rouge|6
+Лосьон|Lotion|lotion|6
+ночной крем|night Cream|crème de Nuit|6
+дневной крем|day Cream|crème de Jour|6
+тональный крем|Foundation|fondation|6
+корректор|corrector|correcteur|6
+скраб|scrub|broussailles|6
+молочко|lotion|lotion|6
+тушь|ink|encre|6
+Комплекты|kits|Kits|7
+Наволочки|pillowcases|taies d'oreiller|7
+Одеяла|Blankets|couvertures|7
+Подушки|Cushions|coussins|7
+Вазы|Vases|vases|7
+Декоративные подушки|Decorative pillows|coussins|7
+Мебель|Furniture|Meubles|7
+Шторы|blinds|stores|7
+Покрывала|Covers|couvertures|7
+Кухня|Kitchen|Cuisine|7
+Посуда|Dishes|vaisselle|7
+Текстиль|Textile|textiles|7
+Пледы|plaids|plaids|7
+Полотенца|Towels|serviettes|7
+Подсвечники|Candlesticks|chandeliers|7
+Рамки для фотографий|Photo frame|Cadres photos|7
+Светильники|Fixtures|Calendrier|7
+Свечи|Candles|bougies|7
+Статуэтки|Figurines|Figurines|7
+Шкатулки|Caskets|cercueils|7
+Стаканы|Glasses|lunettes|7
+Вилки|Plugs|Plugs|7
+Ножы|Knives|couteaux|7
+Ложки|Spoons|Cuiller|7
+Сервизы|sets|ensembles|7
+Сковородка|Frying Pan|Frying Pan|7
+Лампы|Lamps|lampes|7
+Освещение|Lighting|Éclairage|7
+Айфон|iPhone|iPhone|8
+Айпад|iPad|iPad|8
+АйВатч|iWatch|iWatch|8
+Смартфоны Верту|Smartphones Vertu|Smartphones Vertu|8
+Платья|Dresses|Robes|9
+Пальто|Coat|Manteaux|9
+Пуховики|Jackets|Vestes|9
+Куртки|Jackets|Vestes|9
+Парки|Parks|parcs|9
+Юбки|Skirts|Jupes|9
+Брюки|Pants|pantalon|9
+ рубашки|  shirts|  chemises|9
+Джинсы|Jeans|toile de jean|9
+Свитеры и трикотаж|Sweaters and Knitwear|Pulls et Tricots|9
+Комбинезоны|coveralls|combinaisons|9
+Игрушки|Toys|Jouets|9
+Детская одежда|baby clothes|vêtements pour enfants|9
+ Майки|  Mikey|  Mikey|9
+Джинсы|Jeans|toile de jean|9
+брюки|pants|pantalon|9
+Штаны|Pants|Culotte|9
+Сумки|Bags|sacs|10
+Багаж|Baggage|bagages|10
+Сумки на плечо|Shoulder Bags|Sacs à bandoulière|10
+Сумки-тоут|Tote Bags,|Sacs fourre-tout,|10
+Рюкзаки|Backpacks|Sacs à dos|10
+Клатчи|clutches|embrayages|10
+Cпортивные сумки|Sport bags|Sacs de sport|10
+Сумки для ноутбуков|Notebook bags|Sacs pour ordinateurs portables|10
+Портфели|Briefcases|Porte-documents|10
