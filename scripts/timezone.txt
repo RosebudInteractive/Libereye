@@ -1,0 +1,130 @@
+Pacific/Midway|(GMT-11:00) Мидуэй, Самоа|(GMT-11:00) Midway Island, Samoa|(GMT-11:00) l'île de Midway, Samoa
+Pacific/Pago_Pago|(GMT-11:00) Паго-Паго|(GMT-11:00) Pago Pago|(GMT-11:00) Pago Pago
+Pacific/Honolulu|(GMT-10:00) Гавайи|(GMT-10:00) Hawaii|(GMT-10:00) Hawaï
+America/Anchorage|(GMT-8:00) Аляска|(GMT-8:00) Alaska|(GMT-8:00) Alaska
+America/Vancouver|(GMT-7:00) Ванкувер|(GMT-7:00) Vancouver|(GMT-7:00) Vancouver
+America/Los_Angeles|(GMT-7:00) Тихоокеанское время (США и Канада)|(GMT-7:00) Pacific Time (US and Canada)|(GMT-7:00), heure du Pacifique (États-Unis et Canada)
+America/Tijuana|(GMT-7:00) Тихуана|(GMT-7:00) Tijuana|(GMT-7:00) Tijuana
+America/Phoenix|(GMT-7:00) Аризона|(GMT-7:00) Arizona|(GMT-7:00) Arizona
+America/Edmonton|(GMT-6:00) Эдмонтон|(GMT-6:00) Edmonton|(GMT-6:00) Edmonton
+America/Denver|(GMT-6:00) Горное время (США и Канада)|(GMT-6:00) Mountain Time (US and Canada)|(GMT-6:00) Montagne (États-Unis et Canada)
+America/Mazatlan|(GMT-6:00) Мазатлан|(GMT-6:00) Mazatlan|(GMT-6:00) Mazatlan
+America/Regina|(GMT-6:00) Саскачеван|(GMT-6:00) Saskatchewan|(GMT-6:00) Saskatchewan
+America/Guatemala|(GMT-6:00) Гватемала|(GMT-6:00) Guatemala|(GMT-6:00) Guatemala
+America/El_Salvador|(GMT-6:00) Сальвадор|(GMT-6:00) El Salvador|(GMT-6:00) El Salvador
+America/Managua|(GMT-6:00) Манагуа|(GMT-6:00) Managua|(GMT-6:00) Managua
+America/Costa_Rica|(GMT-6:00) Коста-Рика|(GMT-6:00) Costa Rica|(GMT-6:00) Costa Rica
+America/Winnipeg|(GMT-5:00) Виннипег|(GMT-5:00) Winnipeg|(GMT-5:00) Winnipeg
+America/Chicago|(GMT-5:00) Центральное время (США и Канада)|(GMT-5:00) Central Time (US and Canada)|(GMT-5:00), heure du Centre (États-Unis et Canada)
+America/Mexico_City|(GMT-5:00) Мехико|(GMT-5:00) Mexico City|(GMT-5:00) Mexico
+America/Panama|(GMT-5:00) Панама|(GMT-5:00) Panama|(GMT-5:00) Panama
+America/Bogota|(GMT-5:00) Богота|(GMT-5:00) Bogota|(GMT-5:00) Bogota
+America/Lima|(GMT-5:00) Лима|(GMT-5:00) Lima|(GMT-5:00) Lima
+America/Caracas|(GMT-4:30) Каракас|(GMT-4:30) Caracas|(GMT-4:30) Caracas
+America/Montreal|(GMT-4:00) Монреаль|(GMT-4:00) Montreal|(GMT-4:00) Montréal
+America/New_York|(GMT-4:00) Восточное время (США и Канада)|(GMT-4:00) Eastern Time (US and Canada)|(GMT-4:00) heure de l'Est (Etats-Unis et Canada)
+America/Indianapolis|(GMT-4:00) Индиана (Восток)|(GMT-4:00) Indiana (East)|(GMT-4:00) Indiana (Est)
+America/Puerto_Rico|(GMT-4:00) Пуэрто-Рико|(GMT-4:00) Puerto Rico|(GMT-4:00) Porto Rico
+America/Santiago|(GMT-4:00) Сантьяго|(GMT-4:00) Santiago|(GMT-4:00) Santiago
+America/Halifax|(GMT-3:00) Галифакс|(GMT-3:00) Halifax|(GMT-3:00) Halifax
+America/Montevideo|(GMT-3:00) Монтевидео|(GMT-3:00) Montevideo|(GMT-3:00) Montevideo
+America/Araguaina|(GMT-3:00) Бразилиа|(GMT-3:00) Brasilia|(GMT-3:00) Brasilia
+America/Argentina/Buenos_Aires|(GMT-3:00) Буэнос-Айрес, Джорджтаун|(GMT-3:00) Buenos Aires, Georgetown|(GMT-3:00) Buenos Aires, Georgetown
+America/Sao_Paulo|(GMT-3:00) Сан-Паулу|(GMT-3:00) Sao Paulo|(GMT-3:00) São Paulo
+Canada/Atlantic|(GMT-3:00) Атлантическое время (Канада)|(GMT-3:00) Atlantic Time (Canada)|(GMT-3:00) Heure de l'Atlantique (Canada)
+America/St_Johns|(GMT-2:30) Ньюфаундленд и Лабрадор|(GMT-2:30) Newfoundland and Labrador|(GMT-2:30) Terre-Neuve-et-Labrador
+America/Godthab|(GMT-2:00) Гренландия|(GMT-2:00) Greenland|(GMT-2:00) du Groenland
+Atlantic/Cape_Verde|(GMT-1:00), Кабо-Верде|(GMT-1:00) Cape Verde Islands|(GMT-1:00) Cap-Vert
+Atlantic/Azores|(GMT+0:00) Азорские острова|(GMT+0:00) Azores|(GMT+0:00) Açores
+UTC|(GMT+0:00) Универсальное время: UTC|(GMT+0:00) Universal Time UTC|(GMT+0:00) temps universel UTC
+Etc/Greenwich|(GMT+0:00) Время по Гринвичу|(GMT+0:00) Greenwich Mean Time|(GMT+0:00) Greenwich Mean Time
+Atlantic/Reykjavik|(GMT+0:00) Рейкьявик|(GMT+0:00) Reykjavik|(GMT+0:00) Reykjavik
+Africa/Nouakchott|(GMT+0:00) Нуакшот|(GMT+0:00) Nouakchott|(GMT+0:00) Nouakchott
+Europe/Dublin|(GMT+1:00) Дублин|(GMT+1:00) Dublin|(GMT+1:00) Dublin
+Europe/London|(GMT+1:00) Лондон|(GMT+1:00) London|(GMT+1:00) Londres
+Europe/Lisbon|(GMT+1:00) Лиссабон|(GMT+1:00) Lisbon|(GMT+1:00) de Lisbonne
+Africa/Casablanca|(GMT+1:00) Касабланка|(GMT+1:00) Casablanca|(GMT+1:00) Casablanca
+Africa/Bangui|(GMT+1:00) Западная Центральная Африка|(GMT+1:00) West Central Africa|(GMT+1:00) West Afrique centrale
+Africa/Algiers|(GMT+1:00) Алжир|(GMT+1:00) Algiers|(GMT+1:00) d'Alger
+Africa/Tunis|(GMT+1:00) Тунис|(GMT+1:00) Tunis|(GMT+1:00), Tunis
+Europe/Belgrade|(GMT+2:00) Белград, Братислава, Любляна|(GMT+2:00) Belgrade, Bratislava, Ljubljana|(GMT+2:00) Belgrade, Bratislava, Ljubljana
+CET|(GMT+2:00) Сараево, Скопье, Загреб|(GMT+2:00) Sarajevo, Skopje, Zagreb|(GMT+2:00) Sarajevo, Skopje, Zagreb
+Europe/Oslo|(GMT+2:00) Осло|(GMT+2:00) Oslo|(GMT+2:00) Oslo
+Europe/Copenhagen|(GMT+2:00) Копенгаген|(GMT+2:00) Copenhagen|(GMT+2:00) Copenhague
+Europe/Brussels|(GMT+2:00) Брюссель|(GMT+2:00) Brussels|(GMT+2:00) Bruxelles
+Europe/Berlin|(GMT+2:00) Амстердам, Берлин, Рим, Стокгольм, Вена|(GMT+2:00) Amsterdam, Berlin, Rome, Stockholm, Vienna|(GMT+2:00) Amsterdam, Berlin, Rome, Stockholm, Vienne
+Europe/Amsterdam|(GMT+2:00) Амстердам|(GMT+2:00) Amsterdam|(GMT+2:00) Amsterdam
+Europe/Rome|(GMT+2:00) Рим|(GMT+2:00) Rome|(GMT+2:00) Rome
+Europe/Stockholm|(GMT+2:00) Стокгольм|(GMT+2:00) Stockholm|(GMT+2:00) Stockholm
+Europe/Vienna|(GMT+2:00) Вена|(GMT+2:00) Vienna|(GMT+2:00) Vienne
+Europe/Luxembourg|(GMT+2:00) Люксембург|(GMT+2:00) Luxembourg|(GMT+2:00) Luxembourg
+Europe/Paris|(GMT+2:00) Париж|(GMT+2:00) Paris|(GMT+2:00) Paris
+Europe/Zurich|(GMT+2:00) Цюрих|(GMT+2:00) Zurich|(GMT+2:00) Zurich
+Europe/Madrid|(GMT+2:00) Мадрид|(GMT+2:00) Madrid|(GMT+2:00) Madrid
+Africa/Harare|(GMT+2:00) Хараре, Претория|(GMT+2:00) Harare, Pretoria|(GMT+2:00) Harare, Pretoria
+Europe/Warsaw|(GMT+2:00) Варшава|(GMT+2:00) Warsaw|(GMT+2:00) Varsovie
+Europe/Prague|(GMT+2:00) Прага Братислава|(GMT+2:00) Prague Bratislava|(GMT+2:00) Prague Bratislava
+Europe/Budapest|(GMT+2:00) Будапешт|(GMT+2:00) Budapest|(GMT+2:00) Budapest
+Africa/Tripoli|(GMT+2:00) Триполи|(GMT+2:00) Tripoli|(GMT+2:00) Tripoli
+Africa/Johannesburg|(GMT+2:00) Йоханнесбург|(GMT+2:00) Johannesburg|(GMT+2:00) Johannesburg
+Africa/Nairobi|(GMT+3:00), Найроби|(GMT+3:00) Nairobi|(GMT+3:00) Nairobi
+Europe/Sofia|(GMT+3:00) София|(GMT+3:00) Sofia|(GMT+3:00) Sofia
+Europe/Istanbul|(GMT+3:00) Стамбул|(GMT+3:00) Istanbul|(GMT+3:00) Istanbul
+Europe/Athens|(GMT+3:00) Афины|(GMT+3:00) Athens|(GMT+3:00) Athènes
+Europe/Bucharest|(GMT+3:00) Бухарест|(GMT+3:00) Bucharest|(GMT+3:00) Bucarest
+Asia/Nicosia|(GMT+3:00) Никосия|(GMT+3:00) Nicosia|(GMT+3:00) Nicosie
+Asia/Beirut|(GMT+3:00) Бейрут|(GMT+3:00) Beirut|(GMT+3:00) Beyrouth
+Asia/Damascus|(GMT+3:00) Дамаск|(GMT+3:00) Damascus|(GMT+3:00) Damas
+Asia/Jerusalem|(GMT+3:00) Иерусалим|(GMT+3:00) Jerusalem|(GMT+3:00) Jérusalem
+Asia/Amman|(GMT+3:00) Амман|(GMT+3:00) Amman|(GMT+3:00) Amman
+Africa/Cairo|(GMT+3:00) Каир|(GMT+3:00) Cairo|(GMT+3:00) Le Caire
+Europe/Moscow|(GMT+3:00) Москва|(GMT+3:00) Moscow|(GMT+3:00) Moscou
+Asia/Baghdad|(GMT+3:00) Багдад|(GMT+3:00) Baghdad|(GMT+3:00) Bagdad
+Asia/Kuwait|(GMT+3:00) Кувейт|(GMT+3:00) Kuwait|(GMT+3:00) Koweït
+Asia/Riyadh|(GMT+3:00) Эр-Рияд|(GMT+3:00) Riyadh|(GMT+3:00) Riyad
+Asia/Bahrain|(GMT+3:00) Бахрейн|(GMT+3:00) Bahrain|(GMT+3:00) Bahreïn
+Asia/Qatar|(GMT+3:00) Катар|(GMT+3:00) Qatar|(GMT+3:00) Qatar
+Asia/Aden|(GMT+3:00) Аден|(GMT+3:00) Aden|(GMT+3:00) Aden
+Africa/Khartoum|(GMT+3:00) Хартум|(GMT+3:00) Khartoum|(GMT+3:00) Khartoum
+Africa/Djibouti|(GMT+3:00) Джибути|(GMT+3:00) Djibouti|(GMT+3:00) Djibouti
+Africa/Mogadishu|(GMT+3:00) Могадишо|(GMT+3:00) Mogadishu|(GMT+3:00) Mogadiscio
+Asia/Dubai|(GMT+4:00) Дубай|(GMT+4:00) Dubai|(GMT+4:00) Dubaï
+Asia/Muscat|(GMT+4:00) Мускат|(GMT+4:00) Muscat|(GMT+4:00) Muscat
+Asia/Tehran|(GMT+4:30) Тегеран|(GMT+4:30) Tehran|(GMT+4:30) Téhéran
+Asia/Kabul|(GMT+4:30) Кабул|(GMT+4:30) Kabul|(GMT+4:30) Kaboul
+Asia/Baku|(UTC+5:00) Баку, Тбилиси, Ереван|(GMT+5:00) Baku, Tbilisi, Yerevan|(GMT+5:00) Bakou, Tbilissi, Erevan
+Asia/Yekaterinburg|(UTC+5:00) Екатеринбург|(GMT+5:00) Yekaterinburg|(GMT+5:00) Ekaterinbourg
+Asia/Tashkent|(UTC+5:00) Исламабад, Карачи, Ташкент|(GMT+5:00) Islamabad, Karachi, Tashkent|(GMT+5:00) Islamabad, Karachi, Tachkent
+Asia/Calcutta|(UTC+5:30) Индия|(GMT+5:30) India|(GMT+5:30) Inde
+Asia/Kathmandu|(UTC+5: 45) Катманду|(GMT+5:45) Kathmandu|(GMT+5: 45) Katmandou
+Asia/Novosibirsk|(GMT+6:00) Новосибирск|(GMT+6:00) Novosibirsk|(GMT+6:00) Novosibirsk
+Asia/Almaty|(GMT+6:00) Алматы|(GMT+6:00) Almaty|(GMT+6:00) Almaty
+Asia/Dacca|(GMT+6:00) Дакка|(GMT+6:00) Dacca|(GMT+6:00) Dacca
+Asia/Dhaka|(GMT+6:00) Астана, Дакка|(GMT+6:00) Astana, Dhaka|(GMT+6:00) Astana, Dhaka
+Asia/Krasnoyarsk|(GMT+7:00) Красноярск|(GMT+7:00) Krasnoyarsk|(GMT+7:00) Krasnoyarsk
+Asia/Bangkok|(GMT+7:00) Бангкок|(GMT+7:00) Bangkok|(GMT+7:00) Bangkok
+Asia/Saigon|(GMT+7:00) Вьетнам|(GMT+7:00) Vietnam|(GMT+7:00) Vietnam
+Asia/Jakarta|(GMT+7:00) Джакарта|(GMT+7:00) Jakarta|(GMT+7:00) Jakarta
+Asia/Irkutsk|(GMT+8:00) Иркутск, Улан-Батор|(GMT+8:00) Irkutsk, Ulaanbaatar|(GMT+8:00) Irkoutsk, Oulan-Bator
+Asia/Shanghai|(GMT+8:00) Пекин, Шанхай|(GMT+8:00) Beijing, Shanghai|(GMT+8:00) Beijing, Shanghai
+Asia/Hong_Kong|(GMT+8:00) Гонконг|(GMT+8:00) Hong Kong|(GMT+8:00) Hong Kong
+Asia/Taipei|(GMT+8:00) Тайбэй|(GMT+8:00) Taipei|(GMT+8:00) Taipei
+Asia/Kuala_Lumpur|(GMT+8:00) Куала-Лумпур|(GMT+8:00) Kuala Lumpur|(GMT+8:00) Kuala Lumpur
+Asia/Singapore|(GMT+8:00) Сингапур|(GMT+8:00) Singapore|(GMT+8:00) Singapour
+Australia/Perth|(GMT+8:00) Перт|(GMT+8:00) Perth|(GMT+8:00) Perth
+Asia/Yakutsk|(GMT+9:00) Якутск|(GMT+9:00) Yakutsk|(GMT+9:00) Yakutsk
+Asia/Seoul|(GMT+9:00) Сеул|(GMT+9:00) Seoul|(GMT+9:00) Séoul
+Asia/Tokyo|(GMT+9:00) Осака, Саппоро, Токио|(GMT+9:00) Osaka, Sapporo, Tokyo|(GMT+9:00) Osaka, Sapporo, Tokyo
+Australia/Darwin|(GMT+9:30) Дарвин|(GMT+9:30) Darwin|(GMT+9:30) Darwin
+Australia/Adelaide|(GMT+9:30) Аделаида|(GMT+9:30) Adelaide|(GMT+9:30) Adelaide
+Asia/Vladivostok|(GMT+10:00) Владивосток|(GMT+10:00) Vladivostok|(GMT+10:00) Vladivostok
+Pacific/Port_Moresby|(GMT+10:00) Гуам, Порт-Морсби|(GMT+10:00) Guam, Port Moresby|(GMT+10:00) Guam, Port Moresby
+Australia/Brisbane|(GMT+10:00) Брисбен|(GMT+10:00) Brisbane|(GMT+10:00) Brisbane
+Australia/Sydney|(GMT+10:00) Канберра, Мельбурн, Сидней|(GMT+10:00) Canberra, Melbourne, Sydney|(GMT+10:00) Canberra, Melbourne, Sydney
+Australia/Hobart|(GMT+10:00) Хобарт|(GMT+10:00) Hobart|(GMT+10:00) Hobart
+Asia/Magadan|(GMT+10:00) Магадан|(GMT+10:00) Magadan|(GMT+10:00) Magadan
+SST|(GMT+11:00) Соломоновы Острова|(GMT+11:00) Solomon Islands|(GMT+11:00) Iles Salomon
+Pacific/Noumea|(GMT+11:00) Новая Каледония|(GMT+11:00) New Caledonia|(GMT+11:00) Nouvelle-Calédonie
+Asia/Kamchatka|(GMT+12:00) Камчатка|(GMT+12:00) Kamchatka|(GMT+12:00) Kamtchatka
+Pacific/Fiji|(GMT+12:00) Фиджи Острова, Маршалловы Острова|(GMT+12:00) Fiji Islands, Marshall Islands|(GMT+12:00) Îles Fidji, Îles Marshall
+Pacific/Auckland|(GMT+12:00) Окленд, Веллингтон|(GMT+12:00) Auckland, Wellington|(GMT+12:00) Auckland, Wellington
