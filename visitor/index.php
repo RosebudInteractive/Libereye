@@ -21,7 +21,10 @@ global $_PHRASES;
 $aAccount = array();
 if ($oAccount->isLoggedIn() && $oAccount->load($oAccount->isLoggedIn())) {
 	$aAccount = $oAccount->aData;
-    date_default_timezone_set($aAccount['timezone']);
+    if (isset($aAccount['timezone']))
+        date_default_timezone_set($aAccount['timezone']);
+    else
+        date_default_timezone_set('UTC');
 }
 
 $aLanguage = false;
@@ -60,7 +63,7 @@ $sLangUrl = str_replace('/'.LANGUAGE.'/', '/'.(LANGUAGE=='ru'?'en':'ru').'/', $_
 if ($nReplCount==0) $sLangUrl = '/'.(LANGUAGE=='ru'?'en':'ru').$sLangUrl;
 
 
-list($aContentPages, ) = $oContent->getList(array('parent_id'=>'=0', 'is_hide'=>'=0', 'language_id'=>'="'.$aLanguage['language_id'].'"'), 0, 0, 'priority, title');
+list($aContentPages, ) = $oContent->getList(array('parent_id'=>'=0', 'language_id'=>'="'.$aLanguage['language_id'].'"'), 0, 0, 'priority, title');
 
 $oTpl->assign(array(
     'aErrors'        => $aErrors,

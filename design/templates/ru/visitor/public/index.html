@@ -1,81 +1,41 @@
-<aside class="aside-col" style="width:400px;" >
-<div class="widget ad" style="padding:10px 0 10px 12px;">
-	<div class="banner aside big" style="width:376px;height:291px;min-height:291px;">
-        <iframe height="100%" width="100%" allowfullscreen="" frameborder="0" src="//www.youtube.com/embed/HgJbi99htfI?wmode=transparent&amp;autoplay=0&amp;theme=dark&amp;controls=0&amp;autohide=0&amp;loop=0&amp;showinfo=1&amp;rel=0&amp;playlist=false&amp;enablejsapi=0"></iframe>
-	</div>
-</div>
-<div class="widget ad" style="padding:10px 0 10px 12px;" id="subscribe">
-	<div class="banner aside big" style="width:376px;min-height: auto;">
-        <h2 style="text-align: center;">Узнайте первыми</h2>
-        <h3 style="text-align: center;">Мы сообщим вам о запуске сервиса</h3>
-        <form action="/#subscribe" method="POST" class="profile-header" style="padding:0px;padding-bottom: 20px;">
-            <input type="hidden" name="act" value="subscribe" />
-            <div class="profile-data" style="margin-left:10px;">
-                {if $aErrors}<span class="info"><ul class="errorlist">{foreach from=$aErrors item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
-                {if $aSessErr}{literal}{/literal}<span class="info"><ul class="help-text">{foreach from=$aSessErr item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
-                <div>
-                    <label for="id_name">Имя<span class="required">*</span></label>
-				<span class="offset"><input type="text" name="aUser[fname]" maxlength="100" id="id_name" value="{$aSubscribe.fname}">
-
-				</span>
-                </div>
-                <div>
-                    <label for="id_email">Электронная почта<span class="required">*</span></label>
-				<span class="offset" id="id_email"><input id="id_email" maxlength="100" name="aUser[email]"  type="text" value="{$aSubscribe.email}">
-					<span class="info"></span>
-				</span>
-                </div>
-            </div>
-            <footer>
-                <input type="submit" value="Подписаться" class="button big">
-            </footer>
-        </form>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-9 col-lg-12 text-center">
+            <h1>Новости</h1>
+        </div>
     </div>
-</div>
-    <br>
-</aside>
-<div class="main-col" style="margin-right: 420px;">
-
-	<div class="feeds-container">
-        <div data-feed="feed" data-wait-load="true" data-col-min-width="260" data-autoresize="true" class="feed feed-news">
-            <article class="post post-news"><div class="post-wrapper">
-            <div class="post-content">
-            <header class="post-header">
-                <h3 class="post-title post-title-small"><span style="font-size: 25px;">Воспользуйтесь уникальной возможностью прямого доступа в лучшие магазины Европы с помощью сервиса LiberEye! Оцените его возможности и преимущества!</span></h3>
-            </header>
+    <div class="news-list row">
+        <div class="col-sm-3 col-md-3 col-lg-4 news-item">
+            <div class="news-title">
+                <a href="#">
+                    <span class="img"><img src="img/content/content_img_1.png" /></span>
+                    <span>«Лаборатории» первого этажа зоны люкс</span>
+                </a>
+                <div>В течение всего года на 1-м этаже «Галери Лафайет» работают две «лаборатории», представляющие современную моду класса люкс от именитых кутюрье и новых дизайнеров.</div>
             </div>
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-4 news-item">
+            <div class="news-title">
+                <a href="#">
+                    <span class="img"><img src="img/content/content_img_2.png" /></span>
+                    <span>Новый отдел кроссовок в «Галери Лафайет»</span>
+                </a>
+                <div>«Галери Лафайет» на бульваре Османа непрестанно находится в поисках новых идей, которые сделают ваш поход за покупками уникальным и незабываемым. </div>
             </div>
-            </article>
-            <article class="post post-news"><div class="post-wrapper">
-            <div class="post-content">
-            <header class="post-header">
-                <h3 class="post-title post-title-small"><span style="font-size: 25px;">LiberEye открывает для Вас двери лучших магазинов Европы и дарит привилегированный шанс совершить эксклюзивный тур в легендарные магазины "Galeries Lafayette" вместе с нами и в сопровождении индивидуального гида.</span></h3>
-            </header>
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-4 hidden-sm news-item">
+            <div class="news-title">
+                <a href="#">
+                    <span class="img"><img src="img/content/content_img_3.png" /></span>
+                    <span>Культура и наследие</span>
+                </a>
+                <div>Удивительная история Галереи Лафайет началась в XIXвеке. И на всём её протяжении, самый младший из больших торговых центров города не переставал поражать своей смелостью и современностью.</div>
             </div>
-            </div>
-            </article>
-            <article class="post post-news"><div class="post-wrapper">
-            <div class="post-content">
-            <header class="post-header">
-                <h3 class="post-title post-title-small"><span style="font-size: 25px;">Воспользуйтесь услугой профессионального помощника - русскоговорящего шоппинг гида для знакомства с последними коллекциями ведущих мировых брендов.</span></h3>
-            </header>
-            </div>
-            </div>
-            </article>
-
-
-
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-9 col-lg-12 text-center">
+            <a href="#" class="more-news">Больше статей</a>
         </div>
     </div>
 </div>
-
-

@@ -21,7 +21,7 @@ $_CONF['memcache'] = array(
 );
 
 // root path
-$_CONF['path'] = 'd:/Server/domains/libereye/';
+$_CONF['path'] = 'd:/Server/domains/libereye2/Libereye/';
 
 // Host name
 $_CONF['host']  = 'libereye.it/';

@@ -43,7 +43,7 @@ class Template extends Smarty
         //echo $sDir.'/template.html';
         
         $this->display( $sDir.'/'.$this->sTemplateFile );
-        showSql();
+        //showSql();
     }
 
     function addMes($sUrl)

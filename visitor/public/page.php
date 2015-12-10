@@ -12,7 +12,7 @@ if ($sPage && !$oContent->loadBy(array('uri'=>'="'.Database::escape($sPage).'"',
 $aPage = $oContent->aData;
 
 // корневые страницы
-$aCond = array('parent_id'=>'=0', 'is_hide'=>'=0');
+$aCond = array('parent_id'=>'=0');
 list($aParentPages, $iCnt) = $oContent->getList($aCond, 0, 0, 'priority, title');
 
 $oTpl->assign(array(
@@ -24,11 +24,11 @@ $oTpl->assign(array(
 // Подчиненные страницы
 $aChildPages = array();	
 $aParentPage = array();
-if ($aPage['parent_id'] && $oContent->loadBy(array('content_id'=>'="'.$aPage['parent_id'].'"', 'is_hide'=>'=0')))
+if ($aPage['parent_id'] && $oContent->loadBy(array('content_id'=>'="'.$aPage['parent_id'].'"')))
 {
 	$aParentPage = $oContent->aData;
 }
-list($aChildPages, $iCnt) = $oContent->getList(array('parent_id'=>'='.$aPage['content_id'], 'is_hide'=>'=0'), 0, 0, 'priority, title');
+list($aChildPages, $iCnt) = $oContent->getList(array('parent_id'=>'='.$aPage['content_id']), 0, 0, 'priority, title');
 
 $aCond = array();
 
@@ -84,7 +84,7 @@ switch ($sPage)
         $aPage['content'] = str_replace('{SUBSCRIBE_FORM}', $sSubBlock, $aPage['content']);
         break;
 	default:
-		list($aContents, $iCnt) = $oContent->getList(array('is_hide'=>'=0', 'parent_id'=>'='.$aPage['content_id']), 0, 0, 'IF(c.parent_id=0,0,1), priority, title');
+		list($aContents, $iCnt) = $oContent->getList(array('parent_id'=>'='.$aPage['content_id']), 0, 0, 'IF(c.parent_id=0,0,1), priority, title');
 		$oTpl->assign(array(
 		    'aContents'  => $aContents,
 		));

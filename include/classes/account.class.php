@@ -168,5 +168,19 @@ class Account extends DbItem
     	 $sPass .= $sSymbols{rand(0, strlen($sSymbols)-1)};
     	return $sPass;
     }
+
+    /** Loads info from DB by PK
+     * @param int $nId PK
+     * @return boolean 1 - loaded, false - not found
+     */
+    function load($nId)
+    {
+        $sSql = 'SELECT '.join(',', $this->aFields).', t.code timezone'.
+            ' FROM '.$this->sTable.' AS '.$this->sAlias.
+            ' LEFT JOIN timezone t ON '.$this->sAlias.'.timezone_id=t.timezone_id'.
+            ' WHERE '.$this->sId.'="'.$nId.'"';
+        $this->aData = $this->oDb->getRow($sSql);
+        return sizeof($this->aData);
+    }
 }
 ?>
