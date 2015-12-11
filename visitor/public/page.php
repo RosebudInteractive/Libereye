@@ -36,52 +36,27 @@ $aCond = array();
 switch ($sPage)
 {
     case 'main':
-        Conf::loadClass('Subscribe');
-        Conf::loadClass('utils/Validator');
-        Conf::loadClass('utils/mail/Mailer');
-        Conf::loadClass('Content');
-
-        $oSubscribe  	= new Subscribe();
-        $aSubscribe 	= $oReq->getArray('aUser');
-
-        $aFields = array(
-            'aUser[fname]' 	=> array('title'=>Conf::format('Name'),  'pattern'=>'/^.{1,100}$/'),
-            'aUser[email]' 		=> array('title'=>Conf::format('Email'),    'pattern'=>'/^[A-Za-z_0-9\.\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,}$/'),
-        );
-
-        $oValidator = new Validator($aFields, array(array('aUser[pass]', 'pass_confirm', '==')));
+        Conf::loadClass('News');
+        $oNews  	= new News();
         $aErrors 	= array();
 
         switch ($oReq->getAction())
         {
-            case 'subscribe':
-                if ($oValidator->isValid($oReq->getAll())){
-                    $oSubscribe->aData = $aSubscribe;
-                    $oSubscribe->aData['cdate'] = Database::date();
-
-                    if ($oSubscribe->isUniqueEmail())
-                    {
-                        if (($oSubscribe->insert()))
-                            $oReq->forward('/'.$aLanguage['alias'].'/', Conf::format('You have successfully subscribed'));
-                        else
-                            $aErrors = $oSubscribe->getErrors();
-                    }
-                    else
-                        $aErrors[] = Conf::format('This email address is already subscribed');
-                } else
-                    $aErrors = $oValidator->getErrors();
+            case 'getNews':
+                $iPage = $oReq->getInt('page');
+                list($aNews,) = $oNews->getList(array(), $iPage, 3, 'cdate desc');
+                $oTpl->assign(array(
+                    'aNews' 	=> $aNews,
+                ));
+                echo $oTpl->fetch('blocks/news.html');
+                exit;
                 break;
         }
 
-
-        // Title
+        list($aNews,) = $oNews->getList(array(), 0, 3, 'cdate desc');
         $oTpl->assign(array(
-            'aSubscribe' 	=> $aSubscribe,
-            'aErrors'		=> $aErrors,
+            'aNews' 	=> $aNews,
         ));
-
-        $sSubBlock = $oTpl->fetch('blocks/subscribe.html');
-        $aPage['content'] = str_replace('{SUBSCRIBE_FORM}', $sSubBlock, $aPage['content']);
         break;
 	default:
 		list($aContents, $iCnt) = $oContent->getList(array('parent_id'=>'='.$aPage['content_id']), 0, 0, 'IF(c.parent_id=0,0,1), priority, title');

@@ -20,6 +20,7 @@ $_TBL['subscribe'] 	        = array('subscribe',          's', 'subscribe_id');
 $_TBL['language'] 	        = array('language',          'l', 'language_id');
 $_TBL['lang_phrase'] 	        = array('lang_phrase',          'lp', 'lang_phrase_id');
 $_TBL['ogone_api'] 	        = array('ogone_api',          'oa', 'id');
+$_TBL['news'] 	        = array('news',          'n', 'news_id');
 
 
 ?>

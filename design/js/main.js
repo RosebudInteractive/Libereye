@@ -114,4 +114,25 @@ $(function() {
             }
         );
     });
+
+    var page = 1;
+    $('a.more-news').click(function(e) {
+        e.preventDefault();
+        var self = $(this);
+        if (!self.hasClass('loading')) {
+            self.addClass('loading');
+            $.ajax({
+                method: "POST",
+                url: "/",
+                data: { act: "getNews", page: ++page }
+            })
+                .done(function( msg ) {
+                    self.removeClass('loading');
+                    var row = $('<div class="news-list row"/>');
+                    row.append(msg);
+                    $('.news-list').last().after(row);
+                });
+        }
+        return false;
+    });
 });

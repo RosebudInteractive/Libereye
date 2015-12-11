@@ -5,37 +5,21 @@
         </div>
     </div>
     <div class="news-list row">
-        <div class="col-sm-3 col-md-3 col-lg-4 news-item">
+        {foreach from=$aNews item=aItem name=news}
+        <div class="col-sm-3 col-md-3 col-lg-4 news-item    ">
             <div class="news-title">
                 <a href="#">
-                    <span class="img"><img src="/design/pic/content/content_img_1.png" /></span>
-                    <span>«Лаборатории» первого этажа зоны люкс</span>
+                    {if $aItem.image}<span class="img"><img src="/images/news/{$aItem.image}" /></span>{/if}
+                    <span>{$aItem.title}</span>
                 </a>
-                <div>В течение всего года на 1-м этаже «Галери Лафайет» работают две «лаборатории», представляющие современную моду класса люкс от именитых кутюрье и новых дизайнеров.</div>
+                <div>{$aItem.annotation}</div>
             </div>
         </div>
-        <div class="col-sm-3 col-md-3 col-lg-4 news-item">
-            <div class="news-title">
-                <a href="#">
-                    <span class="img"><img src="/design/pic/content/content_img_2.png" /></span>
-                    <span>Новый отдел кроссовок в «Галери Лафайет»</span>
-                </a>
-                <div>«Галери Лафайет» на бульваре Османа непрестанно находится в поисках новых идей, которые сделают ваш поход за покупками уникальным и незабываемым. </div>
-            </div>
-        </div>
-        <div class="col-sm-3 col-md-3 col-lg-4 hidden-sm news-item">
-            <div class="news-title">
-                <a href="#">
-                    <span class="img"><img src="/design/pic/content/content_img_3.png" /></span>
-                    <span>Культура и наследие</span>
-                </a>
-                <div>Удивительная история Галереи Лафайет началась в XIXвеке. И на всём её протяжении, самый младший из больших торговых центров города не переставал поражать своей смелостью и современностью.</div>
-            </div>
-        </div>
+        {/foreach}
     </div>
     <div class="row">
         <div class="col-sm-6 col-md-9 col-lg-12 text-center">
-            <a href="#" class="more-news">Больше статей</a>
+            <a href="#more" class="more-news">Больше статей</a>
         </div>
     </div>
 </div>
