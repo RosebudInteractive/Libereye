@@ -40,6 +40,7 @@ if (!$aLanguage) {
 list($aLanguages,) = $oLanguage->getList(array(), 0,0, 'is_default DESC, title');
 $_PHRASES = LangPhrase::getPhrases($aLanguage['language_id']);
 $_MSG = $_MSG + $_PHRASES;
+define('LANGUAGEID', $aLanguage['language_id']);
 
 
 // Проверка на приватный раздел

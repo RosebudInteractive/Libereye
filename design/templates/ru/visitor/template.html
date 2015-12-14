@@ -6,9 +6,12 @@
     {if $aPage.meta_keys}<meta name="keywords" content="{$aPage.meta_keys}" /> {/if}
     {if $aPage.meta_desc}<meta name="description" content="{$aPage.meta_desc}" /> {/if}
     <link rel="stylesheet" href='/design/css/main.css' type='text/css'/>
+    <link rel="stylesheet" href='/design/css/clock.css' type='text/css'/>
     <script src="/design/js/vendor/jquery.min.js"></script>
     <script src="/design/js/vendor/jquery.cycle.min.js"></script>
     <script src="/design/js/main.js"></script>
+    <script src="/design/js/moment.js"></script>
+    <script src="/design/js/moment-timezone-with-data.min.js"></script>
 </head>
 <body>
 <div class="header-gap"></div>
@@ -21,7 +24,7 @@
         <div class="slide" style="background-image: url('/design/pic/slider_gap.jpg');">
             <div class="row slide-info">
                 <div class="col-sm-3 col-md-5 col-lg-7">
-                    <div class="info-title">Galeries Lafayett</div>
+                    <div class="info-title">Galeries Lafayette</div>
                     <div class="info-text">
                         Пространстве магазинов "Galeries Lafayettе" представлена исчерпывающая гамма коллекций предметов роскоши, - от часов и ювелирных украшений, одежды, обуви и аксессуаров класса Люкс (для женщин, мужчин,
 
@@ -55,7 +58,7 @@
         <div class="slide" style="background-image: url('/design/pic/slider_gap_2.jpg');">
             <div class="row slide-info">
                 <div class="col-sm-3 col-md-5 col-lg-7">
-                    <div class="info-title">Galeries Lafayett</div>
+                    <div class="info-title">Galeries Lafayette</div>
                     <div class="info-text">
                         Пространстве магазинов "Galeries Lafayettе" представлена исчерпывающая гамма коллекций предметов роскоши, - от часов и ювелирных украшений, одежды, обуви и аксессуаров класса Люкс (для женщин, мужчин,
 
@@ -100,7 +103,10 @@
             <a href="/{$aLanguage.alias}/page/how/">{$aPhrases['How it works']}</a>
         </div>
         <div class="col-sm-2 col-md-1 col-lg-2"></div>
-        <div class="hidden-sm col-md-2 col-lg-2"><img src="/design/pic/clock-gap-1.png" />&nbsp;&nbsp;<img src="/design/pic/clock-gap-2.png" /></div>
+        <div class="hidden-sm col-md-2 col-lg-2">
+            <span class="clock"><span class="city">{$aPhrases['London']}</span></span>&nbsp;&nbsp;<span class="clock"><span class="city">{$aPhrases['Paris']}</span></span>
+            <!--<img src="/design/pic/clock-gap-1.png" />&nbsp;&nbsp;<img src="/design/pic/clock-gap-2.png" />-->
+        </div>
         <div class="col-sm-3 col-md-2 col-lg-3 personal-links text-right">
             <a href="/{$aLanguage.alias}/register/">{$aPhrases['Register']}</a>&nbsp;
             <span class="sep"></span>&nbsp;

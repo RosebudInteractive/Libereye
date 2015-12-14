@@ -26,7 +26,6 @@ class News extends DbItem
     function getList($aCond=array(), $iPage=0, $iPageSize=0, $sSort='', $aFields=array())
     {
         $aMap = $this->aFields;
-
         $sCond = $this->_parseCond($aCond, $aMap);
         $sSql = 'SELECT COUNT(*) FROM `'.$this->sTable.'` AS '.$this->sAlias.
         ' WHERE '.$sCond;
@@ -36,9 +35,9 @@ class News extends DbItem
         {
             $iOffset = $this->_getOffset($iPage, $iPageSize, $iCnt);
             $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).
-                    ', (SELECT phrase FROM lang_phrase l WHERE l.object_id='.$this->sAlias.'.news_id AND language_id=1 AND object_type_id=10 AND object_field="title") title'.
-                    ', (SELECT phrase FROM lang_phrase l WHERE l.object_id='.$this->sAlias.'.news_id AND language_id=1 AND object_type_id=10 AND object_field="annotation") annotation'.
-                    ', (SELECT phrase FROM lang_phrase l WHERE l.object_id='.$this->sAlias.'.news_id AND language_id=1 AND object_type_id=10 AND object_field="full_news") full_news'.
+                    ', (SELECT phrase FROM lang_phrase l WHERE l.object_id='.$this->sAlias.'.news_id AND language_id='.LANGUAGEID.' AND object_type_id=10 AND object_field="title") title'.
+                    ', (SELECT phrase FROM lang_phrase l WHERE l.object_id='.$this->sAlias.'.news_id AND language_id='.LANGUAGEID.' AND object_type_id=10 AND object_field="annotation") annotation'.
+                    ', (SELECT phrase FROM lang_phrase l WHERE l.object_id='.$this->sAlias.'.news_id AND language_id='.LANGUAGEID.' AND object_type_id=10 AND object_field="full_news") full_news'.
                     ', (SELECT name FROM image i WHERE i.object_id='.$this->sAlias.'.news_id AND i.object_type="news" LIMIT 1) image'.
                     ' FROM '.$this->sTable.' AS '.$this->sAlias.
                     ' WHERE '.$sCond.

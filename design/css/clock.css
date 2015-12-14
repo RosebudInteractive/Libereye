@@ -1,0 +1,43 @@
+.clock {
+    display: inline-block;
+    color:#fff;
+    font-size: 12px;
+}
+.clock ul {
+    position: relative;
+    width: 17px;
+    height: 30px;
+    margin: 0 auto 0 auto;
+    background: url(/design/pic/clock.png) no-repeat;
+    list-style: none;
+    float: left;
+}
+
+.clock .min, .clock .hour {
+    position: absolute;
+    width: 1px;
+    height: 15px;
+    top: 3px;
+    left: 8px;
+}
+
+.clock .min {
+    background: url(/design/pic/m.png) no-repeat;
+    z-index: 2;
+}
+
+.clock .hour {
+    background: url(/design/pic/h.png) no-repeat;
+    z-index: 1;
+}
+
+.clock .time {
+    padding-left: 23px;
+    display: block;
+    line-height: 15px;
+}
+.clock .city {
+    padding-left: 23px;
+    display: block;
+    line-height: 15px;
+}
