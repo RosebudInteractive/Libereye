@@ -14,7 +14,6 @@ Ext.onReady(function() {
 	        idProperty: 'news_id',
 	        fields: [
 	            {name: 'news_id', type: 'int'},
-	            {name: 'city_title', type: 'string'},
 	            {name: 'title', type: 'string'},
 	            {name: 'cdate', type: 'date'}
 	        ]    
@@ -94,14 +93,6 @@ Ext.onReady(function() {
                 dataIndex: 'news_id'
             },
             {
-                text     : 'Город',
-                width    : 100,
-                dataIndex: 'city_title',
-                editor: {
-                    allowBlank: false
-                }
-            },
-            {
                 text     : 'Заголовок',
                 width    : 400,
                 flex:  1,
@@ -113,7 +104,7 @@ Ext.onReady(function() {
         ],
        
         width: '100%',
-        height: 600,
+        height: $(window).height()-165,
         frame: true,
         renderTo: 'news',
         dockedItems: [

@@ -46,6 +46,12 @@ class DbItem extends Common
      */
     var $sNameField = '';
 
+    /**
+     * Тип объекта, 1 - common
+     * @var int
+     */
+    var $nObjectType = 1;
+
     /** Default Constructor.
      */
     function DbItem()
@@ -102,14 +108,15 @@ class DbItem extends Common
     /** Performs update of current item ( You should fill in $this->aData ...)
      * @param array $aFields fields to update: all other fields will be omitted
      *                       or empty array for no filtration
-     * @param bool  $bEsacape true (default) - escape all data, false - do not escape
+     * @param bool  $bEscape true (default) - escape all data, false - do not escape
+     * @param bool  $aPhraseFields array
      * @return bool
      */
-    function update($aFields=array(), $bEscape=true)
+    function update($aFields=array(), $bEscape=true, $aPhraseFields=array())
     {
 
         if (isset($this->aData[$this->sId]))
-            $nId = $this->aData[$this->sId];
+            $nId = intval($this->aData[$this->sId]);
         else
             return $this->_addError('dbitem.no_id', true);
 
@@ -119,7 +126,42 @@ class DbItem extends Common
         unset($aData[$this->sId]);
         $this->_filterData($aFields);
 
-        if ($this->oDb->update($this->sTable, $aData, $this->sId.' = '.intval($nId), $bEscape))
+        // переводимые поля
+        foreach($aPhraseFields as $sField) {
+            if (isset($aData[$sField])) {
+                $nPhraseId = $this->oDb->getField('SELECT phrase_id FROM phrase WHERE object_type_id='.$this->nObjectType.' AND object_field="'.$sField.'" AND object_id='.$nId);
+                if (!$nPhraseId) {
+                    $aValues = array(
+                        'object_type_id' => $this->nObjectType,
+                        'object_field' => $sField,
+                        'object_id' => $nId,
+                    );
+                    $nPhraseId = $this->oDb->insert('phrase', $aValues);
+                    if (!$nPhraseId)
+                        return $this->_addError('dbitem.insert');
+                }
+
+                foreach($aData[$sField] as $nLangId=>$sTitle) {
+                    $nPhraseDetId = $this->oDb->getField('SELECT phrase_det_id FROM phrase_det WHERE phrase_id=' . $nPhraseId . ' AND language_id=' . $nLangId);
+                    if ($nPhraseDetId) {
+                        if (!$this->oDb->update('phrase_det', array('phrase' => $sTitle), 'phrase_det_id=' . $nPhraseDetId, $bEscape))
+                            return $this->_addError('dbitem.update');
+                    } else {
+                        $aValues = array(
+                            'phrase_id' => $nPhraseId,
+                            'language_id' => $nLangId,
+                            'phrase' => $sTitle,
+                        );
+                        $nPhraseDetId = $this->oDb->insert('phrase_det', $aValues);
+                        if (!$nPhraseDetId)
+                            return $this->_addError('dbitem.insert');
+                    }
+                }
+                unset($aData[$sField]);
+            }
+        }
+
+        if ($this->oDb->update($this->sTable, $aData, $this->sId.' = '.$nId, $bEscape))
             return true;
         else
             return $this->_addError('dbitem.update');

@@ -58,7 +58,10 @@ class Validator extends Common
     {
         // vitally important for debug ( do not use isset (!) )
         $sVal = '';
-        if ( preg_match('/^(.+)\[(.*)\]$/', $sKey, $aMat) ){
+        if ( preg_match('/^(.+)\[(.*)\]\[(.*)\]$/', $sKey, $aMat) ){
+            $sVal = isset($aValues[$aMat[1]][$aMat[2]][$aMat[3]]) ? $aValues[$aMat[1]][$aMat[2]][$aMat[3]] : '';
+        }
+        else if ( preg_match('/^(.+)\[(.*)\]$/', $sKey, $aMat) ){
             $sVal = isset($aValues[$aMat[1]][$aMat[2]]) ? $aValues[$aMat[1]][$aMat[2]] : '';
         }
         else

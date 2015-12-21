@@ -21,6 +21,8 @@ $_TBL['language'] 	        = array('language',          'l', 'language_id');
 $_TBL['lang_phrase'] 	        = array('lang_phrase',          'lp', 'lang_phrase_id');
 $_TBL['ogone_api'] 	        = array('ogone_api',          'oa', 'id');
 $_TBL['news'] 	        = array('news',          'n', 'news_id');
+$_TBL['phrase'] 	        = array('phrase',          'p', 'phrase_id');
+$_TBL['phrase_det'] 	        = array('phrase_det',          'pd', 'phrase_det_id');
 
 
 ?>

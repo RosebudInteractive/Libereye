@@ -23,6 +23,7 @@ $_MSG['part.bookings']       = 'Бронирования времени';
 $_MSG['part.purchases']       = 'Покупки';
 $_MSG['part.subscribe']       = 'Подписка';
 $_MSG['part.phrases']       = 'Переводы';
+$_MSG['part.news']       = 'Новости';
 
 $_MSG['settings.updated'] = 'Настройки обновлены.';
 
@@ -40,7 +41,7 @@ $_MSG['menu.bookings']       = 'Бронирования времени';
 $_MSG['menu.purchases']       = 'Покупки';
 $_MSG['menu.subscribe']       = 'Подписка';
 $_MSG['menu.phrases']       = 'Переводы';
-
+$_MSG['menu.news']       = 'Новости';
 
 //admins
 $_MSG['admin.deleted'] = 'Администратор был успешно удален';

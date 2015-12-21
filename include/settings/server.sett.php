@@ -14,7 +14,7 @@ $_CONF['db']['user'] = 'root';
 $_CONF['db']['pass'] = '111111';
 $_CONF['db']['name'] = 'libereye2';
 $_CONF['memcache'] = array(
-    'enable' => true,
+    'enable' => false,
     'host' => 'localhost',
     'port' => 11211,
     'expire' => 10
@@ -24,7 +24,7 @@ $_CONF['memcache'] = array(
 $_CONF['path'] = 'd:/Server/domains/libereye2/Libereye/';
 
 // Host name
-$_CONF['host']  = 'libereye.it/';
+$_CONF['host']  = 'libereye2.it/';
 
 // Protocols
 $_CONF['http']  = 'http://';

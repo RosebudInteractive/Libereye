@@ -16,6 +16,7 @@ Conf::loadClass('Admin');
 $oAdmin = &new Admin();
 //check login
 $iAdminId = $oAdmin->isLoggedIn();
+define('LANGUAGEID', 1);
 
 if (!$iAdminId)
     $oReq->gotoUrl('admin.login');

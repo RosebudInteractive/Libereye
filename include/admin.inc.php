@@ -64,10 +64,19 @@ $aParts = array(
             'settings'=>array('url' =>Conf::getUrl('admin.settings.settings')),
         ),
     ), //end part "settings"
+    'news' => array(
+        'title'   =>Conf::format('part.news'),
+        'url'     =>Conf::getUrl('admin.news'),
+        'sections'=>array(
+            'list'=>array('url' =>Conf::getUrl('admin.news.list')),
+            'news_edit'=>array('url' =>Conf::getUrl('admin.news.news_edit')),
+        ),
+    ), //end part "news"
 );
 
 $aMenu = array(
     'accounts'       => array('url' => 'admin.accounts', 'title' => Conf::format('menu.accounts')),
+    'news'       => array('url' => 'admin.news', 'title' => Conf::format('menu.news')),
     'bookings'       => array('url' => 'admin.bookings', 'title' => Conf::format('menu.bookings')),
     'purchases'       => array('url' => 'admin.purchases', 'title' => Conf::format('menu.purchases')),
     'content'       => array('url' => 'admin.content', 'title' => Conf::format('menu.content')),
