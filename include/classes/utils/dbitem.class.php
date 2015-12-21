@@ -95,14 +95,41 @@ class DbItem extends Common
     /** Performs insert.
     * @return int new item ID or false on error
     */
-    function insert($bEscape=true)
+    function insert($bEscape=true, $aPhraseFields=array())
     {
+        $aData = $this->aData;
         $this->_filterData();
-        $iId = $this->oDb->insert($this->sTable, $this->aData, $bEscape);
-        if (!$iId)
+        $nId = $this->oDb->insert($this->sTable, $this->aData, $bEscape);
+        if (!$nId)
             return $this->_addError('dbitem.insert');
 
-        return $iId;
+        // переводимые поля
+        foreach($aPhraseFields as $sField) {
+            if (isset($aData[$sField])) {
+                $aValues = array(
+                    'object_type_id' => $this->nObjectType,
+                    'object_field' => $sField,
+                    'object_id' => $nId,
+                );
+                $nPhraseId = $this->oDb->insert('phrase', $aValues);
+                if (!$nPhraseId)
+                    return $this->_addError('dbitem.insert');
+
+                $this->oDb->query('UPDATE '.$this->sTable.' SET '.$sField.'_id='.$nPhraseId.' WHERE '.$this->sId.'='.$nId);
+                foreach($aData[$sField] as $nLangId=>$sTitle) {
+                    $aValues = array(
+                        'phrase_id' => $nPhraseId,
+                        'language_id' => $nLangId,
+                        'phrase' => $sTitle,
+                    );
+                    $nPhraseDetId = $this->oDb->insert('phrase_det', $aValues);
+                    if (!$nPhraseDetId)
+                        return $this->_addError('dbitem.insert');
+                }
+                unset($aData[$sField]);
+            }
+        }
+        return $nId;
     }
 
     /** Performs update of current item ( You should fill in $this->aData ...)

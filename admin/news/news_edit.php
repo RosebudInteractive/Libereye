@@ -69,8 +69,6 @@ switch($oReq->getAction())
         $oNews->aData['account_id'] = $oAdmin->isLoggedIn();
         if ($oValidator->isValid($oReq->getAll())) {
 
-            $oNews->aData['alias'] = $oNews->genAlias($oNews->aData['title']);
-
             // Upload image
             if ($_FILES['image']['tmp_name'])
             {
@@ -82,7 +80,7 @@ switch($oReq->getAction())
                     $aErrors = $oMovie->getErrors();
             }
 
-            if ($oNews->insert())
+            if ($oNews->insert(true, array('title', 'annotation', 'full_news')))
                 $oReq->forward(conf::getUrl('admin.news.list'), conf::getMessages('news.created'));
             else
                 $aErrors = $oNews->getErrors();

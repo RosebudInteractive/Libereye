@@ -62,30 +62,33 @@ class News extends DbItem
      */
     function load($nId, $nLangId=0)
     {
-        $sSql = 'SELECT '.join(',', $this->aFields).
-            ', (SELECT name FROM image i WHERE i.object_id='.$this->sAlias.'.news_id AND i.object_type="news" LIMIT 1) image'.
-            ' FROM '.$this->sTable.' AS '.$this->sAlias.
-            ' WHERE '.$this->sId.'="'.$nId.'"';
-        $this->aData = $this->oDb->getRow($sSql);
+        $this->aData = array();
+        if ($nId) {
+            $sSql = 'SELECT '.join(',', $this->aFields).
+                ', (SELECT name FROM image i WHERE i.object_id='.$this->sAlias.'.news_id AND i.object_type="news" LIMIT 1) image'.
+                ' FROM '.$this->sTable.' AS '.$this->sAlias.
+                ' WHERE '.$this->sId.'="'.$nId.'"';
+            $this->aData = $this->oDb->getRow($sSql);
 
-        $sSql = 'SELECT p.object_field, pd.phrase, pd.language_id'.
-            ' FROM  phrase p '.
-            ' LEFT JOIN phrase_det pd ON pd.phrase_id=p.phrase_id  '.
-            ' WHERE p.object_type_id='.$this->nObjectType.' AND p.object_id="'.$nId.'"';
-        $aRows = $this->oDb->getRows($sSql);
-        $aInfo = array();
-        foreach ($aRows as $aRow) {
-            $aInfo[$aRow['object_field']][$aRow['language_id']] = $aRow['phrase'];
-        }
+            $sSql = 'SELECT p.object_field, pd.phrase, pd.language_id'.
+                ' FROM  phrase p '.
+                ' LEFT JOIN phrase_det pd ON pd.phrase_id=p.phrase_id  '.
+                ' WHERE p.object_type_id='.$this->nObjectType.' AND p.object_id="'.$nId.'"';
+            $aRows = $this->oDb->getRows($sSql);
+            $aInfo = array();
+            foreach ($aRows as $aRow) {
+                $aInfo[$aRow['object_field']][$aRow['language_id']] = $aRow['phrase'];
+            }
 
-        if ($nLangId) {
-            $this->aData['title'] = $aInfo['title'][$nLangId];
-            $this->aData['annotation'] = $aInfo['annotation'][$nLangId];
-            $this->aData['full_news'] = $aInfo['full_news'][$nLangId];
-        } else {
-            $this->aData['title'] = $aInfo['title'];
-            $this->aData['annotation'] = $aInfo['annotation'];
-            $this->aData['full_news'] = $aInfo['full_news'];
+            if ($nLangId) {
+                $this->aData['title'] = $aInfo['title'][$nLangId];
+                $this->aData['annotation'] = $aInfo['annotation'][$nLangId];
+                $this->aData['full_news'] = $aInfo['full_news'][$nLangId];
+            } else {
+                $this->aData['title'] = $aInfo['title'];
+                $this->aData['annotation'] = $aInfo['annotation'];
+                $this->aData['full_news'] = $aInfo['full_news'];
+            }
         }
 
         return sizeof($this->aData);

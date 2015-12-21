@@ -91,7 +91,7 @@
         {include file="blocks/errors.html"}
 
         <div id="hk"><a href="{url link='admin.news'}">Новости</a>&nbsp;&gt;&nbsp;{if $aNews.news_id}Редактирование новости: {$aNews.title[1]}{else}Добавление новости{/if} <hr /></div>
-        <h1 class="first">{if $aNews.news_id}Редактирование новости: {$aContent.title}{else}Добавление новости{/if}</h1>
+        <h1 class="first">{if $aNews.news_id}Редактирование новости: {$aNews.title[1]}{else}Добавление новости{/if}</h1>
 
         <form method="POST" action="{$sUrl}" onsubmit="{$sJs}" enctype="multipart/form-data" name="content">
             <input type="hidden" name="act" value="{if $aNews.news_id}Сохранить{else}Создать{/if}" />
