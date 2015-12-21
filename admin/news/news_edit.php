@@ -10,12 +10,12 @@
 Conf::loadClass('utils/Validator');
 Conf::loadClass('News');
 Conf::loadClass('Language');
-Conf::loadClass('utils/file/Image');
+Conf::loadClass('Image');
 
 $oNews = new News();
 $oLanguage = new Language();
 $aLanguages = $oLanguage->getHash('title', array(), 'language_id');
-$oImage= new CImage();
+$oImage= new Image();
 $iNewsId = $oReq->getInt('id');
 $aFields = array();
 foreach($aLanguages as $nLangId=>$sLanguage) {
@@ -47,9 +47,8 @@ switch($oReq->getAction())
             // Upload image
             if ($_FILES['image']['tmp_name'])
             {
-                if ($aFile = $oImage->upload('image') ) {
-                   // $oImage->makeThumbnail(Conf::get('image.path').$aFile['real_dir'].$aFile['real_name'], 340, 340);
-                    $oNews->aData['image']  = $aFile['real_dir'].$aFile['real_name'];
+                $sExt = strtolower(substr($_FILES['image']['name'], strrpos($_FILES['image']['name'], '.')+1));
+                if ($iImageId = $oImage->upload($_FILES['image']['tmp_name'], 'news', $iNewsId, $sExt) ) {
                 }
                 else
                     $aErrors = $oImage->getErrors();
@@ -72,12 +71,11 @@ switch($oReq->getAction())
             // Upload image
             if ($_FILES['image']['tmp_name'])
             {
-                if ($aFile = $oImage->upload('image') ) {
-                   // $oImage->makeThumbnail(Conf::get('image.path').$aFile['real_dir'].$aFile['real_name'], 340, 340);
-                    $oNews->aData['image']  = $aFile['real_dir'].$aFile['real_name'];
+                $sExt = strtolower(substr($_FILES['image']['name'], strrpos($_FILES['image']['name'], '.')+1));
+                if ($iImageId = $oImage->upload($_FILES['image']['tmp_name'], 'news', $iNewsId, $sExt) ) {
                 }
                 else
-                    $aErrors = $oMovie->getErrors();
+                    $aErrors = $oImage->getErrors();
             }
 
             if ($oNews->insert(true, array('title', 'annotation', 'full_news')))

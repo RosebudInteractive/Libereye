@@ -16,10 +16,11 @@ class Image extends DbItem
         $this->_initTable('image');
     }
     
-    function upload($sFrom, $sObject, $sObjectId, $sExt, $sToken='')
+    function upload($sFrom, $sObject, $sObjectId, $sExt='', $sToken='')
     {
     	$sFromClear = preg_replace('@\?.*@i', '', $sFrom); // image.jpg?www=1&ddd=2 => image.jpg
-		$sFileName = md5(uniqid(rand(), true)).($sExt?('.'.$sExt):substr($sFromClear, strrpos($sFromClear, '.')));
+        $sExt = $sExt?$sExt:substr($sFromClear, strrpos($sFromClear, '.')+1);
+		$sFileName = md5(uniqid(rand(), true)).'.'.$sExt;
 		$sFileDir = implode('/', str_split(substr($sFileName, 0, 3), 1)).'/'; // a/b/c/d/
 		$sFileFullDir = Conf::get('image.path').$sObject.'/'.$sFileDir;
 
@@ -62,7 +63,7 @@ class Image extends DbItem
 						'height' => $height,
 						'md5_file'=> md5_file($sFileFullDir.$sFileName),
 						'cdate' => Database::date(),
-						'token' => $sToken
+						//'token' => $sToken
 					);
 					return $this->insert();
 				}
