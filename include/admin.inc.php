@@ -50,6 +50,22 @@ $aParts = array(
             'content_edit'=>array('url' =>Conf::getUrl('admin.content.content_edit')),
         ),
     ), //end part "content"
+    'shops' => array(
+        'title'   =>Conf::format('part.shops'),
+        'url'     =>Conf::getUrl('admin.shops'),
+        'sections'=>array(
+            'list'=>array('url' =>Conf::getUrl('admin.shopslist')),
+            'shop_edit'=>array('url' =>Conf::getUrl('admin.shops.shop_edit')),
+        ),
+    ), //end part "shops"
+    'brands' => array(
+        'title'   =>Conf::format('part.brands'),
+        'url'     =>Conf::getUrl('admin.brands'),
+        'sections'=>array(
+            'list'=>array('url' =>Conf::getUrl('admin.brands.list')),
+            'brand_edit'=>array('url' =>Conf::getUrl('admin.brands.brand_edit')),
+        ),
+    ), //end part "brands"
     'subscribe' => array(
         'title'   =>Conf::format('part.subscribe'),
         'url'     =>Conf::getUrl('admin.subscribe'),
@@ -79,6 +95,8 @@ $aMenu = array(
     'news'       => array('url' => 'admin.news', 'title' => Conf::format('menu.news')),
     'bookings'       => array('url' => 'admin.bookings', 'title' => Conf::format('menu.bookings')),
     'purchases'       => array('url' => 'admin.purchases', 'title' => Conf::format('menu.purchases')),
+    'brands'    => array('url' => 'admin.brands', 'title' => Conf::format('menu.brands')),
+    'shops'    => array('url' => 'admin.shops', 'title' => Conf::format('menu.shops')),
     'content'       => array('url' => 'admin.content', 'title' => Conf::format('menu.content')),
     'subscribe'       => array('url' => 'admin.subscribe', 'title' => Conf::format('menu.subscribe')),
     'phrases'       => array('url' => 'admin.phrases', 'title' => Conf::format('menu.phrases')),

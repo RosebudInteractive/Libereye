@@ -24,6 +24,8 @@ $_MSG['part.purchases']       = 'Покупки';
 $_MSG['part.subscribe']       = 'Подписка';
 $_MSG['part.phrases']       = 'Переводы';
 $_MSG['part.news']       = 'Новости';
+$_MSG['part.shops']       = 'Магазины';
+$_MSG['part.brands']       = 'Бренды';
 
 $_MSG['settings.updated'] = 'Настройки обновлены.';
 
@@ -42,6 +44,8 @@ $_MSG['menu.purchases']       = 'Покупки';
 $_MSG['menu.subscribe']       = 'Подписка';
 $_MSG['menu.phrases']       = 'Переводы';
 $_MSG['menu.news']       = 'Новости';
+$_MSG['menu.shops']       = 'Магазины';
+$_MSG['menu.brands']       = 'Бренды';
 
 //admins
 $_MSG['admin.deleted'] = 'Администратор был успешно удален';

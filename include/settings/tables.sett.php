@@ -23,6 +23,8 @@ $_TBL['ogone_api'] 	        = array('ogone_api',          'oa', 'id');
 $_TBL['news'] 	        = array('news',          'n', 'news_id');
 $_TBL['phrase'] 	        = array('phrase',          'p', 'phrase_id');
 $_TBL['phrase_det'] 	        = array('phrase_det',          'pd', 'phrase_det_id');
+$_TBL['shop'] 	        = array('shop',          's', 'shop_id');
+$_TBL['brand'] 	        = array('brand',          'b', 'brand_id');
 
 
 ?>

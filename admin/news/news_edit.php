@@ -41,7 +41,9 @@ switch($oReq->getAction())
             // Delete image
             if ($oReq->get('image_delete'))
             {
-                $oNews->aData['image']  = '';
+                //$oNews->aData['image']  = '';
+                if ($oImage->loadBy(array('object_type'=>'="news"', 'object_id'=>'='.$iNewsId)))
+                    $oImage->delete($oImage->aData['image_id']);
             }
 
             // Upload image

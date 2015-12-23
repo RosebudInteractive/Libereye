@@ -1305,3 +1305,8 @@ table.inv, table.inv td {
 
 .gallery {display: block;width: 110px;float: left;margin:3px;text-align:center;border:1px solid #999;}
 .gallery img{padding:2px;width: 100px;  height: 100px;}
+
+.noPadding .webix_cell{
+    padding: 0px;
+    line-height:100%;
+}
