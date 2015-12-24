@@ -4,6 +4,8 @@
     font: normal 13px "Lato", sans-serif;
     font-weight: normal;
 }
+.clock.black {color:#000;}
+
 .clock ul {
     position: relative;
     width: 17px;
@@ -13,6 +15,8 @@
     list-style: none;
     float: left;
 }
+
+.clock.black ul {background: url(/design/pic/clock-black.png) no-repeat;}
 
 .clock .min, .clock .hour {
     position: absolute;
@@ -26,11 +30,13 @@
     background: url(/design/pic/m.png) no-repeat;
     z-index: 2;
 }
+.clock.black .min {background: url(/design/pic/m-black.png) no-repeat;}
 
 .clock .hour {
     background: url(/design/pic/h.png) no-repeat;
     z-index: 1;
 }
+.clock.black .hour {background: url(/design/pic/h-black.png) no-repeat;}
 
 .clock .time {
     padding-left: 23px;
