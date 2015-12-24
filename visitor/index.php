@@ -7,6 +7,8 @@
  * ============================================================ */
 error_reporting(E_ALL);
 ini_set('display_errors', true);
+/* Установка внутренней кодировки в UTF-8 */
+mb_internal_encoding("UTF-8");
 require_once '../include/visitor.inc.php';
 
 Conf::loadClass('Account');
@@ -25,6 +27,8 @@ if ($oAccount->isLoggedIn() && $oAccount->load($oAccount->isLoggedIn())) {
         date_default_timezone_set($aAccount['timezone']);
     else
         date_default_timezone_set('UTC');
+} else {
+    date_default_timezone_set('UTC');
 }
 
 $aLanguage = false;

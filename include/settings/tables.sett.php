@@ -25,6 +25,10 @@ $_TBL['phrase'] 	        = array('phrase',          'p', 'phrase_id');
 $_TBL['phrase_det'] 	        = array('phrase_det',          'pd', 'phrase_det_id');
 $_TBL['shop'] 	        = array('shop',          's', 'shop_id');
 $_TBL['brand'] 	        = array('brand',          'b', 'brand_id');
+$_TBL['open_time'] 	        = array('open_time',          'ot', 'open_time_id');
+$_TBL['pgroup'] 	        = array('pgroup',          'pg', 'pgroup_id');
+$_TBL['ptype'] 	        = array('ptype',          'pt', 'ptype_id');
+$_TBL['ptype2group'] 	        = array('ptype2group',          'p2g', 'ptype2group_id');
 
 
 ?>

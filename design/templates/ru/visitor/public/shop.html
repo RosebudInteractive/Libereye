@@ -1,0 +1,491 @@
+<div class="container content">
+<div class="row">
+<div class="left-column">
+    <div class="left-slider">
+        <div class="shop-main-info">
+            <img class="shop-main-logo" src="/images/shop/{$aShop.promo_head}" alt="{$aShop.title}" />
+            <div class="shop-open-time">
+                <strong>{$aPhrases['Opened']}</strong>
+                <span>11:00 — 19:00</span>
+                <!--{if $aOpenTimes.0}<span>{$aPhrases['Mo']} {$aOpenTimes.0.times}</span>{/if}
+                {if $aOpenTimes.1}<span>{$aPhrases['Tu']} {$aOpenTimes.1.times}</span>{/if}
+                {if $aOpenTimes.2}<span>{$aPhrases['We']} {$aOpenTimes.2.times}</span>{/if}
+                {if $aOpenTimes.3}<span>{$aPhrases['Th']} {$aOpenTimes.3.times}</span>{/if}
+                {if $aOpenTimes.4}<span>{$aPhrases['Fr']} {$aOpenTimes.4.times}</span>{/if}
+                {if $aOpenTimes.5}<span>{$aPhrases['Sa']} {$aOpenTimes.5.times}</span>{/if}
+                {if $aOpenTimes.6}<span>{$aPhrases['Su']} {$aOpenTimes.6.times}</span>{/if}-->
+            </div>
+            <div class="shop-links">
+                <div class="shop-buttons">
+                    <a href="#" class="btn btn-green"><i class="label">18</i>Заказать митинг</a>
+                    <a href="#" class="btn btn-green-white">Заказать видео</a>
+                </div>
+                <div class="shop-info-links">
+                    <a href="#about">{$aPhrases['About Store']}</a><br/>
+                    <a href="#departments">{$aPhrases['Departments']} ({$iGroupsCnt})</a><br/>
+                    <a href="#brands">{$aPhrases['Brands']} ({$iBrandsCnt})</a><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="right-column">
+<div class="gallery">
+    <div class="images">
+        <img src="/design/pic/content/shop_img_1.jpg" />
+        <img src="/design/pic/content/shop_img_2.jpg" />
+    </div>
+    <div class="line"></div>
+</div>
+<div class="right-inner">
+<div class="shop-description">
+    <a name="about" class="internal-a"></a>
+    <div class="block-title">{$aPhrases['About Store']}</div>
+    <div class="text">
+        {$aShop.description_part1}
+        {if $aShop.description_part2}
+        <span id="desciption-part2" style="display: none;">{$aShop.description_part2}</span>
+        <a class="text-unwrap" href="#" onclick="return showFull(this, '#desciption-part2');">{$aPhrases['Expand']}</a>
+        {/if}
+    </div>
+</div>
+<div class="shop-departments">
+    <a name="departments" class="internal-a"></a>
+    <div class="block-title">{$aPhrases['Departments']}</div>
+    <ul class="departments-list">
+        {foreach from=$aGroups item=aItem}
+        <li>
+            <a href="#" data-department="{$aItem.pgroup_id}">
+                <i>{$aItem.ptypes}</i>
+                {if $aItem.image}<img src="/images/pgroup/{$aItem.image}" />{/if}
+                <span>{$aItem.title}</span>
+            </a>
+        </li>
+        {/foreach}
+    </ul>
+    <div class="selected-department">
+        <div class="department-title"></div>
+        <div class="department-list"></div>
+        <a href="#" class="close-department"><img src="/design/pic/department-close.png" /></a>
+    </div>
+    {literal}
+    <script>
+        var departmentsData = {/literal}{$sDepartmentsDataJson}{literal};
+    </script>
+    {/literal}
+</div>
+<div class="shop-brands">
+    <a name="brands" class="internal-a"></a>
+    <div class="block-title">{$aPhrases['Brands']}</div>
+    <div class="text">
+        {$aShop.brand_desc}
+    </div>
+    <div class="search-input-wrap">
+        <div class="search-input">
+            <input type="text" id="brand-input" name="brand" value="" placeholder="{$aPhrases['Brand name']}" />
+        </div>
+        <div class="search-result-wrap">
+            <div class="search-result-empty">
+                {$aPhrases['No brand']}
+            </div>
+            <div class="search-result"></div>
+        </div>
+    </div>
+    <!--<div class="brand-logos">
+        {foreach from=$aBrands item=aItem}
+        <span><a href="/{$aLanguage.alias}/brand/{$aItem.brand_id}/">{if $aItem.image}<img src="/images/brand/{$aItem.image}" />{else}{$aItem.title}{/if}</a></span>
+        {/foreach}
+    </div>-->
+    <div class="brand-logos">
+        <span><img src="/design/pic/content/b1.jpg" /></span>
+        <span><img src="/design/pic/content/b2.jpg" /></span>
+        <span><img src="/design/pic/content/b3.jpg" /></span>
+        <span><img src="/design/pic/content/b4.jpg" /></span>
+        <span><img src="/design/pic/content/b5.jpg" /></span>
+        <span><img src="/design/pic/content/b6.jpg" /></span>
+        <span><img src="/design/pic/content/b7.jpg" /></span>
+        <span><img src="/design/pic/content/b8.jpg" /></span>
+        <span><img src="/design/pic/content/b9.jpg" /></span>
+        <span><img src="/design/pic/content/b10.jpg" /></span>
+        <span><img src="/design/pic/content/b11.jpg" /></span>
+        <!--<span><img src="/design/pic/content/b12.jpg" /></span>-->
+    </div>
+</div>
+<div class="shop-meetings-form">
+<div class="inputs"></div>
+<div class="block-title">{$aPhrases['Order meeting']}</div>
+<div class="tabs-container">
+<div class="tabs-controls">
+    <a href="#" id="tab1-control" class="tab-control active" data-tab="#tab1">
+        <div class="shopper-tab">
+                                        <span class="shopper-photo">
+                                            <img src="/design/pic/content/shopper_1.jpg" />
+                                        </span>
+            <span class="shopper-slots">15</span>
+                                        <span class="shopepr-name">
+                                            Шоппер твоей мечты
+                                        </span>
+        </div>
+    </a>
+    <a href="#" id="tab2-control" class="tab-control" data-tab="#tab2">
+        <div class="shopper-tab">
+                                        <span class="shopper-photo">
+                                            <img src="/design/pic/content/shopper_2.jpg" />
+                                        </span>
+            <span class="shopper-slots">3</span>
+                                        <span class="shopepr-name">
+                                            Маша Шелобуткина
+                                        </span>
+        </div>
+    </a>
+</div>
+<div class="tabs">
+<div id="tab1">
+    <form class="shopper-form" data-shopper="1" method="post" action="">
+        <div class="form-page form-page-1">
+            <div class="slots-table-wrap">
+                <table class="slots-table">
+                    <tr>
+                        <th class="todays">Сегодня</th>
+                        <th>Пн.</th>
+                        <th>Вт.</th>
+                        <th>Ср.</th>
+                        <th>Чт.</th>
+                        <th>Пт.</th>
+                        <th>Сб.</th>
+                    </tr>
+                    <tr>
+                        <td class="todays">
+                            <div class="pie-wrap">
+                                <span class="pie">1/3</span>
+                                <span class="pie-text" data-text="Сегодня в">2</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/3</span>
+                                <span class="pie-text" data-text="в понедельник в">3</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">2/3</span>
+                                <span class="pie-text" data-text="во вторник в">1</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в среду в">3</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">3/3</span>
+                                <span class="pie-text" data-text="в четверг в">0</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/3</span>
+                                <span class="pie-text" data-text="в пятницу в">3</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/3</span>
+                                <span class="pie-text" data-text="в субботу в">3</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="todays">
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="Сегодня в">6</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в понедельник в">6</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">1/6</span>
+                                <span class="pie-text" data-text="во вторник в">5</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в среду в">6</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в четверг в">6</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в пятницу в">6</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в субботу в">6</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="form-page form-page-2">
+            <div class="controls">
+                <div class="day-name day-text">Сегодня в</div>
+                <div class="prev"><a href="#" data-page="1">Назад</a></div>
+                <div class="cancel"><a href="#">Отмена</a></div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="times" data-fname="time">
+                <div class="time" data-value="14:00">14:00</div>
+                <div class="time" data-value="15:00">15:00</div>
+                <div class="time" data-value="16:00">16:00</div>
+                <div class="time" data-value="17:00">17:00</div>
+                <div class="time" data-value="18:00">18:00</div>
+                <div class="time" data-value="19:00">19:00</div>
+            </div>
+        </div>
+        <div class="form-page form-page-3">
+            <div class="controls">
+                <div class="prev"><a href="#" data-page="2">Назад</a></div>
+                <div class="cancel"><a href="#">Отмена</a></div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="confirmation">
+                <div class="confirm-left">
+                    <div class="form-inline">
+                        <label>E-mail</label>
+                        <div><input type="text" name="email" value="" /></div>
+                    </div>
+                    <div class="email-explain">
+                        Ваш действующий e-mail на который мы вышлем подтверждение митинга.
+                    </div>
+                    <textarea name="info" placeholder="Опишите цель митинга"></textarea>
+                </div>
+                <div class="confirm-right">
+                    <div class="confirmed-title">Митинг состоится</div>
+                    <div class="confirmed-day day-text">сегодня в</div>
+                    <div class="confirmed-time time-text">18:00</div>
+                    <a class="btn btn-green meeting-confirm" href="#">Заказать митинг</a>
+                </div>
+            </div>
+        </div>
+        <div class="form-page form-page-4">
+            <div class="confirmation">
+                <div class="confirm-left">
+                    <div class="confirmed-day">Ура!</div>
+                    <div class="confirmed-explain">
+                        Мы отправили на почту <strong class="email-text">Example@mail.com</strong> уведомление о митинге. Пожалуйста откройте письмо и перейдите по ссылке чтобы подтвердить бронь.
+                    </div>
+                    <div class="confirm-target">
+                        <span>Цель митинга</span>
+                        <div class="explain-text">Мы поговорим о том, как структурировать шрифты, которые нас окружают и научиться разбираться в них. Как отличать одни шрифты от других и правильно их применять и сочетать. Немного погрузимся в историю и сравним типографику прошлого и современности.</div>
+                    </div>
+                </div>
+                <div class="confirm-right">
+                    <div class="confirmed-title">Митинг состоится</div>
+                    <div class="confirmed-day day-text">сегодня в</div>
+                    <div class="confirmed-time time-text">18:00</div>
+                    <div class="confirmed-links">
+                        <a href="#">Я не получил(а) письма.</a><br/>
+                        <a href="#">Отправить еще раз.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="tab2">
+    <form class="shopper-form" data-shopper="2" method="post" action="">
+        <div class="form-page form-page-1">
+            <div class="slots-table-wrap">
+                <table class="slots-table">
+                    <tr>
+                        <th class="todays">Сегодня</th>
+                        <th>Пн.</th>
+                        <th>Вт.</th>
+                        <th>Ср.</th>
+                        <th>Чт.</th>
+                        <th>Пт.</th>
+                        <th>Сб.</th>
+                    </tr>
+                    <tr>
+                        <td class="todays">
+                            <div class="pie-wrap">
+                                <span class="pie">3/3</span>
+                                <span class="pie-text" data-text="Сегодня в">0</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/3</span>
+                                <span class="pie-text" data-text="в понедельник в">3</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">2/3</span>
+                                <span class="pie-text" data-text="во вторник в">1</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в среду в">3</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">3/3</span>
+                                <span class="pie-text" data-text="в четверг в">0</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/3</span>
+                                <span class="pie-text" data-text="в пятницу в">3</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/3</span>
+                                <span class="pie-text" data-text="в субботу в">3</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="todays">
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="Сегодня в">6</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в понедельник в">6</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">1/6</span>
+                                <span class="pie-text" data-text="во вторник в">5</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в среду в">6</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в четверг в">6</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в пятницу в">6</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pie-wrap">
+                                <span class="pie">0/6</span>
+                                <span class="pie-text" data-text="в субботу в">6</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="form-page form-page-2">
+            <div class="controls">
+                <div class="day-name day-text">Сегодня в</div>
+                <div class="prev"><a href="#" data-page="1">Назад</a></div>
+                <div class="cancel"><a href="#">Отмена</a></div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="times" data-fname="time">
+                <div class="time" data-value="14:00">14:00</div>
+                <div class="time" data-value="15:00">15:00</div>
+                <div class="time" data-value="16:00">16:00</div>
+                <div class="time" data-value="17:00">17:00</div>
+                <div class="time" data-value="18:00">18:00</div>
+                <div class="time" data-value="19:00">19:00</div>
+            </div>
+        </div>
+        <div class="form-page form-page-3">
+            <div class="controls">
+                <div class="prev"><a href="#" data-page="2">Назад</a></div>
+                <div class="cancel"><a href="#">Отмена</a></div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="confirmation">
+                <div class="confirm-left">
+                    <div class="form-inline">
+                        <label>E-mail</label>
+                        <div><input type="text" name="email" value="" /></div>
+                    </div>
+                    <div class="email-explain">
+                        Ваш действующий e-mail на который мы вышлем подтверждение митинга.
+                    </div>
+                    <textarea name="info" placeholder="Опишите цель митинга"></textarea>
+                </div>
+                <div class="confirm-right">
+                    <div class="confirmed-title">Митинг состоится</div>
+                    <div class="confirmed-day day-text">сегодня в</div>
+                    <div class="confirmed-time time-text">18:00</div>
+                    <a class="btn btn-green meeting-confirm" href="#">Заказать митинг</a>
+                </div>
+            </div>
+        </div>
+        <div class="form-page form-page-4">
+            <div class="confirmation">
+                <div class="confirm-left">
+                    <div class="confirmed-day">Ура!</div>
+                    <div class="confirmed-explain">
+                        Мы отправили на почту <strong class="email-text">Example@mail.com</strong> уведомление о митинге. Пожалуйста откройте письмо и перейдите по ссылке чтобы подтвердить бронь.
+                    </div>
+                    <div class="confirm-target">
+                        <span>Цель митинга</span>
+                        <div class="explain-text">Мы поговорим о том, как структурировать шрифты, которые нас окружают и научиться разбираться в них. Как отличать одни шрифты от других и правильно их применять и сочетать. Немного погрузимся в историю и сравним типографику прошлого и современности.</div>
+                    </div>
+                </div>
+                <div class="confirm-right">
+                    <div class="confirmed-title">Митинг состоится</div>
+                    <div class="confirmed-day day-text">сегодня в</div>
+                    <div class="confirmed-time time-text">18:00</div>
+                    <div class="confirmed-links">
+                        <a href="#">Я не получил(а) письма.</a><br/>
+                        <a href="#">Отправить еще раз.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

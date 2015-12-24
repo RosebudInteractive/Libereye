@@ -9,6 +9,13 @@ require_once 'common.inc.php';
 require_once 'messages/'.LANGUAGE.'/member.mess.php';
 
 $aParts = array(
+    'ajax' => array(
+        'title'   =>Conf::format('part.ajax'),
+        'url'     =>Conf::getUrl('visitor.ajax'),
+        'sections'=>array(
+            'getbrands' => array('url'  =>Conf::getUrl('visitor.ajax.getbrands')),
+        ),
+    ), // end part "public"
     'public' => array(
         'title'   =>Conf::format('part.public'),
         'url'     =>Conf::getUrl('visitor.public'),
@@ -21,6 +28,7 @@ $aParts = array(
             'login' => array('url'  =>Conf::getUrl('visitor.public.login')),
             'remind' => array('url'  =>Conf::getUrl('visitor.public.remind')),
             'confirm' => array('url'  =>Conf::getUrl('visitor.public.confirm')),
+            'shop' => array('url'  =>Conf::getUrl('visitor.public.shop')),
         ),
     ), // end part "public"
     'private' => array(

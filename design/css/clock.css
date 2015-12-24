@@ -1,7 +1,8 @@
 .clock {
     display: inline-block;
     color:#fff;
-    font-size: 12px;
+    font: normal 13px "Lato", sans-serif;
+    font-weight: normal;
 }
 .clock ul {
     position: relative;
