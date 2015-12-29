@@ -275,7 +275,9 @@ class Database extends Common
         if ($bEscape)
         {
             $aValues = $this->escape($aValues);
-            $sVals = '"'.implode('","',array_values($aValues)).'"';
+            $sVals = '';
+            if ($aValues)
+                $sVals = '"'.implode('","',array_values($aValues)).'"';
         }
         else
             $sVals = implode(',',array_values($aValues));

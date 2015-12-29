@@ -188,6 +188,10 @@ class DbItem extends Common
             }
         }
 
+
+        if (!$aData)
+            return true;
+
         if ($this->oDb->update($this->sTable, $aData, $this->sId.' = '.$nId, $bEscape))
             return true;
         else

@@ -116,10 +116,10 @@ class Brand extends DbItem
 
             if ($nLangId) {
                 $this->aData['title'] = $aInfo['title'][$nLangId];
-                $this->aData['description'] = $aInfo['description'][$nLangId];
+                $this->aData['description'] = isset($aInfo['description'])?$aInfo['description'][$nLangId]:'';
             } else {
                 $this->aData['title'] = $aInfo['title'];
-                $this->aData['description'] = $aInfo['description'];
+                $this->aData['description'] = isset($aInfo['description'])?$aInfo['description']:array();
             }
         }
 

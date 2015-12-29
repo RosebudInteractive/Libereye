@@ -18,7 +18,17 @@ $oBrand = new Brand();
 // ========== processing actions ==========
 switch($oReq->getAction())
 {
-   case 'get':
+   case 'load':
+		$iBrandId = $oReq->getInt('id');
+        if ($iBrandId && $oBrand->load($iBrandId)) {
+            echo json_encode($oBrand->aData);
+            exit;
+        }
+		echo '{"error":"Бренд не найден"}';
+		exit;
+		break;
+
+    case 'get':
 		// delete
 		if (isset($_GET['subact']) && $_GET['subact']=='del')
 		{
@@ -31,7 +41,7 @@ switch($oReq->getAction())
 		{
 			$aCond['{#field}'] = $oReq->get('field').' LIKE "%'.Database::escapeLike($oReq->get('query')).'%"';
 		}
-		
+
 		$iPos = $oReq->getInt('start');
 		$iPageSize = $oReq->getInt('count', 50);
 		$aSort = $oReq->getArray('sort' , array('brand_id'=>'desc'));
@@ -40,24 +50,30 @@ switch($oReq->getAction())
 		exit;
 		break;
 
-   case 'update':
-        $aBrand = array(
-            'brand_id' => $oReq->getInt('brand_id'),
-            'title' => $oReq->get('title'),
-        );
-   		if (!$oBrand->update($oReq->getInt('id'))){
-            $aErrors = $oBrand->getErrors();
-        }
-        exit;
-   		break;
+    case 'update':
     case 'create':
-        echo '{ "id":"0", "mytext":"saved" }';
+        $iBrandId = $oReq->getInt('id');
+        $aBrand = $oReq->getArray('aBrand');
+        $oBrand->aData = $aBrand;
+        if ($iBrandId) {
+            $oBrand->aData['brand_id'] = $iBrandId;
+            if (!$oBrand->update(array(), true, array('title', 'description'))){
+                $aErrors = $oBrand->getErrors();
+            }
+        } else {
+            if (!($iBrandId = $oBrand->insert(true, array('title', 'description')))){
+                $aErrors = $oBrand->getErrors();
+            }
+        }
+        echo '{ "id":"'.$iBrandId.'", "error":'.json_encode($aErrors).'}';
         exit;
         break;
-   case 'del':
-   		if ($oBrand->delete($oReq->getInt('id'))){
-   			$oReq->forward(conf::getUrl('admin.accounts.list'), 'Пользователь был успешно удален');
+   case 'destroy':
+        $iBrandId = $oReq->getInt('id');
+   		if (!$oBrand->delete($iBrandId)){
+            $aErrors = $oBrand->getErrors();
    		}
+        echo '{ "id":"'.$iBrandId.'", "error":'.json_encode($aErrors).'}';
    		break;
 }
 
