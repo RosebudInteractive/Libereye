@@ -29,24 +29,33 @@ switch($oReq->getAction())
 		break;
 
     case 'get':
-		// delete
-		if (isset($_GET['subact']) && $_GET['subact']=='del')
-		{
-			if ($oReq->get('ids'))
-				$oBrand->deleteByCond(array('brand_id'=>'IN('.$oReq->get('ids').')'));
-		}
 		// search
 		$aCond = array();
-		if (isset($_GET['subact']) && $_GET['subact']=='search' && trim($_GET['query']))
+		if (isset($_GET['filter']))
 		{
-			$aCond['{#field}'] = $oReq->get('field').' LIKE "%'.Database::escapeLike($oReq->get('query')).'%"';
+            if (isset($_GET['filter']['value']) && $_GET['filter']['value'])
+                $aCond['{#title}'] = 'pd1.phrase LIKE "%'.Database::escapeLike($_GET['filter']['value']).'%"';
+            if (isset($_GET['filter']['title']) && $_GET['filter']['title'])
+                $aCond['{#title}'] = 'pd1.phrase LIKE "%'.Database::escapeLike($_GET['filter']['title']).'%"';
+            if (isset($_GET['filter']['description']) && $_GET['filter']['description'])
+                $aCond['{#description}'] = 'pd2.phrase LIKE "%'.Database::escapeLike($_GET['filter']['description']).'%"';
 		}
 
 		$iPos = $oReq->getInt('start');
 		$iPageSize = $oReq->getInt('count', 50);
 		$aSort = $oReq->getArray('sort' , array('brand_id'=>'desc'));
 		list($aItems, $iCnt) = $oBrand->getListOffset($aCond, $iPos, $iPageSize, str_replace('=', ' ', http_build_query($aSort, ' ', ', ')));
-		echo '{"pos":'.$iPos.', "total_count":"'.$iCnt.'","data":'.json_encode($aItems).'}';
+
+        if (!$oReq->get('suggest'))
+            echo '{"pos":'.$iPos.', "total_count":"'.$iCnt.'","data":'.json_encode($aItems).'}';
+        else {
+            $aBrandsSuggest = array();
+            foreach($aItems as $aItem){
+                $aBrandsSuggest[] = array("id"=>$aItem['brand_id'],"value"=>$aItem['title']);
+            }
+            echo json_encode($aBrandsSuggest);
+        }
+
 		exit;
 		break;
 
