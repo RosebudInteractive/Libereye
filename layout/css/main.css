@@ -61,6 +61,7 @@ body {
     /*border: 1px solid #000;*/
     border: none;
     padding: 10px 14px;
+    color: #fff;
 }
 .header .personal-links a.menu-activator {
     vertical-align: middle;
@@ -74,8 +75,17 @@ body {
     display: none;
     vertical-align: middle;
 }
+.header .personal-links a.close-menu:hover img {
+    display: none;
+}
+.header .personal-links a.close-menu:hover img.hover {
+    display: inline-block;
+}
 .header .personal-links a.close-menu img {
     vertical-align: middle;
+}
+.header .personal-links a.close-menu img.hover {
+    display: none;
 }
 .header .personal-links span.sep {
     opacity: .30;
@@ -215,6 +225,7 @@ body {
     box-shadow: 4px 3px 10px rgba(0,0,0,.15);
     width: 190px;
     text-align: center;
+    white-space: nowrap;
 }
 .btn.btn-green {
     border: 1px solid #22b46a;
@@ -223,6 +234,11 @@ body {
 .btn.btn-white {
     border: 1px solid #fff;
     background: transparent;
+}
+.btn.btn-green-white {
+    border: 1px solid #22b46a;
+    background: #fff;
+    color: #22b46a;
 }
 
 .btn.btn-green:hover {
@@ -239,10 +255,27 @@ body {
     background: #fff;
     color: #22b46a;
 }
-.btn.btn-green:active, .btn.btn-white:active {
+.btn.btn-green-white:hover {
+    border: 1px solid #22b46a;
+    background: #22b46a;
+    color: #fff;
+}
+.btn.btn-green:active, .btn.btn-white:active, .btn.btn-green-white:active {
     border: 1px solid #000;
     background: #000;
     color: #fff;
+}
+.btn .label {
+    float: right;
+    display: inline-block;
+    height: 100%;
+    padding: 15px;
+    vertical-align: middle;
+    margin: -15px 10px -15px 0;
+    border-radius: 30px;
+    background: #fff;
+    color: #22b46a;
+    font-style: normal;
 }
 
 h1 {
@@ -453,6 +486,72 @@ div.footer-bottom div a:hover {
     border-bottom: 1px solid #fff;
 }
 
+.pie-wrap {
+    position: relative;
+    display: inline-block;
+}
+.pie-wrap .pie-text {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 58px;
+    height: 60px;
+    font: 400 38px/49px 'Playfair Display', serif;
+    text-align: center;
+    color: #22b46a;
+    cursor: pointer;
+}
+.pie-wrap .peity {
+    border: 1px solid #2eb872;
+    border-radius: 50%;
+    box-shadow: 2px 2px 10px rgba(0,0,0,.15);
+}
+.pie-wrap:hover .peity circle, .pie-wrap:hover .peity path {
+    fill: #2eb872;
+    transition: fill 0.4s;
+}
+.pie-wrap.filled .peity {
+    border-color: #e6e6e6;
+    box-shadow: none;
+}
+.pie-wrap.filled:hover circle {
+    fill: #e6e6e6;
+}
+.pie-wrap.filled:hover .pie-text {
+    cursor: default;
+}
+.pie-wrap:hover .pie-text {
+    color: #fff;
+}
+
+.tabs-container .tabs-controls {
+    border-bottom: 1px solid #c5c5c5;
+    height: 137px;
+}
+.tabs-container .tabs-controls .tab-control {
+    height: 100%;
+    float: left;
+    width: 120px;
+    text-align: center;
+    position: relative;
+    top: 1px;
+    text-decoration: none;
+    padding-top: 13px;
+    color: #000;
+    font: 400 13px/18px 'Lato', sans-serif;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+}
+.tabs-container .tabs-controls .tab-control.active {
+    border: 1px solid #c5c5c5;
+    border-bottom: 1px solid #fff;
+    border-radius: 10px 10px 0 0;
+}
+.tabs-container .tabs {
+    padding-top: 35px;
+}
+
 .row:before,
 .row:after {
     content: "";
@@ -591,3 +690,150 @@ div.footer-bottom div a:hover {
 }
 
 
+/*
+ * CSS Styles that are needed by jScrollPane for it to operate correctly.
+ *
+ * Include this stylesheet in your site or copy and paste the styles below into your stylesheet - jScrollPane
+ * may not operate correctly without them.
+ */
+
+.jspContainer
+{
+    overflow: hidden;
+    position: relative;
+}
+
+.jspPane
+{
+    position: absolute;
+}
+
+.jspVerticalBar
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 16px;
+    height: 100%;
+}
+
+.jspHorizontalBar
+{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 18px;
+}
+
+.jspCap
+{
+    display: none;
+}
+
+.jspHorizontalBar .jspCap
+{
+    float: left;
+}
+
+.jspTrack
+{
+    background: #dde;
+    position: relative;
+    width: 100%;
+    background: rgba(0,0,0,.25);
+}
+
+.jspDrag
+{
+    background: #bbd;
+    position: relative;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+.jspHorizontalBar .jspTrack,
+.jspHorizontalBar .jspDrag
+{
+    float: left;
+    height: 100%;
+
+}
+.jspHorizontalBar .jspDrag {
+    border-top: 1px solid #f2f2f2;
+    border-radius: 5px;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e8e8e8+0,c0c0c0+100 */
+    background: rgb(232,232,232); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(232,232,232,1) 0%, rgba(192,192,192,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgba(232,232,232,1) 0%,rgba(192,192,192,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgba(232,232,232,1) 0%,rgba(192,192,192,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e8e8e8', endColorstr='#c0c0c0',GradientType=0 ); /* IE6-9 */
+
+    /*background-image: url('../img/slider_grip.png');*/
+    background-repeat: no-repeat;
+    height: 16px;
+    margin-top: 1px;
+}
+.jspVerticalBar .jspTrack {
+    background: none;
+    box-sizing: border-box;
+}
+.jspVerticalBar .jspDrag {
+    background: #c5c5c5;
+    width: 12px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+.jspDragRight {
+    height: 100%;
+    background: url('../img/slider_grip.png') no-repeat 50% 50%;
+}
+.jspArrow
+{
+    background: #50506d;
+    text-indent: -20000px;
+    display: block;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.jspArrow.jspDisabled
+{
+    cursor: default;
+    background: #80808d;
+}
+
+.jspVerticalBar .jspArrow
+{
+    height: 16px;
+}
+
+.jspHorizontalBar .jspArrow
+{
+    width: 16px;
+    float: left;
+    height: 100%;
+}
+
+.jspVerticalBar .jspArrow:focus
+{
+    outline: none;
+}
+
+.jspCorner
+{
+    background: #eeeef4;
+    float: left;
+    height: 100%;
+}
+
+/* Yuk! CSS Hack for IE6 3 pixel bug :( */
+* html .jspCorner
+{
+    margin: 0 -3px 0 0;
+}

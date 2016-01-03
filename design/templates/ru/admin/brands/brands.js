@@ -236,11 +236,4 @@ webix.ready(function(){
     $$('brandtitle').attachEvent("onValueSuggest", function(obj){
         alert("Suggested "+obj.id);
     })
-
-    function showForm(winId, node){
-        //$$(winId).getBody().clear();
-        $$(winId).show(node);
-        $$(winId).getBody().focus();
-    }
-
 });
