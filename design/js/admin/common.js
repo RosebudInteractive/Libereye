@@ -27,8 +27,6 @@ function translateForm(rows, groupName) {
         r.show = LANGUAGES[i].is_default == 1;
         cells.cells.push(r);
         tabview.options.push({id:'tab'+LANGUAGES[i].language_id.toString(), value:LANGUAGES[i].title});
-     //   if (LANGUAGES[i].is_default == 1)
-       //     tabview.value = 'tab'+LANGUAGES[i].language_id.toString();
     }
 
     if (index) {
@@ -51,3 +49,45 @@ function showForm(winId, node){
     $$(winId).show(node);
     $$(winId).getBody().focus();
 }
+
+
+function editNode(node, el, options){
+    var id  = $$('brands').getItem(node.row).brand_id, translated = options.translated;
+    webix.ajax(options.urls.load+"?id="+id, function(text, data){
+        data = data.json();
+        $$("tabbar").setValue('tab'+getDefaultLang().language_id.toString());
+        $$('form').setValues({id:data.brand_id}, true);
+        for(var i in LANGUAGES) {
+            for(var j in translated) {
+                var value = data[translated[j]] && data[translated[j]][LANGUAGES[i].language_id] ? data[translated[j]][LANGUAGES[i].language_id] : '';
+                $$(translated[j]+LANGUAGES[i].language_id).setValue(value);
+            }
+        }
+        showForm("win1", el);
+    });
+
+    return false;
+};
+
+function removeNode(node, options){
+    webix.confirm({
+        text:"Вы уверены?", ok:"Да", cancel:"Отмена",
+        callback:function(res){
+            if(res) {
+                var id  = $$('brands').getItem(node.row).brand_id;
+                var data = {id:id};
+                webix.ajax().post(options.urls.destroy, data, {
+                    success: function(text, data){
+                        $$('brands').clearSelection();
+                        $$('brands').load(options.urls.get);
+                        webix.message("Бренд успешно удален");
+                    }
+                });
+                return false;
+            }
+        }
+    });
+    return false;
+};
+
+
