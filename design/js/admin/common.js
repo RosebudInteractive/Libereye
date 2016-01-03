@@ -51,8 +51,8 @@ function showForm(winId, node){
 }
 
 
-function editNode(node, el, options){
-    var id  = $$('brands').getItem(node.row).brand_id, translated = options.translated;
+function editNode(node, el, grid, options){
+    var id  = grid.getItem(node.row).brand_id, translated = options.translated;
     webix.ajax(options.urls.load+"?id="+id, function(text, data){
         data = data.json();
         $$("tabbar").setValue('tab'+getDefaultLang().language_id.toString());
@@ -69,17 +69,17 @@ function editNode(node, el, options){
     return false;
 };
 
-function removeNode(node, options){
+function removeNode(node, grid, options){
     webix.confirm({
         text:"Вы уверены?", ok:"Да", cancel:"Отмена",
         callback:function(res){
             if(res) {
-                var id  = $$('brands').getItem(node.row).brand_id;
+                var id  = grid.getItem(node.row).brand_id;
                 var data = {id:id};
                 webix.ajax().post(options.urls.destroy, data, {
                     success: function(text, data){
-                        $$('brands').clearSelection();
-                        $$('brands').load(options.urls.get);
+                        grid.clearSelection();
+                        grid.load(options.urls.get);
                         webix.message("Бренд успешно удален");
                     }
                 });

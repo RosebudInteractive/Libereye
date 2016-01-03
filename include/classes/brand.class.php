@@ -68,10 +68,10 @@ class Brand extends DbItem
         $aMap = $this->aFields;
         $sCond = $this->_parseCond($aCond, $aMap);
         $sSql = 'SELECT COUNT(*) FROM `'.$this->sTable.'` AS '.$this->sAlias.
-            ' LEFT JOIN phrase p1 ON p1.object_id='.$this->sAlias.'.brand_id AND p1.object_type_id='.$this->nObjectType.'   AND p1.object_field="title" '.
-            ' LEFT JOIN phrase_det pd1 ON pd1.phrase_id=p1.phrase_id AND pd1.language_id='.$nLangId.'  '.
-            ' LEFT JOIN phrase p2 ON p2.object_id='.$this->sAlias.'.brand_id AND p2.object_type_id='.$this->nObjectType.'   AND p2.object_field="description" '.
-            ' LEFT JOIN phrase_det pd2 ON pd2.phrase_id=p2.phrase_id AND pd2.language_id='.$nLangId.'  '.
+            (isset($aCond['{#title}']) || isset($aCond['{#description}'])?(' LEFT JOIN phrase p1 ON p1.object_id='.$this->sAlias.'.brand_id AND p1.object_type_id='.$this->nObjectType.'   AND p1.object_field="title" '.
+                ' LEFT JOIN phrase_det pd1 ON pd1.phrase_id=p1.phrase_id AND pd1.language_id='.$nLangId.'  '.
+                ' LEFT JOIN phrase p2 ON p2.object_id='.$this->sAlias.'.brand_id AND p2.object_type_id='.$this->nObjectType.'   AND p2.object_field="description" '.
+                ' LEFT JOIN phrase_det pd2 ON pd2.phrase_id=p2.phrase_id AND pd2.language_id='.$nLangId.'  '):'').
         ' WHERE '.$sCond;
         $iCnt = $this->oDb->getField($sSql);
         $aRows = array();

@@ -12,7 +12,7 @@ webix.ready(function(){
     };
 
     var grid = {
-        id:"brands",
+        id:"gridItem",
         view:"datatable",
         columns:[
             {id:"brand_id", header:"ID", width:60, sort:"server" },
@@ -58,10 +58,15 @@ webix.ready(function(){
                 showForm("win1", this.$view);
             }},
             { view:"button", width:100, disabled:true, value:"Изменить", id:"editBtn", click:function(){
-                    editNode($$('brands').getSelectedId(true)[0], $$("editBtn").$view, options);
+                    editNode($$('gridItem').getSelectedId(true)[0], $$("editBtn").$view, $$('gridItem'), options);
                 }}, { view:"button", width:100, disabled:true, value:"Удалить", id:"delBtn",  click:function(){
-                    removeNode($$('brands').getSelectedId(true)[0], options);
-                }}
+                    removeNode($$('gridItem').getSelectedId(true)[0], $$('gridItem'), options);
+                }},
+            {},
+            { view:"button", width:80, value:"Обновить", click:function(){
+                $$('gridItem').clearSelection();
+                $$('gridItem').load(options.urls.get);
+            }}
         ]
     };
 
@@ -85,7 +90,7 @@ webix.ready(function(){
                 { view:"button", type:"form", value: "Сохранить", click:function(){
                     if ($$("form").validate()){
                         var data = $$('form').getValues();
-                        webix.ajax().post("/admin/index.php/part_brands/act_create", data, {
+                        webix.ajax().post(options.urls.create, data, {
                             success: function(text, data){
                                 data = data.json()
                                 if (data.error && data.error.length>0) {
@@ -93,8 +98,8 @@ webix.ready(function(){
                                 } else {
                                     webix.message("Изменения сохранены");
                                 }
-                                $$('brands').clearSelection();
-                                $$('brands').load("/admin/index.php/part_brands/act_get");
+                                $$('gridItem').clearSelection();
+                                $$('gridItem').load(options.urls.get);
                             }
                         });
                         this.getTopParentView().hide(); //hide window
@@ -120,4 +125,6 @@ webix.ready(function(){
         head:false,
         body:form
     });
+
+
 });
