@@ -1,16 +1,19 @@
 webix.ready(function(){
 
+    var translated = ['title', 'description'];
+
     var edit = function(e, node, el){
         var id  = $$('brands').getItem(node.row).brand_id;
         webix.ajax("/admin/index.php/part_brands/act_load?id="+id, function(text, data){
             data = data.json();
-            $$('form').setValues({id:data.brand_id});
-            $$('title1').setValue(data.title[1]?data.title[1]:'');
-            $$('title2').setValue(data.title[2]?data.title[2]:'');
-            $$('title3').setValue(data.title[3]?data.title[3]:'');
-            $$('desc1').setValue(data.description[1]?data.description[1]:'');
-            $$('desc2').setValue(data.description[2]?data.description[2]:'');
-            $$('desc3').setValue(data.description[3]?data.description[3]:'');
+            $$("tabbar").setValue('tab'+getDefaultLang().language_id.toString());
+            $$('form').setValues({id:data.brand_id}, true);
+            for(var i in LANGUAGES) {
+                for(var j in translated) {
+                    var value = data[translated[j]] && data[translated[j]][LANGUAGES[i].language_id] ? data[translated[j]][LANGUAGES[i].language_id] : '';
+                    $$(translated[j]+LANGUAGES[i].language_id).setValue(value);
+                }
+            }
             showForm("win1", el);
         });
 
@@ -40,16 +43,12 @@ webix.ready(function(){
 
     var grid = {
         id:"brands",
-       // container:"brands",
         view:"datatable",
         editable:true,
         columns:[
             { id:"brand_id",	header:"ID", 			width:60, sort:"server" },
-            { id:"title",	header:["Название", {content:"serverFilter"}], width:300, sort:"server"/*, editor:"text"*/ },
-            { id:"description",	header:["Описание", {content:"serverFilter"}], 	width:500, sort:"server"  }//,
-            // { id:"image",	header:"Картинка" , template:function(obj){return obj.image?"<img width='100' src='/images/news/"+obj.image+"'>":"";}, width:100, css:"noPadding", sort:"server"},
-           // { id:"edit", header:"&nbsp;", width:35, template:"<span  style=' cursor:pointer;' class='webix_icon fa-pencil'></span>"},
-            //{ id:"trash", header:"&nbsp;", width:35, template:"<span style=' cursor:pointer;' class='webix_icon fa-trash-o'></span>"}
+            { id:"title",	header:["Название", {content:"serverFilter"}], width:300, sort:"server"},
+            { id:"description",	header:["Описание", {content:"serverFilter"}], 	width:500, sort:"server"  }
         ],
 
         select:"row",
@@ -93,13 +92,13 @@ webix.ready(function(){
     var buttons = {
         view:"toolbar", elements:[
             { view:"button", width:100, value:"Добавить",  click:function(){
-                $$('form').setValues({id:0});
-                $$('title1').setValue("");
-                $$('title2').setValue("");
-                $$('title3').setValue("");
-                $$('desc1').setValue("");
-                $$('desc2').setValue("");
-                $$('desc3').setValue("");
+                $$("tabbar").setValue('tab'+getDefaultLang().language_id.toString());
+                $$('form').setValues({id:0}, true);
+                for(var i in LANGUAGES) {
+                    for(var j in translated) {
+                        $$(translated[j]+LANGUAGES[i].language_id).setValue('');
+                    }
+                }
                 showForm("win1", this.$view);
             }},
             { view:"button", width:100, disabled:true, value:"Изменить", id:"editBtn", click:function(){
@@ -121,34 +120,21 @@ webix.ready(function(){
         ]
     });
 
-    var dp = webix.dp('brands');
-    dp.attachEvent('onAfterSaveError', function(id, status, obj){
-        var operation = this.getItemState(id).operation; //operation that was performed
-        console.log(operation);
-    });
-
-
     var form = {
         id: "form",
         view:"form",
         width:600,
         borderless:true,
         elements: [ {rows : [
-            {view: "tabview", cells: [
-                    {header: "Русский", body: {id: "ru", rows: [{rows : [{ view:"text", label:'Название', name:"aBrand[title][1]",required:true, invalidMessage: "Поле обязательное", id:"title1" },{ view:"textarea", label:'Описание', height:100, name:"aBrand[description][1]", id:"desc1" }]}]}},
-                    {header: "English", body: {id: "en", rows: [{rows : [{ view:"text", label:'Название', name:"aBrand[title][2]",required:true, invalidMessage: "Поле обязательное", id:"title2" },{ view:"textarea", label:'Описание', height:100, name:"aBrand[description][2]", id:"desc2" }]}]}},
-                    {header: "Français", body: {id: "fr", rows: [{rows : [{ view:"text", label:'Название', name:"aBrand[title][3]",required:true, invalidMessage: "Поле обязательное", id:"title3" },{ view:"textarea", label:'Описание', height:100, name:"aBrand[description][3]", id:"desc3" }]}]}}
-                ]
-            },
+            { translated:true, view:"text", label:'Название', name:"title",required:true, invalidMessage: "Поле обязательное", id:"title" },
+            { translated:true, view:"textarea", label:'Описание', height:100, name:"description", id:"description" },
             { margin:5, cols:[
                 {},
                 { view:"button", type:"form", value: "Сохранить", click:function(){
                     if ($$("form").validate()){ //validate form
-                        //webix.message("All is correct");
                         var data = $$('form').getValues();
                         webix.ajax().post("/admin/index.php/part_brands/act_create", data, {
                             success: function(text, data){
-                              //  $$('brands').clearAll();
                                 data = data.json()
                                 if (data.error && data.error.length>0) {
                                     webix.message({ type:"error", text:Array.isArray(data.error)?data.error.join("\n"):data.error });
@@ -172,27 +158,26 @@ webix.ready(function(){
         ],
 
         elementsConfig:{
-            labelPosition:"top"
+            labelWidth:110
         }
     };
+
+    form.elements[0].rows = translateForm(form.elements[0].rows, 'aBrand');
+
+
     var form2 = {
         id: "form2",
         view:"form",
         width:700,
         borderless:true,
         elements: [ {rows : [
-            { view:"text", label:'Бренд', name:"aProduct[brand]", required:true, invalidMessage: "Поле обязательное", id:"brandtitle", suggest:"/admin/index.php/part_brands/act_get/suggest_1", /*onValueSuggest:function(obj){
+            { view:"text", label:'Бренд', name:"aProduct[brand]", required:true, invalidMessage: "Поле обязательное", id:"brandtitle", suggest:"/admin/index.php/part_brands/act_get/suggest_1"/*, onValueSuggest:function(obj){
                     $$('form2').setValue('aProduct[brand_id]', obj.id);
                 }*/},
             { view:"text", label:'Тип продукта', name:"aProduct[ptype_id]", required:true, invalidMessage: "Поле обязательное", id:"ptype_id", suggest:"/admin/index.php/part_brands/act_get/suggest_1"},
             { view:"text", label:'Артикул', name:"aProduct[article]", required:true, invalidMessage: "Поле обязательное", id:"article"},
-
-            {view: "tabview", cells: [
-                {header: "Русский", body: {id: "ru", rows: [{rows : [{ view:"text", label:'Название', name:"aBrand[title][1]",required:true, invalidMessage: "Поле обязательное", id:"title12" },{ view:"textarea", label:'Описание', height:100, name:"aBrand[description][1]", id:"desc12" }]}]}},
-                {header: "English", body: {id: "en", rows: [{rows : [{ view:"text", label:'Название', name:"aBrand[title][2]",required:true, invalidMessage: "Поле обязательное", id:"title22" },{ view:"textarea", label:'Описание', height:100, name:"aBrand[description][2]", id:"desc22" }]}]}},
-                {header: "Français", body: {id: "fr", rows: [{rows : [{ view:"text", label:'Название', name:"aBrand[title][3]",required:true, invalidMessage: "Поле обязательное", id:"title32" },{ view:"textarea", label:'Описание', height:100, name:"aBrand[description][3]", id:"desc32" }]}]}}
-            ]
-            },
+            { translated:true, view:"text", label:'Название', name:"title",required:true, invalidMessage: "Поле обязательное", id:"title" },
+            { translated:true, view:"textarea", label:'Описание', height:100, name:"description", id:"description" },
             { margin:5, cols:[
                 {},
                 { view:"button", type:"form", value: "Сохранить", click:function(){
@@ -229,6 +214,7 @@ webix.ready(function(){
         }
     };
 
+   // form2.elements[0].rows = translateForm(form2.elements[0].rows, 'aProduct');
 
     webix.ui({
         view:"popup",
