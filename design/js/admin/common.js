@@ -30,8 +30,8 @@ function translateForm(rows, groupName) {
     }
 
     if (index) {
+        rows.splice(index, 0, cells);
         rows.splice(index, 0, tabview);
-        rows.splice(index+1, 0, cells);
     }
 
     return rows;
@@ -52,11 +52,16 @@ function showForm(winId, node){
 
 
 function editNode(node, el, grid, options){
-    var id  = grid.getItem(node.row).brand_id, translated = options.translated;
+    var id  = grid.getItem(node.row)[options.id], translated = options.translated;
     webix.ajax(options.urls.load+"?id="+id, function(text, data){
         data = data.json();
-        $$("tabbar").setValue('tab'+getDefaultLang().language_id.toString());
-        $$('form').setValues({id:data.brand_id}, true);
+        if (data.error) {
+            webix.message({type:"error", text:data.error});
+            return false;
+        }
+        if ($$("tabbar"))
+            $$("tabbar").setValue('tab'+getDefaultLang().language_id.toString());
+        $$('form').setValues({id:id}, true);
         for(var i in LANGUAGES) {
             for(var j in translated) {
                 var value = data[translated[j]] && data[translated[j]][LANGUAGES[i].language_id] ? data[translated[j]][LANGUAGES[i].language_id] : '';
@@ -74,7 +79,7 @@ function removeNode(node, grid, options){
         text:"Вы уверены?", ok:"Да", cancel:"Отмена",
         callback:function(res){
             if(res) {
-                var id  = grid.getItem(node.row).brand_id;
+                var id  = grid.getItem(node.row)[options.id];
                 var data = {id:id};
                 webix.ajax().post(options.urls.destroy, data, {
                     success: function(text, data){
@@ -90,4 +95,21 @@ function removeNode(node, grid, options){
     return false;
 };
 
-
+function saveItem(options) {
+    if ($$("form").validate()){
+        var data = $$('form').getValues();
+        webix.ajax().post(options.urls.create, data, {
+            success: function(text, data){
+                data = data.json()
+                if (data.error && data.error.length>0) {
+                    webix.message({ type:"error", text:Array.isArray(data.error)?data.error.join("\n"):data.error });
+                } else {
+                    webix.message("Изменения сохранены");
+                }
+                $$('gridItem').clearSelection();
+                $$('gridItem').load(options.urls.get);
+            }
+        });
+        this.getTopParentView().hide(); //hide window
+    }
+}

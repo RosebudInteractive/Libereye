@@ -8,7 +8,8 @@ webix.ready(function(){
             destroy: "/admin/index.php/part_brands/act_destroy",
             update: "/admin/index.php/part_brands/act_create",
             create: "/admin/index.php/part_brands/act_create"
-        }
+        },
+        id: 'brand_id'
     };
 
     var grid = {
@@ -45,6 +46,7 @@ webix.ready(function(){
         url:options.urls.get
     };
 
+
     var buttons = {
         view:"toolbar", elements:[
             { view:"button", width:100, value:"Добавить",  click:function(){
@@ -58,10 +60,10 @@ webix.ready(function(){
                 showForm("win1", this.$view);
             }},
             { view:"button", width:100, disabled:true, value:"Изменить", id:"editBtn", click:function(){
-                    editNode($$('gridItem').getSelectedId(true)[0], $$("editBtn").$view, $$('gridItem'), options);
-                }}, { view:"button", width:100, disabled:true, value:"Удалить", id:"delBtn",  click:function(){
-                    removeNode($$('gridItem').getSelectedId(true)[0], $$('gridItem'), options);
-                }},
+                editNode($$('gridItem').getSelectedId(true)[0], $$("editBtn").$view, $$('gridItem'), options);
+            }}, { view:"button", width:100, disabled:true, value:"Удалить", id:"delBtn",  click:function(){
+                removeNode($$('gridItem').getSelectedId(true)[0], $$('gridItem'), options);
+            }},
             {},
             { view:"button", width:80, value:"Обновить", click:function(){
                 $$('gridItem').clearSelection();
@@ -69,6 +71,7 @@ webix.ready(function(){
             }}
         ]
     };
+
 
     var grida = webix.ui({
         container:"brands",
@@ -87,24 +90,7 @@ webix.ready(function(){
             { translated:true, view:"textarea", label:'Описание', height:100, name:"description", id:"description" },
             { margin:5, cols:[
                 {},
-                { view:"button", type:"form", value: "Сохранить", click:function(){
-                    if ($$("form").validate()){
-                        var data = $$('form').getValues();
-                        webix.ajax().post(options.urls.create, data, {
-                            success: function(text, data){
-                                data = data.json()
-                                if (data.error && data.error.length>0) {
-                                    webix.message({ type:"error", text:Array.isArray(data.error)?data.error.join("\n"):data.error });
-                                } else {
-                                    webix.message("Изменения сохранены");
-                                }
-                                $$('gridItem').clearSelection();
-                                $$('gridItem').load(options.urls.get);
-                            }
-                        });
-                        this.getTopParentView().hide(); //hide window
-                    }
-                }},
+                { view:"button", type:"form", value: "Сохранить", click:function(){ saveItem.apply(this, [options]); }},
                 { view:"button", value:"Отмена", click:function(){
                         this.getTopParentView().hide(); //hide window
                 }}
