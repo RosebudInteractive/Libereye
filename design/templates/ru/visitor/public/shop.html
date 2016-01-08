@@ -111,12 +111,25 @@
         <!--<span><img src="/design/pic/content/b12.jpg" /></span>-->
     </div>
 </div>
+
+
 <div class="shop-meetings-form">
 <div class="inputs"></div>
 <div class="block-title">{$aPhrases['Order meeting']}</div>
 <div class="tabs-container">
 <div class="tabs-controls">
     <a href="#" id="tab1-control" class="tab-control active" data-tab="#tab1">
+        <div class="shopper-tab">
+                                        <span class="shopper-photo">
+                                            <img src="/design/pic/content/shopper_all.png" />
+                                        </span>
+            <span class="shopper-slots">18</span>
+                                        <span class="shopepr-name">
+                                            Все шопперы
+                                        </span>
+        </div>
+    </a>
+    <a href="#" id="tab2-control" class="tab-control" data-tab="#tab2">
         <div class="shopper-tab">
                                         <span class="shopper-photo">
                                             <img src="/design/pic/content/shopper_1.jpg" />
@@ -127,7 +140,7 @@
                                         </span>
         </div>
     </a>
-    <a href="#" id="tab2-control" class="tab-control" data-tab="#tab2">
+    <a href="#" id="tab3-control" class="tab-control" data-tab="#tab3">
         <div class="shopper-tab">
                                         <span class="shopper-photo">
                                             <img src="/design/pic/content/shopper_2.jpg" />
@@ -140,349 +153,211 @@
     </a>
 </div>
 <div class="tabs">
-<div id="tab1">
-    <form class="shopper-form" data-shopper="1" method="post" action="">
-        <div class="form-page form-page-1">
-            <div class="slots-table-wrap">
-                <table class="slots-table">
-                    <tr>
-                        <th class="todays">{$aPhrases['Today']}</th>
-                        <th>{$aPhrases['Mo']}.</th>
-                        <th>{$aPhrases['Tu']}.</th>
-                        <th>{$aPhrases['We']}.</th>
-                        <th>{$aPhrases['Th']}.</th>
-                        <th>{$aPhrases['Fr']}.</th>
-                        <th>{$aPhrases['Sa']}.</th>
-                    </tr>
-                    <tr>
-                        <td class="todays">
-                            <div class="pie-wrap">
-                                <span class="pie">1/3</span>
-                                <span class="pie-text" data-text="{$aPhrases['Today']} в">2</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/3</span>
-                                <span class="pie-text" data-text="в понедельник в">3</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">2/3</span>
-                                <span class="pie-text" data-text="во вторник в">1</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в среду в">3</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">3/3</span>
-                                <span class="pie-text" data-text="в четверг в">0</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/3</span>
-                                <span class="pie-text" data-text="в пятницу в">3</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/3</span>
-                                <span class="pie-text" data-text="в субботу в">3</span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="todays">
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="{$aPhrases['Today']} в">6</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в понедельник в">6</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">1/6</span>
-                                <span class="pie-text" data-text="во вторник в">5</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в среду в">6</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в четверг в">6</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в пятницу в">6</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в субботу в">6</span>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="form-page form-page-2">
-            <div class="controls">
-                <div class="day-name day-text">{$aPhrases['Today']} в</div>
-                <div class="prev"><a href="#" data-page="1">Назад</a></div>
-                <div class="cancel"><a href="#">Отмена</a></div>
-                <div style="clear:both"></div>
-            </div>
-            <div class="times" data-fname="time">
-                <div class="time" data-value="14:00">14:00</div>
-                <div class="time" data-value="15:00">15:00</div>
-                <div class="time" data-value="16:00">16:00</div>
-                <div class="time" data-value="17:00">17:00</div>
-                <div class="time" data-value="18:00">18:00</div>
-                <div class="time" data-value="19:00">19:00</div>
-            </div>
-        </div>
-        <div class="form-page form-page-3">
-            <div class="controls">
-                <div class="prev"><a href="#" data-page="2">Назад</a></div>
-                <div class="cancel"><a href="#">Отмена</a></div>
-                <div style="clear:both"></div>
-            </div>
-            <div class="confirmation">
-                <div class="confirm-left">
-                    <div class="form-inline">
-                        <label>E-mail</label>
-                        <div><input type="text" name="email" value="" /></div>
-                    </div>
-                    <div class="email-explain">
-                        Ваш действующий e-mail на который мы вышлем подтверждение митинга.
-                    </div>
-                    <textarea name="info" placeholder="Опишите цель митинга"></textarea>
-                </div>
-                <div class="confirm-right">
-                    <div class="confirmed-title">Митинг состоится</div>
-                    <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
-                    <div class="confirmed-time time-text">18:00</div>
-                    <a class="btn btn-green meeting-confirm" href="#">{$aPhrases['Order meeting']}</a>
+    <div id="tab1">
+        <form class="shopper-form" data-shopper="1" method="post" action="">
+            <div class="form-page form-page-1">
+                <div class="slots-table-wrap">
+                    <table class="slots-table">
+                        <tr>
+                            <th></th>
+                            <th class="todays">{$aPhrases['Today']}</th>
+                            <th>25 Пн.</th>
+                            <th>26 Вт.</th>
+                            <th>27 Ср.</th>
+                            <th>28 Чт.</th>
+                            <th>29 Пт.</th>
+                            <th>30 Сб.</th>
+                        </tr>
+                        <tr data-tod="morning">
+                            <td class="tod">Утро</td>
+                            <td class="todays">
+                                <div class="pie-wrap">
+                                    <span class="pie">2/3</span>
+                                    <span class="pie-text" data-daytext="{$aPhrases['Today']}" data-times="10:00;11:00;12:00">1</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">0/3</span>
+                                    <span class="pie-text" data-daytext="25 сентября" data-times="10:00;11:00;12:00">3</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">2/3</span>
+                                    <span class="pie-text" data-daytext="26 сентября" data-times="">1</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">0/6</span>
+                                    <span class="pie-text" data-daytext="27 сентября" data-times="">3</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">3/3</span>
+                                    <span class="pie-text" data-daytext="28 сентября" data-times="10:00;11:00;12:00">0</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">0/3</span>
+                                    <span class="pie-text" data-daytext="29 сентября" data-times="10:00">3</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">0/3</span>
+                                    <span class="pie-text" data-daytext="30 сентября" data-times="">3</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-tod="day">
+                            <td class="tod">День</td>
+                            <td class="todays">
+                                <div class="pie-wrap">
+                                    <span class="pie">0/6</span>
+                                    <span class="pie-text" data-daytext="{$aPhrases['Today']}" data-times="14:00;15:00;16:00">6</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">0/6</span>
+                                    <span class="pie-text" data-daytext="25 сентября" data-times="">6</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">1/6</span>
+                                    <span class="pie-text" data-daytext="26 сентября" data-times="">5</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">0/6</span>
+                                    <span class="pie-text" data-daytext="27 сентября" data-times="14:00;15:00;16:00">6</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">0/6</span>
+                                    <span class="pie-text" data-daytext="28 сентября" data-times="14:00;15:00;16:00">6</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">0/6</span>
+                                    <span class="pie-text" data-daytext="29 сентября" data-times="">6</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pie-wrap">
+                                    <span class="pie">0/6</span>
+                                    <span class="pie-text" data-daytext="30 сентября" data-times="">6</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
-        </div>
-        <div class="form-page form-page-4">
-            <div class="confirmation">
-                <div class="confirm-left">
-                    <div class="confirmed-day">Ура!</div>
-                    <div class="confirmed-explain">
-                        Мы отправили на почту <strong class="email-text">Example@mail.com</strong> уведомление о митинге. Пожалуйста откройте письмо и перейдите по ссылке чтобы подтвердить бронь.
-                    </div>
-                    <div class="confirm-target">
-                        <span>Цель митинга</span>
-                        <div class="explain-text">Мы поговорим о том, как структурировать шрифты, которые нас окружают и научиться разбираться в них. Как отличать одни шрифты от других и правильно их применять и сочетать. Немного погрузимся в историю и сравним типографику прошлого и современности.</div>
-                    </div>
+            <div class="form-page form-page-2">
+                <div class="controls">
+                    <div class="day-name day-text">{$aPhrases['Today']} в</div>
+                    <div class="prev"><a href="#" data-page="1">Назад</a></div>
+                    <div class="cancel"><a href="#">Отмена</a></div>
+                    <a class="prev-day" href="#"><img src="/design/pic/shopper_date_back.png"></a>
+                    <a class="next-day" href="#"><img src="/design/pic/shopper_date_forward.png"></a>
+                    <div style="clear:both"></div>
                 </div>
-                <div class="confirm-right">
-                    <div class="confirmed-title">Митинг состоится</div>
-                    <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
-                    <div class="confirmed-time time-text">18:00</div>
-                    <div class="confirmed-links">
-                        <a href="#">Я не получил(а) письма.</a><br/>
-                        <a href="#">Отправить еще раз.</a>
+                <div class="times day" data-fname="time">
+                    <div class="time" data-value="14:00">14:00</div>
+                </div>
+                <div class="times morning" data-fname="time">
+                    <div class="time" data-value="14:00">14:00</div>
+                </div>
+            </div>
+            <div class="form-page form-page-3">
+                <div class="controls">
+                    <div class="prev"><a href="#" data-page="2">Назад</a></div>
+                    <div class="cancel"><a href="#">Отмена</a></div>
+                    <div style="clear:both"></div>
+                </div>
+                <div class="confirmation">
+                    <div class="confirm-left">
+                        <div class="form-inline">
+                            <label>E-mail</label>
+                            <div><input type="text" name="email" value="" /></div>
+                        </div>
+                        <div class="email-explain">
+                            Ваш действующий e-mail на который мы вышлем подтверждение митинга.
+                        </div>
+                        <textarea name="info" placeholder="Опишите цель митинга"></textarea>
+                    </div>
+                    <div class="confirm-right">
+                        <div class="confirmed-title">Митинг состоится</div>
+                        <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
+                        <div class="confirmed-time time-text">18:00</div>
+                        <a class="btn btn-green meeting-confirm" href="#">{$aPhrases['Order meeting']}</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
+            <div class="form-page form-page-4">
+                <div class="confirmation">
+                    <div class="confirm-left">
+                        <div class="confirmed-day">Ура!</div>
+                        <div class="confirmed-explain">
+                            Мы отправили на почту <strong class="email-text">Example@mail.com</strong> уведомление о митинге. Пожалуйста откройте письмо и перейдите по ссылке чтобы подтвердить бронь.
+                        </div>
+                        <div class="confirm-target">
+                            <span>Цель митинга</span>
+                            <div class="explain-text">Мы поговорим о том, как структурировать шрифты, которые нас окружают и научиться разбираться в них. Как отличать одни шрифты от других и правильно их применять и сочетать. Немного погрузимся в историю и сравним типографику прошлого и современности.</div>
+                        </div>
+                    </div>
+                    <div class="confirm-right">
+                        <div class="confirmed-title">Митинг состоится</div>
+                        <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
+                        <div class="confirmed-time time-text">18:00</div>
+                        <div class="confirmed-links">
+                            <a href="#">Я не получил(а) письма.</a><br/>
+                            <a href="#">Отправить еще раз.</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="tab2">
+
+    </div>
+    <div id="tab3">
+
+    </div>
 </div>
-<div id="tab2">
-    <form class="shopper-form" data-shopper="2" method="post" action="">
-        <div class="form-page form-page-1">
-            <div class="slots-table-wrap">
-                <table class="slots-table">
-                    <tr>
-                        <th class="todays">{$aPhrases['Today']}</th>
-                        <th>{$aPhrases['Mo']}.</th>
-                        <th>{$aPhrases['Tu']}.</th>
-                        <th>{$aPhrases['We']}.</th>
-                        <th>{$aPhrases['Th']}.</th>
-                        <th>{$aPhrases['Fr']}.</th>
-                        <th>{$aPhrases['Sa']}.</th>
-                    </tr>
-                    <tr>
-                        <td class="todays">
-                            <div class="pie-wrap">
-                                <span class="pie">3/3</span>
-                                <span class="pie-text" data-text="{$aPhrases['Today']} в">0</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/3</span>
-                                <span class="pie-text" data-text="в понедельник в">3</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">2/3</span>
-                                <span class="pie-text" data-text="во вторник в">1</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в среду в">3</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">3/3</span>
-                                <span class="pie-text" data-text="в четверг в">0</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/3</span>
-                                <span class="pie-text" data-text="в пятницу в">3</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/3</span>
-                                <span class="pie-text" data-text="в субботу в">3</span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="todays">
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="{$aPhrases['Today']} в">6</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в понедельник в">6</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">1/6</span>
-                                <span class="pie-text" data-text="во вторник в">5</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в среду в">6</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в четверг в">6</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в пятницу в">6</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="pie-wrap">
-                                <span class="pie">0/6</span>
-                                <span class="pie-text" data-text="в субботу в">6</span>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="form-page form-page-2">
-            <div class="controls">
-                <div class="day-name day-text">{$aPhrases['Today']} в</div>
-                <div class="prev"><a href="#" data-page="1">Назад</a></div>
-                <div class="cancel"><a href="#">Отмена</a></div>
-                <div style="clear:both"></div>
-            </div>
-            <div class="times" data-fname="time">
-                <div class="time" data-value="14:00">14:00</div>
-                <div class="time" data-value="15:00">15:00</div>
-                <div class="time" data-value="16:00">16:00</div>
-                <div class="time" data-value="17:00">17:00</div>
-                <div class="time" data-value="18:00">18:00</div>
-                <div class="time" data-value="19:00">19:00</div>
-            </div>
-        </div>
-        <div class="form-page form-page-3">
-            <div class="controls">
-                <div class="prev"><a href="#" data-page="2">Назад</a></div>
-                <div class="cancel"><a href="#">Отмена</a></div>
-                <div style="clear:both"></div>
-            </div>
-            <div class="confirmation">
-                <div class="confirm-left">
-                    <div class="form-inline">
-                        <label>E-mail</label>
-                        <div><input type="text" name="email" value="" /></div>
-                    </div>
-                    <div class="email-explain">
-                        Ваш действующий e-mail на который мы вышлем подтверждение митинга.
-                    </div>
-                    <textarea name="info" placeholder="Опишите цель митинга"></textarea>
-                </div>
-                <div class="confirm-right">
-                    <div class="confirmed-title">Митинг состоится</div>
-                    <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
-                    <div class="confirmed-time time-text">18:00</div>
-                    <a class="btn btn-green meeting-confirm" href="#">{$aPhrases['Order meeting']}</a>
-                </div>
-            </div>
-        </div>
-        <div class="form-page form-page-4">
-            <div class="confirmation">
-                <div class="confirm-left">
-                    <div class="confirmed-day">Ура!</div>
-                    <div class="confirmed-explain">
-                        Мы отправили на почту <strong class="email-text">Example@mail.com</strong> уведомление о митинге. Пожалуйста откройте письмо и перейдите по ссылке чтобы подтвердить бронь.
-                    </div>
-                    <div class="confirm-target">
-                        <span>Цель митинга</span>
-                        <div class="explain-text">Мы поговорим о том, как структурировать шрифты, которые нас окружают и научиться разбираться в них. Как отличать одни шрифты от других и правильно их применять и сочетать. Немного погрузимся в историю и сравним типографику прошлого и современности.</div>
-                    </div>
-                </div>
-                <div class="confirm-right">
-                    <div class="confirmed-title">Митинг состоится</div>
-                    <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
-                    <div class="confirmed-time time-text">18:00</div>
-                    <div class="confirmed-links">
-                        <a href="#">Я не получил(а) письма.</a><br/>
-                        <a href="#">Отправить еще раз.</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-</div>
+<script id="meeting-form-no-time-title-morning" type="x-tmpl-jquery">
+                                <div class="no-time-title">
+                                    <div>Все утреннее время забронировано</div>
+                                    <div>Доступные часы днем</div>
+                                </div>
+                            </script>
+<script id="meeting-form-no-time-title-day" type="x-tmpl-jquery">
+                                <div class="no-time-title">
+                                    <div>Все дневное время забронировано</div>
+                                    <div>Доступные часы утром</div>
+                                </div>
+                            </script>
+<script id="meeting-form-no-time-title" type="x-tmpl-jquery">
+                                <div class="no-date-time-title">
+                                    <div>На эту дату все время забронировано.</div>
+                                    <div><strong>Ближайшая дата со свободны временем:</strong></div>
+                                    <a href="#" class="jump-to-date">{literal}${dayText}{/literal}</a>
+                                </div>
+                            </script>
+<script id="meeting-form-no-time-at-all-title" type="x-tmpl-jquery">
+                                <div class="no-date-time-at-all-title">
+                                    <div>На эту дату, а также последующие в ближайшую неделю, все время забронировано. Попробуйте просмотреть более ранние даты.</div>
+                                </div>
+                            </script>
 </div>
 </div>
 </div>

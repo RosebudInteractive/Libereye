@@ -67,7 +67,7 @@ $(function() {
             var i = 0;
             for (var x in links) {
                 var link = $('<div class="overlay-link-wrap">'+links[x]+'</div>');
-                console.log(link);
+
                 link.find('a').css({'opacity':0}).append('<span/>');
                 link.appendTo(overlayMenu);
 
@@ -154,13 +154,20 @@ $(function() {
 
         // events
         form.find('.pie-wrap').not('.filled').find('.pie-text').click(function(){
-            dayText = $(this).data('text');
-            form.find('.day-text').html(dayText);
+            var clicked = $(this);
+            dayText = clicked.data('daytext');
+
+            generateTimes(clicked, form);
+            bindDayShiftEvents(clicked, form);
+
+
+            form.find('.day-text').html(dayText + ' в');
+            form.find('.controls .day-text').html(dayText);
             form.find('.form-page-1').hide();
             form.find('.form-page-2').show();
         });
 
-        form.find('.times .time').click(function(){
+        form.on('click', '.times .time', function(){
             selectedTime = $(this).data('value');
 
             form.find('.time-text').html(selectedTime);
@@ -184,8 +191,242 @@ $(function() {
 
             // collect data and submit form
 
+            // Don't forget to get shopper ID.
+
         });
+
+        form.on('click', 'a.time-toggle', function(e){
+            e.preventDefault();
+            var visible = $(this).closest('.form-page').find('.times:visible');
+            var hidden = $(this).closest('.form-page').find('.times:hidden');
+            visible.hide(); hidden.show();
+        });
+
+
     });
+
+    /**
+     * @param clicked jQuery element .pie-text in this case
+     * @param form jQuery element parent form
+     */
+    function generateTimes(clicked, form) {
+        var dayText = clicked.data('daytext');
+
+        // find out what time of day have been clicked: day or morning
+        var clickedTOD = clicked.parents('tr').data('tod');
+        var otherTOD = clickedTOD == 'morning' ? 'day' : 'morning';
+
+        // Hide other TOD block
+        var timesBlockClicked = form.find('.times.'+clickedTOD);
+        timesBlockClicked.show();
+        var timesBlockOther = form.find('.times.'+otherTOD);
+        timesBlockOther.hide();
+
+        // Generate times for clicked TOD
+        var timesClicked = clicked.data('times');
+        if (timesClicked.length == 0)
+            timesClicked = [];
+        else
+            timesClicked = timesClicked.split(";");
+
+        timesBlockClicked.empty();
+        for (var x in timesClicked) {
+            timesBlockClicked.append('<div class="time" data-value="'+timesClicked[x]+'">'+timesClicked[x]+'</div>')
+        }
+
+        // Generate times for other TOD
+        var timesOther = clicked.closest('table').find('tr[data-tod="'+otherTOD+'"] .pie-text[data-daytext="'+dayText+'"]').data('times');
+
+        if (timesOther.length == 0)
+            timesOther = [];
+        else
+            timesOther = timesOther.split(";");
+
+        timesBlockOther.empty();
+        for (var i in timesOther) {
+            timesBlockOther.append('<div class="time" data-value="'+timesOther[i]+'">'+timesOther[i]+'</div>')
+        }
+
+        // Some actions if times are booked
+
+        if (timesClicked.length == 0 && timesOther.length == 0) {
+            // both are empty
+            // find next not empty date
+            var countTimes = 0;
+            var foundNoDates = false;
+            var t = 0;
+            var nextClicked = clicked;
+            while (countTimes == 0 && t < 7) {
+                countTimes = 0;
+
+                nextClicked = nextClicked.closest('td').next('td').find('.pie-text');
+                if (nextClicked.length == 0) {
+                    foundNoDates = true;
+                    break;
+                }
+
+                var toggleTOD = nextClicked.parents('tr').data('tod') == 'morning' ? 'day' : 'morning';
+
+                // Find times for previously clicked row
+                var foundTimes = nextClicked.data('times');
+                if (foundTimes.length == 0)
+                    foundTimes = [];
+                else
+                    foundTimes = foundTimes.split(";");
+
+                countTimes += foundTimes.length;
+
+                // Find times on other row
+                foundTimes = nextClicked.closest('table').find('tr[data-tod="'+toggleTOD+'"] .pie-text[data-daytext="'+nextClicked.data('daytext')+'"]').data('times');
+                if (foundTimes.length == 0)
+                    foundTimes = [];
+                else
+                    foundTimes = foundTimes.split(";");
+
+                countTimes += foundTimes.length;
+
+
+                // emergency
+                t++;
+            }
+
+            if (foundNoDates) {
+                timesBlockClicked.empty();
+                $('#meeting-form-no-time-at-all-title').tmpl().appendTo(timesBlockClicked);
+            } else {
+                timesBlockClicked.empty();
+                $('#meeting-form-no-time-title').tmpl({"dayText": nextClicked.data('daytext')}).appendTo(timesBlockClicked);
+
+                // append click event
+                form.on('click', '.jump-to-date', function(e){
+                    e.preventDefault();
+
+                    generateTimes(nextClicked, form);
+                    form.find('.day-text').html(nextClicked.data('daytext'));
+                    form.find('.form-page-1').hide();
+                    form.find('.form-page-2').show();
+                });
+
+                //
+            }
+        } else if (timesClicked.length > 0 && timesOther.length == 0) {
+            // if clicked has times and other is empty
+            // do nothing
+        } else if (timesClicked.length == 0 && timesOther.length > 0) {
+            // if clicked is empty and other has times
+            timesBlockClicked.empty();
+            $('#meeting-form-no-time-title-'+clickedTOD).tmpl().prependTo(timesBlockOther);
+            timesBlockOther.show();
+        } else {
+            // both has times
+            var todText = {"day": "дневные", "morning": "утренние"};
+            timesBlockClicked.append('<a href="#" class="time-toggle">Посмотреть '+todText[otherTOD]+' часы ('+timesOther.length+')</a>')
+            timesBlockOther.append('<a href="#" class="time-toggle">Посмотреть '+todText[clickedTOD]+' часы ('+timesClicked.length+')</a>')
+        }
+
+    }
+
+    function findDay(day, direction) {
+
+        if (direction == 'next')
+            return day.closest('td').next('td').find('.pie-text');
+        else if (direction == 'prev')
+            return day.closest('td').prev('td').find('.pie-text');
+        else
+            return [];
+    }
+
+    function bindDayShiftEvents(currentDay, form) {
+
+        var dayBackLink = form.find('a.prev-day');
+        var dayForwardLink = form.find('a.next-day');
+
+        // off click event
+        form.off('click', 'a.prev-day');
+        form.off('click', 'a.next-day');
+
+
+        // find prev and next day
+        var nextDay = findDay(currentDay, 'next');
+        var prevDay = findDay(currentDay, 'prev');
+
+        // set this data to elements
+        dayBackLink.data('day-to', prevDay);
+        dayForwardLink.data('day-to', nextDay);
+
+
+        if (nextDay.length > 0) {
+            dayForwardLink.show();
+        } else
+            form.find('a.next-day').hide();
+
+        if (prevDay.length > 0) {
+            dayBackLink.show();
+        } else
+            form.find('a.prev-day').hide();
+
+        form.on('click', 'a.prev-day', function(e){
+            e.preventDefault();
+            if (typeof $(this).data('day-to') != "undefined")
+                prevDay = $(this).data('day-to');
+            else
+                prevDay = findDay(findDay(nextDay, 'prev'), 'prev');
+
+            generateTimes(prevDay, form);
+            form.find('.day-text').html(prevDay.data('daytext') + ' в');
+            form.find('.controls .day-text').html(prevDay.data('daytext'));
+
+            nextDay = findDay(prevDay, 'next');
+            prevDay = findDay(prevDay, 'prev');
+            if (prevDay.length == 0) {
+                $(this).hide();
+            } else {
+                $(this).show();
+                $(this).data('day-to', prevDay);
+            }
+
+            if (nextDay.length == 0) {
+                dayForwardLink.hide()
+            } else {
+                dayForwardLink.show();
+                dayForwardLink.data('day-to', nextDay);
+
+                console.log(nextDay);
+            }
+        });
+
+        form.on('click', 'a.next-day', function(e){
+            e.preventDefault();
+            if (typeof $(this).data('day-to') != "undefined")
+                nextDay = $(this).data('day-to');
+            else
+                nextDay = findDay(findDay(prevDay, 'next'), 'next');
+
+            generateTimes(nextDay, form);
+            form.find('.day-text').html(nextDay.data('daytext') + ' в');
+            form.find('.controls .day-text').html(nextDay.data('daytext'));
+
+            prevDay = findDay(nextDay, 'prev');
+            nextDay = findDay(nextDay, 'next');
+            if (nextDay.length == 0) {
+                $(this).hide();
+            } else {
+                $(this).show();
+                $(this).data('day-to', nextDay);
+            }
+
+            if (prevDay.length == 0) {
+                dayBackLink.hide()
+            } else {
+                dayBackLink.show();
+                dayBackLink.data('day-to', prevDay);
+
+                console.log(prevDay);
+            }
+        });
+    }
+
+
     $('.controls .prev a').click(function(e){
         e.preventDefault();
         var pageTo = $(this).data('page');
@@ -203,37 +444,23 @@ $(function() {
     });
 
     // Search
-    $('#brand-input').on('keyup', function(){
-        if ($(this).val().length > 0) {
+    var brandInput = $('#brand-input');
+    brandInput.on('keyup', function(){
+        if ($(this).val().length > 2) {
             var searchWrap = $('.search-result-wrap');
-            var that = this;
+
             // Make ajax request if needed
-            $.ajax({
-                method: "POST",
-                url: "/visitor/index.php/part_ajax/sect_getbrands/",
-                data: { q: $(this).val(), lang: LANGUAGE }
-            })
-                .done(function( msg ) {
-                    var results = JSON.parse(msg);
-                    var resultsCount = results.length;
-                    var $result = searchWrap.find('.search-result');
-                    $result.empty();
-                    for(var i in results) {
-                        var span = $('<a class="search-item"/>').html(results[i]);
-                        $result.append(span);
-                    }
-                    // On success attach items with class "search-item" to $('.search-input-wrap .search-result')
-                    if (resultsCount > 0) {
-                        searchWrap.removeClass('empty').slideDown(200, function() { $result.jScrollPane({autoReinitialise: true})});
-                    } else {
-                        searchWrap.addClass('empty').slideDown(200, function() { $result.jScrollPane({autoReinitialise: true})});
-                    }
-                });
 
-
+            var resultsCount = 2;
+            // On success attach items with class "search-item" to $('.search-input-wrap .search-result')
+            if (resultsCount > 0) {
+                searchWrap.slideDown(200, function() { $(this).find('.search-result').jScrollPane({autoReinitialise: true})});
+            } else {
+                searchWrap.addClass('empty').slideDown(200, function() { $(this).find('.search-result').jScrollPane({autoReinitialise: true})});
+            }
         }
     });
-    $('#brand-input').on('blur', function(){
+    brandInput.on('blur', function(){
         setTimeout(function(){ $('.search-result-wrap').slideUp(200); }, 500);
     });
 
@@ -279,5 +506,167 @@ $(function() {
 
     var gallery = $('.gallery .images');
     gallery.jScrollPane({autoReinitialise: true});
+
+
+    $('.login-init').click(function(e){
+        e.preventDefault();
+        showOverlay();
+
+        $('#login-init').tmpl().appendTo('.overlay-content');
+
+        $('#login').submit(function(e) {
+            e.preventDefault();
+            var errors = [];
+            var form = $(this);
+            var errorBlock = form.find('.error-block');
+            errorBlock.html('');
+
+            // Validate data
+            var validation = true;
+            $.each($(this).serializeArray(), function(){
+                var inputBlock = form.find('input[name="'+this.name+'"]').parents('.input');
+                if (this.name == 'email') {
+                    // Add more conditions if needed
+                    if (this.value.length == 0) {
+                        validation = false;
+                        errors["name_empty"] = "Введите E-mail";
+                        inputBlock.addClass('failed');
+                        if (inputBlock.find('.input-error').length == 0) {
+                            inputBlock.append('<div class="input-error">'+errors["name_empty"]+'</div>');
+                        }
+                        errorBlock.append(errors["name_empty"]+'<br/>');
+                    }
+                }
+                if (this.name == 'password') {
+                    // Add more conditions if needed
+                    if (this.value.length == 0) {
+                        validation = false;
+                        errors["password_empty"] = "Введите пароль";
+                        inputBlock.addClass('failed');
+                        if (inputBlock.find('.input-error').length == 0) {
+                            inputBlock.append('<div class="input-error">'+errors["password_empty"]+'</div>');
+                        }
+                        errorBlock.append(errors["password_empty"]+'<br/>');
+                    }
+                }
+            });
+
+            if (validation == true) {
+                // Make login
+            } else {
+                // show errors
+            }
+
+        });
+
+        $('.overlay-submit input').click(function(e){
+            e.preventDefault();
+            $(this).parents('form').submit();
+        });
+
+        setMargin($('.overlay-content'), 90);
+    });
+
+    $('.registration-init').click(function(e){
+        e.preventDefault();
+        showOverlay();
+
+        $('#registration-init').tmpl().appendTo('.overlay-content');
+
+        $('#email-registration').click(function(){
+            e.preventDefault();
+            showOverlay();
+
+            $('#registration-form').tmpl().appendTo('.overlay-content');
+
+            $('#registration').submit(function(e) {
+                e.preventDefault();
+                var errors = [];
+                var form = $(this);
+                var errorBlock = form.find('.error-block');
+                errorBlock.html('');
+
+                // Validate data
+                var validation = true;
+                $.each($(this).serializeArray(), function(){
+                    console.log(this);
+                    var inputBlock = form.find('input[name="'+this.name+'"]').parents('.input');
+                    if (this.name == 'name') {
+                        // Add more conditions if needed
+                        if (this.value.length == 0) {
+                            validation = false;
+                            errors["name_empty"] = "Введите имя";
+                            inputBlock.addClass('failed');
+                            if (inputBlock.find('.input-error').length == 0) {
+                                inputBlock.append('<div class="input-error">'+errors["name_empty"]+'</div>');
+                            }
+                            errorBlock.append(errors["name_empty"]+'<br/>');
+                        } else {
+                            inputBlock.removeClass('failed').addClass('success');
+                        }
+                    }
+                    if (this.name == 'email') {
+                        // Add more conditions if needed
+                        if (this.value.length == 0) {
+                            validation = false;
+                            errors["email_empty"] = "Введите почту";
+                            inputBlock.addClass('failed');
+                            if (inputBlock.find('.input-error').length == 0) {
+                                inputBlock.append('<div class="input-error">'+errors["email_empty"]+'</div>');
+                            }
+                            errorBlock.append(errors["email_empty"]+'<br/>');
+                        } else {
+                            inputBlock.removeClass('failed').addClass('success');
+                        }
+                    }
+                    if (this.name == 'password') {
+
+                    }
+                });
+
+                if (validation == true) {
+                    showOverlay();
+                    $('#registration-success').tmpl({"email": form.find('input[name="email"]').val()}).appendTo('.overlay-content');
+                } else {
+
+                    // show errors
+
+                }
+
+            });
+
+            $('.overlay-submit input').click(function(e){
+                e.preventDefault();
+                $(this).parents('form').submit();
+            });
+
+            setMargin($('.overlay-content'), 90);
+        });
+
+        setMargin($('.overlay-content'), 90);
+    });
+
+
+
+    function showOverlay () {
+        var overlay = $('body .overlay');
+        if (overlay.length == 0)
+            $('body').append('<div class="overlay"><div class="overlay-fade"></div><div class="overlay-content"><a href="#" class="overlay-close"></a></div></div>');
+        else
+            $('body .overlay').find('.overlay-content').empty().append('<a href="#" class="overlay-close"></a>');
+
+        overlay.show();
+
+        $('.overlay .overlay-close, .overlay .overlay-fade').click(function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            $('body .overlay').fadeOut(400, function() {$(this).hide()});
+        });
+    }
+
+    function setMargin(elem, margin) {
+        var ocHeight = (elem.height()-0) + margin;
+        elem.css({'margin-top': -ocHeight/2 + 'px'});
+    }
 
 });

@@ -348,6 +348,7 @@ a.text-unwrap:after {
 .shopper-tab {
     position: relative;
     display: inline-block;
+    width: 100%;
 }
 .shopper-tab span.shopper-photo {
     display: block;
@@ -398,6 +399,12 @@ a.text-unwrap:after {
     font: 400 13px 'Lato', sans-serif;
     padding-bottom: 15px;
 }
+.slots-table td.tod {
+    color: #666;
+    font-size: 13px;
+    vertical-align: middle;
+    padding-right: 15px;
+}
 .slots-table th.todays {
     font-weight: bold;
 }
@@ -407,6 +414,16 @@ a.text-unwrap:after {
 .shop-meetings-form .controls {
     position: relative;
     margin-bottom: 25px;
+}
+.shop-meetings-form .controls .prev-day {
+    position: absolute;
+    left: 35%;
+    top: -4px;
+}
+.shop-meetings-form .controls .next-day {
+    position: absolute;
+    right: 35%;
+    top: -4px;
 }
 .shop-meetings-form .controls div {
     display: inline-block;
@@ -461,6 +478,9 @@ a.text-unwrap:after {
     position: absolute;
     left: 0;
 }
+.shop-meetings-form .times {
+    text-align: center;
+}
 .shop-meetings-form .times .time {
     width: 100%;
     border: 1px solid #22b46a;
@@ -488,6 +508,40 @@ a.text-unwrap:after {
 }
 .shop-meetings-form .confirmation .confirm-left {
     width: 60%;
+}
+.shop-meetings-form .no-time-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.shop-meetings-form .no-time-title div:last-child {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.shop-meetings-form .no-date-time-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 17px;
+}
+.shop-meetings-form .no-date-time-title div:first-child {
+    margin-bottom: 15px;
+}
+.shop-meetings-form .no-date-time-at-all-title {
+    font-weight: 800;
+    font-size: 17px;
+}
+.shop-meetings-form .time-toggle {
+    text-decoration: none;
+    border-bottom: 1px dashed #22b46a;
+    color: #22b46a;
+    font-size: 13px;
+}
+.shop-meetings-form .jump-to-date {
+    text-decoration: none;
+    border-bottom: 1px dashed #22b46a;
+    color: #22b46a;
+    font-size: 17px;
 }
 .form-inline {
     width: 100%;

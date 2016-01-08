@@ -3,6 +3,10 @@
     color:#fff;
     font: normal 13px "Lato", sans-serif;
     font-weight: normal;
+    height:39px;
+    font-weight: 700;
+    padding-left: 2px;
+    padding-top: 1px;
 }
 .clock.black {color:#000;}
 
@@ -39,12 +43,13 @@
 .clock.black .hour {background: url(/design/pic/h-black.png) no-repeat;}
 
 .clock .time {
-    padding-left: 23px;
+    padding-left: 21px;
     display: block;
     line-height: 15px;
+    padding-top: 1px;
 }
 .clock .city {
-    padding-left: 23px;
+    padding-left: 21px;
     display: block;
     line-height: 15px;
 }

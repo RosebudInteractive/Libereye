@@ -265,6 +265,38 @@ body {
     background: #000;
     color: #fff;
 }
+.btn.btn-overlay {
+    padding: 12px 25px 12px 25px;
+    width: 100%;
+    position: relative;
+    color: #22b46a;
+}
+.btn.btn-overlay:hover {
+    text-decoration: none;
+}
+.btn.btn-overlay span {
+    display: inline-block;
+    width: 25px;
+    height: 39px;
+    float: left;
+}
+.login .btn.btn-overlay span {
+    height: 25px !important;
+}
+.btn.btn-fb {
+    background: #3765a3;
+    border-color: #3765a3;
+    color: #fff;
+}
+.btn.btn-fb span {
+    background: url('/design/pic/ov_fb_icon.png') no-repeat 0 50%;
+}
+.btn.btn-vk span {
+    background: url('/design/pic/ov_vk_icon.png') no-repeat 0 50%;
+}
+.btn.btn-g span {
+    background: url('/design/pic/ov_google_icon.png') no-repeat 0 50%;
+}
 .btn .label {
     float: right;
     display: inline-block;
@@ -567,6 +599,229 @@ div.footer-bottom div a:hover {
     /*background-color: #FFDCDC;*/
 }
 
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 500;
+    width: 100%;
+    height: 100%;
+    /*display: none;*/
+}
+.overlay .overlay-content {
+    z-index: 501;
+    position: absolute;
+    width: 427px;
+    left: 50%;
+    margin-left: -213px;
+    background: #fff;
+    border-radius: 15px;
+    padding: 42px 42px 35px;
+    top: 50%;
+}
+.overlay .overlay-fade {
+    background: rgba(0,0,0,.75);
+    width: 100%;
+    height: 100%;
+}
+.overlay-content .overlay-close {
+    position: absolute;
+    width: 13px;
+    height: 12px;
+    background: url('/design/pic/overlay-close.png');
+    right: 24px;
+    top: 24px;
+}
+.overlay-content .overlay-title {
+    font: 800 16px/24px 'Lato', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #000;
+}
+.overlay-content .overlay-subtitle {
+    font: 800 16px/48px 'Lato', sans-serif;
+    color: #000;
+}
+.overlay-content {
+    color: #666;
+    font-size: 16px;
+}
+.overlay-content a {
+    color: #22b46a;
+    text-decoration: none;
+}
+.overlay-content a:hover {
+    text-decoration: underline;
+}
+.overlay-content .email-registration-block {
+    text-align: center;
+}
+.overlay-content .email-registration-block a {
+    color: #22b46a;
+    text-decoration: none;
+    background: url('/design/pic/overlay-email-reg-icon.png') no-repeat 0 50%;
+    padding-left: 20px;
+}
+.overlay-content .email-registration-block a:hover {
+    text-decoration: underline;
+}
+.overlay-content .overlay-buttons .btn {
+    margin-bottom: 12px;
+    line-height: 25px;
+}
+.overlay-content .overlay-line {
+    margin: 30px -42px;
+    height: 1px;
+    border: 1px solid #c5c5c5;
+}
+.overlay-content .overlay-login-href {
+    font-weight: 800;
+    text-decoration: none;
+}
+.overlay-content .overlay-login-href:hover {
+    text-decoration: underline;
+}
+.overlay-content .input {
+    margin-bottom: 15px;
+    position: relative;
+}
+.overlay-content .input:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+.overlay-content .input label {
+    color: #000;
+    display: inline-block;
+    width: 80px;
+    text-align: right;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+.overlay-content .input input {
+    color: #000;
+    border: none;
+    border-bottom: 1px dotted #27a865;
+    width: 250px;
+    padding: 7px;
+    vertical-align: middle;
+    background: transparent;
+}
+.overlay-content .input .select {
+    color: #000;
+    border: none;
+    border-bottom: 1px dotted #27a865;
+    width: 250px;
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    background: url('/design/pic/select_button.png') no-repeat 97% 50%;
+}
+.overlay-content .input .select select {
+    background: transparent;
+    width: 100%;
+    padding: 10px 7px 7px;
+    border: 0;
+    border-radius: 0;
+    -webkit-appearance: none;
+}
+.overlay-content .input .select.day-select {
+    width: 70px;
+}
+.overlay-content .input .select.year-select {
+    width: 87px;
+}
+.overlay-content .input input:focus {
+    outline: none;
+}
+.overlay-content .input .input-error {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    padding: 15px;
+    z-index: 100;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 8px 2px rgba(0,0,0,.3);
+    font-size: 13px;
+    max-width: 200px;
+}
+.overlay-content .input .input-error:after {
+    content: "";
+    position: absolute;
+    top: -13px;
+    left: 74%;
+    border-width: 0 10px 13px;
+    border-style: solid;
+    border-color: #fff transparent;
+    display: block;
+    width: 0;
+}
+.overlay-content .input.failed {
+    background: url('/design/pic/form-input-failed.jpg') no-repeat 97% 50%;
+}
+.overlay-content .input.failed input, .overlay-content .input.failed {
+    cursor: pointer;
+}
+.overlay-content .input.failed:hover .input-error {
+    display: block;
+}
+.overlay-content .input.success {
+    background: url('/design/pic/form-input-success.jpg') no-repeat 97% 50%;
+}
+.overlay-content .input.failed input {
+    border-bottom: 1px dotted #d02222;
+}
+.overlay-content .input.success input {
+    border-bottom: 1px dotted #27a865;
+}
+.overlay-content .error-block {
+    color:#d02222;
+    font-size: 13px;
+    margin: 10px 0;
+}
+.overlay-content .overlay-submit input {
+    width: 100%;
+    border-radius: 25px;
+    background: #27a865;
+    color: #fff;
+    border: none;
+    font-weight: 800;
+    font-size: 16px;
+    padding: 13px 0;
+    margin-top: 10px;
+}
+.overlay-content .overlay-submit input:hover {
+    cursor: pointer;
+}
+.overlay-content .overlay-forget-link {
+    color: #27a865;
+    font-size: 13px;
+    float: right;
+    position: relative;
+    top: 1px;
+}
+.or {
+    /*width: 100%;*/
+    height: 1px;
+    border: 1px solid #c5c5c5;
+    text-align: center;
+    margin: 20px -42px 30px;
+}
+.or span {
+    background: #fff;
+    position: relative;
+    top: -25px;
+    font: 800 16px/48px 'Lato', sans-serif;
+    color: #000;
+    padding: 0 21px;
+}
+.or-short {
+    width: 185px;
+    margin: 20px auto 30px;
+}
+
 .col-sm-1 { width: 8.866%; }
 .col-sm-2 { width: 25.532%; }
 .col-sm-3 { width: 42.198%; }
@@ -836,4 +1091,75 @@ div.footer-bottom div a:hover {
 * html .jspCorner
 {
     margin: 0 -3px 0 0;
+}
+
+
+/* Base for label styling */
+[type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
+    position: absolute;
+    left: -9999px;
+}
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+/* checkbox aspect */
+[type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before {
+    content: '';
+    position: absolute;
+    left:0; top: -4px;
+    width: 21px; height: 21px;
+    border: 1px solid #c5c5c5;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,.15)
+}
+/* checked mark aspect */
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+    content: url('/design/pic/checkbox_mark.jpg');
+    position: absolute;
+    top: 0; left: 4px;
+    font-size: 18px;
+    line-height: 0.8;
+    color: #09ad7e;
+    transition: all .2s;
+}
+/* checked mark aspect changes */
+[type="checkbox"]:not(:checked) + label:after {
+    opacity: 0;
+    transform: scale(0);
+}
+[type="checkbox"]:checked + label:after {
+    opacity: 1;
+    transform: scale(1);
+}
+/* disabled checkbox */
+[type="checkbox"]:disabled:not(:checked) + label:before,
+[type="checkbox"]:disabled:checked + label:before {
+    box-shadow: none;
+    border-color: #bbb;
+    background-color: #ddd;
+}
+[type="checkbox"]:disabled:checked + label:after {
+    color: #999;
+}
+[type="checkbox"]:disabled + label {
+    color: #aaa;
+}
+/* accessibility */
+[type="checkbox"]:checked:focus + label:before,
+[type="checkbox"]:not(:checked):focus + label:before {
+    border: 1px dotted blue;
+}
+
+/* hover style just for information */
+label:hover:before {
+    border: 1px solid #4778d9!important;
 }
