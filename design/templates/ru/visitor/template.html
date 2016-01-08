@@ -121,9 +121,9 @@
             <!--<img src="/design/pic/clock-gap-1.png" />&nbsp;&nbsp;<img src="/design/pic/clock-gap-2.png" />-->
         </div>
         <div class="col-sm-3 col-md-2 col-lg-3 personal-links text-right">
-            <a href="/{$aLanguage.alias}/register/">{$aPhrases['Register']}</a>&nbsp;
+            <a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;
             <span class="sep"></span>&nbsp;
-            <a href="/{$aLanguage.alias}/login/">{$aPhrases['Login']}</a>
+            <a href="#" class="login-init">{$aPhrases['Login']}</a>
             <div class="visible-sm">
                 <a href="#" class="menu-activator"><img src="/design/pic/small-menu-icon.png" /></a>
                 <a href="#" class="close-menu"><img src="/design/pic/menu-close-icon.png" /></a>
@@ -144,9 +144,9 @@
         <div class="col-sm-2 col-md-1 col-lg-2"></div>
         <div class="hidden-sm col-md-2 col-lg-2"><span class="clock black"><span class="city">{$aPhrases['London']}</span></span>&nbsp;&nbsp;<span class="clock black"><span class="city">{$aPhrases['Paris']}</span></span><!--<img src="/design/pic/clock-gap-1_black.png" />&nbsp;&nbsp;<img src="/design/pic/clock-gap-2_black.png" />--></div>
         <div class="col-sm-3 col-md-2 col-lg-3 personal-links text-right">
-            <a href="/{$aLanguage.alias}/register/">{$aPhrases['Register']}</a>&nbsp;
+            <a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;
             <span class="sep"></span>&nbsp;
-            <a href="/{$aLanguage.alias}/login/">{$aPhrases['Login']}</a>
+            <a href="#" class="login-init">{$aPhrases['Login']}</a>
             <div class="visible-sm">
                 <a href="#" class="menu-activator"><img src="/design/pic/small-menu-icon_black.png" /></a>
                 <a href="#" class="close-menu">
@@ -205,5 +205,162 @@
         </div>
     </div>
 </div>
+
+
+{literal}
+<script id="login-form" type="text/x-jquery-tmpl">
+        <form class="login-form" action="" method="post">
+
+        </form>
+</script>
+<script id="registration-form" type="text/x-jquery-tmpl">
+        <form action="" id="registration" method="post">
+            <div>Зарегистрируйтесь c помощью <a href="#">Facebook</a>, <a href="#">Вконтакте</a> или <a href="#">Google</a>.</div>
+            <div class="or"><span>или</span></div>
+            <div class="inputs">
+                <div class="input">
+                    <label for="inName">Имя</label>
+                    <input id="inName" type="text" name="name" value=""  />
+                </div>
+                <div class="input">
+                    <label for="inEmail">Email</label>
+                    <input id="inEmail" type="text" name="email" value=""  />
+                </div>
+                <div class="input">
+                    <label for="inPass">Пароль</label>
+                    <input id="inPass" type="password" name="password" value=""  />
+                </div>
+                <div class="input">
+                    <label for="inPassA">Повторите<br/>пароль</label>
+                    <input id="inPassA" type="password" name="password-check" value=""  />
+                </div>
+                <div class="overlay-subtitle">День рождения</div>
+                <div class="input">
+                    <label for="inMonth">Месяц</label>
+                    <div class="select">
+                        <select id="inMonth" name="bmonth">
+                            <option>январь</option>
+                            <option>февраль</option>
+                            <option>март</option>
+                            <option>апрель</option>
+                            <option>май</option>
+                            <option>июнь</option>
+                            <option>июль</option>
+                            <option>август</option>
+                            <option>сентябрь</option>
+                            <option>октябрь</option>
+                            <option>ноябрь</option>
+                            <option>декабрь</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input">
+                    <label for="inDay">День</label>
+                    <div class="select day-select">
+                        <select id="inDay" name="bday">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                            <option>16</option>
+                            <option>17</option>
+                            <option>18</option>
+                            <option>19</option>
+                            <option>20</option>
+                            <option>21</option>
+                            <option>22</option>
+                            <option>23</option>
+                            <option>24</option>
+                            <option>25</option>
+                            <option>26</option>
+                            <option>27</option>
+                            <option>28</option>
+                            <option>29</option>
+                            <option>30</option>
+                            <option>31</option>
+                        </select>
+                    </div>
+                    <label for="inYear">Год</label>
+                    <div class="select year-select">
+                        <select id="inYear" name="byear">
+                            <option>1980</option>
+                            <option>1981</option>
+                            <option>1982</option>
+                            <option>1983</option>
+                            <option>1984</option>
+                            <option>1985</option>
+                            <option>1986</option>
+                            <option>1987</option>
+                            <option>1988</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="error-block"></div>
+            <div class="overlay-submit"><input type="submit" name="sub" value="Зарегистрироваться" /></div>
+            <div class="overlay-line"></div>
+            <div class="text-center">Вы уже на LiberEye? <a href="#" class="overlay-login-href">Войти</a>
+        </form>
+</script>
+<script id="login-init" type="text/x-jquery-tmpl">
+        <form action="" method="post" id="login">
+            <div class="overlay-title">Войти</div>
+            <br/>
+            <div class="overlay-buttons login">
+                <a href="#" class="btn btn-fb btn-overlay"><span></span>&nbsp;Войти через Facebook</a>
+                <a href="#" class="btn btn-vk btn-green-white btn-overlay"><span></span>&nbsp;Войти через Вконтакте</a>
+                <a href="#" class="btn btn-g btn-green-white btn-overlay"><span></span>&nbsp;Войти через Google</a>
+            </div>
+            <div class="or or-short"><span>или</span></div>
+            <div class="inputs">
+                    <div class="input">
+                        <label for="inEmail">Email</label>
+                        <input id="inEmail" type="text" name="email" value=""  />
+                    </div>
+                    <div class="input">
+                        <label for="inPass">Пароль</label>
+                        <input id="inPass" type="password" name="password" value=""  />
+                    </div>
+                    <a href="#" class="overlay-forget-link">Забыли пароль?</a>
+                    <input type="checkbox" name="remember" value="1" id="inRemember" />&nbsp;<label for="inRemember">Запомнить меня</label>
+            </div>
+            <div class="error-block"></div>
+            <div class="overlay-submit"><input type="submit" name="sub" value="Войти" /></div>
+            <div class="overlay-line"></div>
+            <div class="text-center">Вы уже на LiberEye? <a href="#" class="overlay-login-href">Войти</a>
+        </form>
+</script>
+<script id="registration-init" type="text/x-jquery-tmpl">
+        <div class="overlay-title">Зарегистрируйтесь</div>
+        <div>и посетите самые крупные универмаги мира.</div>
+        <br/>
+        <div class="overlay-buttons">
+            <a href="#" class="btn btn-fb btn-overlay"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Facebook</a>
+            <a href="#" class="btn btn-vk btn-green-white btn-overlay"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Вконтакте</a>
+            <a href="#" class="btn btn-g btn-green-white btn-overlay"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Google</a>
+        </div>
+        <div class="or or-short"><span>или</span></div>
+        <div class="email-registration-block"><a href="#" id="email-registration">Регистрация через E-mail</a></div>
+        <div class="overlay-line"></div>
+        <div class="text-center">Вы уже на LiberEye? <a href="#" class="overlay-login-href">Войти</a>
+</script>
+<script id="registration-success" type="text/x-jquery-tmpl">
+        <div class="registration-success">
+            <span>Ура!</span>
+            Мы выслали на <strong>${email}</strong> письмо с дальнейшими инструкциями.
+        </div>
+</script>
+{/literal}
 </body>
 </html>
