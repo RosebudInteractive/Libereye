@@ -31,16 +31,18 @@ class Booking extends DbItem
         $sSql = 'SELECT COUNT(*) FROM `'.$this->sTable.'` AS '.$this->sAlias.
         ' LEFT JOIN account a USING(account_id)'.
         ' LEFT JOIN account a2 ON a2.account_id=b.seller_id'.
+        ' LEFT JOIN shop_slot ss ON ss.shop_slot_id=b.shop_slot_id'.
         ' WHERE '.$sCond;
         $iCnt = $this->oDb->getField($sSql);
         $aRows = array();
         if ($iCnt)
         {
             $iOffset = $this->_getOffset($iPage, $iPageSize, $iCnt);
-            $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).', a.fname, a.lname, a.email, a2.fname seller, a2.lname seller_lname, a2.email seller_email'.
+            $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).', a.fname, a.email, a2.fname seller, a2.email seller_email, ss.time_from, ss.time_to'.
                     ' FROM '.$this->sTable.' AS '.$this->sAlias.
                     ' LEFT JOIN account a USING(account_id)'.
                     ' LEFT JOIN account a2 ON a2.account_id=b.seller_id'.
+                    ' LEFT JOIN shop_slot ss ON ss.shop_slot_id=b.shop_slot_id'.
                     ' WHERE '.$sCond.
                     ($sSort?(' ORDER BY '.$sSort):'').
                     ($iPageSize?(' LIMIT '.$iOffset.','.$iPageSize):'');

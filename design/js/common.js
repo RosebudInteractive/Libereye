@@ -1,5 +1,13 @@
 $(function() {
-    // загрузка новостей
+
+    // РІСЂРµРјРµРЅРЅР°СЏ Р·РѕРЅР° РЅР° РєР»РёРµРЅС‚Рµ
+    if (!$.cookie('timezone') || $.cookie('timezone') != new Date().getTimezoneOffset()) {
+        $.cookie('timezone', new Date().getTimezoneOffset());
+        location.reload();
+    }
+
+
+    // Р·Р°РіСЂСѓР·РєР° РЅРѕРІРѕСЃС‚РµР№
     var page = 1;
     $('a.more-news').click(function(e) {
         e.preventDefault();
@@ -21,7 +29,7 @@ $(function() {
         return false;
     });
 
-    // часы
+    // С‡Р°СЃС‹
     var timezones = ['Europe/London', 'Europe/Paris'];
     $('.clock').each(function(i){
         var self = $(this);
@@ -77,9 +85,12 @@ $(function() {
         setTimeout(function(){ $('.search-result-wrap').slideUp(200); }, 500);
     });
 
+
+
+
 });
 
-// описание магазина
+// РѕРїРёСЃР°РЅРёРµ РјР°РіР°Р·РёРЅР°
 function showFull(link, obj) {
     if ($(obj).is(':visible')) {
         $(obj).css('display', 'none');

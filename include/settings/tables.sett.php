@@ -29,6 +29,7 @@ $_TBL['open_time'] 	        = array('open_time',          'ot', 'open_time_id');
 $_TBL['pgroup'] 	        = array('pgroup',          'pg', 'pgroup_id');
 $_TBL['ptype'] 	        = array('ptype',          'pt', 'ptype_id');
 $_TBL['ptype2group'] 	        = array('ptype2group',          'p2g', 'ptype2group_id');
+$_TBL['shop_slot'] 	        = array('shop_slot',          'ss', 'shop_slot_id');
 
 
 ?>
