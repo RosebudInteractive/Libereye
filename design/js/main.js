@@ -140,6 +140,7 @@ $(function() {
 
     // meeting form
     var dayText = '';
+    var dayDate = '';
     var selectedTime = '';
     var shopperId = 0;
     var explainText = '';
@@ -156,12 +157,14 @@ $(function() {
         form.find('.pie-wrap').not('.filled').find('.pie-text').click(function(){
             var clicked = $(this);
             dayText = clicked.data('daytext');
+            dayDate = clicked.data('daydate');
 
             generateTimes(clicked, form);
             bindDayShiftEvents(clicked, form);
 
 
             form.find('.day-text').html(dayText + ' в');
+            form.find('[name="date"]').val(dayDate);
             form.find('.controls .day-text').html(dayText);
             form.find('.form-page-1').hide();
             form.find('.form-page-2').show();
@@ -172,6 +175,7 @@ $(function() {
 
             form.find('.time-text').html(selectedTime);
             form.find('.form-page-2').hide();
+            form.find('.form-page-3 .error-block').hide();
             form.find('.form-page-3').show();
         });
 

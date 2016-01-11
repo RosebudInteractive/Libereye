@@ -18,6 +18,7 @@ $oBrand   = new Brand();
 $oShopSlot   = new ShopSlot();
 $oBooking   = new Booking();
 $nShopId = $oReq->getInt('id');
+$nTimezoneOffset = isset($_COOKIE['timezone'])?intval($_COOKIE['timezone'])*60:0;
 
 // валидация
 if (!$nShopId || !$oShop->load($nShopId, LANGUAGEID))
@@ -25,6 +26,65 @@ if (!$nShopId || !$oShop->load($nShopId, LANGUAGEID))
     $oReq->forward('/'.$aLanguage['alias'].'/page/404.html');
 }
 $aShop = $oShop->aData;
+
+switch($oReq->getAction()) {
+    case 'booking':
+        $sDate = $oReq->get('date');
+        $sDesc = $oReq->get('description');
+        $sEmail = $oReq->get('email');
+        $iSellerId = $oReq->getInt('seller');
+
+        if (!$sDate) $aErrors[] = Conf::format('Date is not specified');
+        if (!$sEmail) $aErrors[] = Conf::format('Email is not specified');
+        if ($sEmail && !filter_var($sEmail, FILTER_VALIDATE_EMAIL)) $aErrors[] = Conf::format('Email is incorrect');
+        if (!$sDesc) $aErrors[] = Conf::format('Aim of the meeting is not specified');
+
+        if (!$aErrors) {
+
+            // смещенение в UTC
+            $nTimeOffset = strtotime($sDate)+$nTimezoneOffset;
+
+            // если не указан продавец находим любого свободного
+            if (!$iSellerId) {
+                $iSellerId = intval($oShopSlot->findSeller($nTimeOffset));
+                if (!$iSellerId) {
+                    $aErrors[] = Conf::format('Slot not found');
+                }
+            }
+
+            if (!$aErrors) {
+                if ($oAccount->loadBy(array('account_id' => '=' . $iSellerId, 'status' => '="seller"'))) {
+                    if ($oShopSlot->loadBy(array('shop_id' => '=' . $nShopId, 'time_from' => '="' . Database::date($nTimeOffset) . '"'))) {
+                        if ($oBooking->loadBy(array('shop_slot_id' => '=' . $oShopSlot->aData['shop_slot_id'], 'seller_id' => '=' . $iSellerId))) {
+                            if ($oBooking->aData['status'] == 'free') {
+                                $oBooking->aData = array('booking_id'=>$oBooking->aData['booking_id']);
+                                if ($oAccount->isLoggedIn()) $oBooking->aData['account_id'] = $oAccount->isLoggedIn();
+                                $oBooking->aData['email'] = $sEmail;
+                                $oBooking->aData['description'] = $sDesc;
+                                $oBooking->aData['status'] = 'booked';
+                                $oBooking->aData['udate'] = Database::date();
+                                $oBooking->aData['ip'] = $_SERVER['REMOTE_ADDR'];
+                                if (!$oBooking->update())
+                                    $aErrors = $oBooking->getErrors();
+                            } else {
+                                $aErrors[] = Conf::format('Slot is already booked');
+                            }
+                        } else {
+                            $aErrors[] = Conf::format('Slot not found');
+                        }
+                    } else {
+                        $aErrors[] = Conf::format('Slot not found');
+                    }
+                } else {
+                    $aErrors[] = Conf::format('Shopper not found');
+                }
+            }
+        }
+
+        echo json_encode(array('errors'=>$aErrors));
+        exit;
+        break;
+}
 
 // время работы
 list($aOpenTimesTmp, ) = $oOpenTime->getList(array('shop_id'=>'='.$nShopId, 'type'=>'="open"'), 0, 0, 'week_day');
@@ -66,40 +126,44 @@ if ($aItems) list($aSlots,) = $oBooking->getList(array('{#shop_id}'=>'ss.shop_id
 // добавим всех шопперов
 array_unshift($aItems, array('account_id'=>0, 'fname'=>Conf::format('All shoppers')));
 
+// Время со смещением временной зоны
+$nTimeOffset = time()-$nTimezoneOffset;
+
 // дни недели
 foreach($aItems as $aShopper) {
     $aShoppers[$aShopper['account_id']] = $aShopper;
     $aShoppers[$aShopper['account_id']]['total'] = 0;
     $aShoppers[$aShopper['account_id']]['days'] = array();
-    $sStartTime = strtotime(date('Y-m-d'));
+    $sStartTime = strtotime(date('Y-m-d', $nTimeOffset));
     for($time=$sStartTime; $time<$sStartTime+7*86400; $time+=86400) {
         $sDayTitle = date('d')==date('d', $time) ? Conf::format('Today') :  date('d', $time).' '.Conf::format($aWeekDays[date('w', $time)]).'.';
-        $aShoppers[$aShopper['account_id']]['days'][$time] = array('title'=>$sDayTitle, 'morning'=>array('busy'=>0, 'free'=>0, 'total'=>0, 'times'=>array()),
+        $aShoppers[$aShopper['account_id']]['days'][$time] = array('day_title'=>$sDayTitle, 'day_date'=>date('Y-m-d', $time), 'morning'=>array('busy'=>0, 'free'=>0, 'total'=>0, 'times'=>array()),
             'day'=>array('busy'=>0, 'free'=>0, 'total'=>0, 'times'=>array()));
     }
 }
 
 foreach ($aSlots as $aSlot) {
-    $sDateTime = strtotime(date('Y-m-d',strtotime($aSlot['time_from'])));
+    $sDateTime = strtotime(date('Y-m-d',strtotime($aSlot['time_from'])-$nTimezoneOffset));
     if (isset($aShoppers[$aSlot['seller_id']]['days'][$sDateTime])) {
-        $sTime = strtotime($aSlot['time_from']);
+        $sTime = strtotime($aSlot['time_from'])-$nTimezoneOffset;
+        $sTimeFormat = date('G:i', $sTime);
         if (date('G', $sTime)*60+date('i', $sTime) < 720) { // утренний слот
             if ($aSlot['status']=='free')
-                $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['morning']['times'][] = date('G:i', $sTime);
+                $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['morning']['times'][$sTimeFormat] = $sTimeFormat;
             $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['morning'][$aSlot['status']=='booked'?'busy':'free'] +=1;
             $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['morning']['total'] +=1;
             if ($aSlot['status']=='free')
-                $aShoppers[0]['days'][$sDateTime]['morning']['times'][]  = $aSlot['seller_id'].'|'.date('G:i', $sTime);
+                $aShoppers[0]['days'][$sDateTime]['morning']['times'][$sTimeFormat]  = $sTimeFormat;
             $aShoppers[0]['days'][$sDateTime]['morning'][$aSlot['status']=='booked'?'busy':'free'] +=1;
             $aShoppers[0]['days'][$sDateTime]['morning']['total'] +=1;
 
         } else {
             if ($aSlot['status']=='free')
-                $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['day']['times'][] = date('G:i', $sTime);
+                $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['day']['times'][$sTimeFormat] = $sTimeFormat;
             $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['day'][$aSlot['status']=='booked'?'busy':'free'] +=1;
             $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['day']['total'] +=1;
             if ($aSlot['status']=='free')
-                $aShoppers[0]['days'][$sDateTime]['day']['times'][]  = $aSlot['seller_id'].'|'.date('G:i', $sTime);
+                $aShoppers[0]['days'][$sDateTime]['day']['times'][$sTimeFormat]  = $sTimeFormat;
             $aShoppers[0]['days'][$sDateTime]['day'][$aSlot['status']=='booked'?'busy':'free'] +=1;
             $aShoppers[0]['days'][$sDateTime]['day']['total'] +=1;
         }

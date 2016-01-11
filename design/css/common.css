@@ -1,1 +1,6 @@
 .department-list ul li:first-letter { text-transform:uppercase; }
+.error-block {
+    color: #d02222;
+    font-size: 13px;
+    margin: 10px 0;
+}

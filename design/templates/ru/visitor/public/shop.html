@@ -149,7 +149,7 @@
                                 <td{if $smarty.foreach.days.first} class="todays"{/if}>
                                     <div class="pie-wrap">
                                         <span class="pie">{$aSubDay.morning.busy}/{$aSubDay.morning.total}</span>
-                                        <span class="pie-text" data-daytext="{$aSubDay.title}" data-times="{$aSubDay.morning.times}">{$aSubDay.morning.free}</span>
+                                        <span class="pie-text" data-daytext="{$aSubDay.day_title}" data-daydate="{$aSubDay.day_date}" data-times="{$aSubDay.morning.times}">{$aSubDay.morning.free}</span>
                                     </div>
                                 </td>
                                 {/foreach}
@@ -160,7 +160,7 @@
                                 <td{if $smarty.foreach.days.first} class="todays"{/if}>
                                     <div class="pie-wrap">
                                         <span class="pie">{$aSubDay.day.busy}/{$aSubDay.day.total}</span>
-                                        <span class="pie-text" data-daytext="{$aSubDay.title}" data-times="{$aSubDay.day.times}">{$aSubDay.day.free}</span>
+                                        <span class="pie-text" data-daytext="{$aSubDay.day_title}" data-daydate="{$aSubDay.day_date}" data-times="{$aSubDay.day.times}">{$aSubDay.day.free}</span>
                                     </div>
                                 </td>
                                 {/foreach}
@@ -185,6 +185,7 @@
                     </div>
                 </div>
                 <div class="form-page form-page-3">
+                    <input type="hidden" name="date" value="" />
                     <div class="controls">
                         <div class="prev"><a href="#" data-page="2">Назад</a></div>
                         <div class="cancel"><a href="#">Отмена</a></div>
@@ -205,6 +206,7 @@
                             <div class="confirmed-title">Митинг состоится</div>
                             <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
                             <div class="confirmed-time time-text">18:00</div>
+                            <div class="error-block"></div>
                             <a class="btn btn-green meeting-confirm" href="#">{$aPhrases['Order meeting']}</a>
                         </div>
                     </div>
@@ -296,6 +298,7 @@
                     <label>E-mail</label>
                     <div><input type="text" name="email" value="" /></div>
                 </div>
+                <div class="error-block">Введите E-mail<br>Введите пароль<br></div>
                 <div class="email-explain">
                     Ваш действующий e-mail на который мы вышлем подтверждение митинга.
                 </div>

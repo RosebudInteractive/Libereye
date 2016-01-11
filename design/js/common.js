@@ -86,6 +86,51 @@ $(function() {
     });
 
 
+    $('.shopper-form').each(function(){
+        var form = $(this);
+        var shopperId = $(this).data('shopper');
+        form.find('.form-page-3 .error-block').hide();
+
+        form.find('.meeting-confirm').off('click').click(function(e){
+            e.preventDefault();
+            var emailText = $(this).parents('.form-page').find('[name="email"]').val();
+            var explainText = $(this).parents('.form-page').find('[name="info"]').val();
+            var date = $(this).parents('.form-page').find('[name="date"]').val();
+            var time = $(this).parents('.form-page').find('.time-text').html();
+            var that = this;
+            var errors = [];
+            if (!validateEmail(emailText)) errors.push('Введите E-mail');
+            if (!explainText.length) errors.push('Введите цель митинга');
+
+            if (errors.length == 0) {
+
+                $.ajax({
+                    method: "POST",
+                    url: document.location,
+                    data: { act: "booking", seller: shopperId, date:date+' '+time+':00', email:emailText, description:explainText }
+                })
+                    .done(function( msg ) {
+                        var results = JSON.parse(msg);
+                        if (results.errors && results.errors.length != 0) {
+                            var errorBlock = form.find('.form-page-3 .error-block');
+                            errorBlock.html(results.errors.join('<br>'));
+                            errorBlock.show();
+                        } else {
+                            form.find('.email-text').html(emailText);
+                            form.find('.explain-text').html(explainText);
+                            form.find('.form-page-3').hide();
+                            form.find('.form-page-4').show();
+                            $(that).parents('.shop-meetings-form').find('.tab-control.active .shopper-slots').addClass('done');
+                        }
+                    });
+            } else {
+                var errorBlock = form.find('.form-page-3 .error-block');
+                errorBlock.html(errors.join('<br>'));
+                errorBlock.show();
+            }
+        });
+    });
+
 
 
 });
@@ -101,3 +146,9 @@ function showFull(link, obj) {
     }
     return false;
 }
+
+function validateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
