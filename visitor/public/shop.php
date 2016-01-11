@@ -8,6 +8,7 @@ Conf::loadClass('Ptype2group');
 Conf::loadClass('Brand');
 Conf::loadClass('ShopSlot');
 Conf::loadClass('Booking');
+Conf::loadClass('utils/mail/Mailer');
 
 $oShop   = new Shop();
 $oOpenTime   = new OpenTime();
@@ -64,7 +65,22 @@ switch($oReq->getAction()) {
                                 $oBooking->aData['status'] = 'booked';
                                 $oBooking->aData['udate'] = Database::date();
                                 $oBooking->aData['ip'] = $_SERVER['REMOTE_ADDR'];
-                                if (!$oBooking->update())
+                                $sConfirmCode = md5(uniqid(rand(), true));
+                                $oBooking->aData['confirm_code'] = $sConfirmCode;
+
+                                if ($oBooking->update()) {
+                                    // отправляем подтверждение
+                                    $oMailer = new Mailer();
+                                    $oMailer->send(
+                                        'confirm_booking',
+                                        $sEmail,
+                                        array(
+                                            'date'	=>  date('d/m/Y', strtotime($sDate)),
+                                            'time'	=>  date('H:i', strtotime($sDate)),
+                                            'confirm_url' => Conf::get('http').Conf::get('host').$aLanguage['alias'].'/confirmbooking/?code='.$sConfirmCode
+                                        )
+                                        ,array(), array(), $aLanguage['language_id']);
+                                } else
                                     $aErrors = $oBooking->getErrors();
                             } else {
                                 $aErrors[] = Conf::format('Slot is already booked');
