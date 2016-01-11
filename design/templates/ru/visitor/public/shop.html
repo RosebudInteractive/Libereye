@@ -228,8 +228,8 @@
                             <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
                             <div class="confirmed-time time-text">18:00</div>
                             <div class="confirmed-links">
-                                <a href="#">Я не получил(а) письма.</a><br/>
-                                <a href="#">Отправить еще раз.</a>
+                                <a href="#" class="not-get-mail">Я не получил(а) письма.</a><br/>
+                                <a href="#" class="send-mail">Отправить еще раз.</a>
                             </div>
                         </div>
                     </div>
@@ -265,77 +265,6 @@
 <script id="meeting-form-no-time-at-all-title" type="x-tmpl-jquery">
     <div class="no-date-time-at-all-title">
         <div>На эту дату, а также последующие в ближайшую неделю, все время забронировано. Попробуйте просмотреть более ранние даты.</div>
-    </div>
-</script>
-<script id="form-page-2" type="x-tmpl-jquery">
-    <div class="form-page form-page-2">
-        <div class="controls">
-            <div class="day-name day-text">{$aPhrases['Today']} в</div>
-            <div class="prev"><a href="#" data-page="1">Назад</a></div>
-            <div class="cancel"><a href="#">Отмена</a></div>
-            <a class="prev-day" href="#"><img src="/design/pic/shopper_date_back.png"></a>
-            <a class="next-day" href="#"><img src="/design/pic/shopper_date_forward.png"></a>
-            <div style="clear:both"></div>
-        </div>
-        <div class="times day" data-fname="time">
-            <div class="time" data-value="14:00">14:00</div>
-        </div>
-        <div class="times morning" data-fname="time">
-            <div class="time" data-value="14:00">14:00</div>
-        </div>
-    </div>
-</script>
-<script id="form-page-3" type="x-tmpl-jquery">
-    <div class="form-page form-page-3">
-        <div class="controls">
-            <div class="prev"><a href="#" data-page="2">Назад</a></div>
-            <div class="cancel"><a href="#">Отмена</a></div>
-            <div style="clear:both"></div>
-        </div>
-        <div class="confirmation">
-            <div class="confirm-left">
-                <div class="form-inline">
-                    <label>E-mail</label>
-                    <div><input type="text" name="email" value="" /></div>
-                </div>
-                <div class="error-block">Введите E-mail<br>Введите пароль<br></div>
-                <div class="email-explain">
-                    Ваш действующий e-mail на который мы вышлем подтверждение митинга.
-                </div>
-                <textarea name="info" placeholder="Опишите цель митинга"></textarea>
-            </div>
-            <div class="confirm-right">
-                <div class="confirmed-title">Митинг состоится</div>
-                <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
-                <div class="confirmed-time time-text">18:00</div>
-                <a class="btn btn-green meeting-confirm" href="#">{$aPhrases['Order meeting']}</a>
-            </div>
-        </div>
-    </div>
-</script>
-<script id="form-page-4" type="x-tmpl-jquery">
-    <div class="form-page form-page-4">
-        <div class="confirmation">
-            <div class="confirm-left">
-                <div class="confirmed-day">Ура!</div>
-                <div class="confirmed-explain">
-                    Мы отправили на почту <strong class="email-text">Example@mail.com</strong> уведомление о митинге. Пожалуйста откройте письмо и перейдите по ссылке чтобы подтвердить бронь.
-                </div>
-                <div class="confirm-target">
-                    <span>Цель митинга</span>
-                    <div class="explain-text">Мы поговорим о том, как структурировать шрифты, которые нас окружают и научиться разбираться в них. Как отличать одни шрифты от других и правильно их применять и сочетать. Немного погрузимся в историю и сравним типографику прошлого и современности.</div>
-                </div>
-            </div>
-            <div class="confirm-right">
-                <div class="confirmed-title">Митинг состоится</div>
-                <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
-                <div class="confirmed-time time-text">18:00</div>
-                <div class="confirmed-links">
-                    <a href="#">Я не получил(а) письма.</a><br/>
-                    <a href="#">Отправить еще раз.</a>
-                </div>
-            </div>
-        </div>
     </div>
 </script>
 {/literal}

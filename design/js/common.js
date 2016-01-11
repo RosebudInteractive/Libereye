@@ -86,10 +86,31 @@ $(function() {
     });
 
 
+    var formData = {}; // данные для повторного письма
     $('.shopper-form').each(function(){
         var form = $(this);
         var shopperId = $(this).data('shopper');
         form.find('.form-page-3 .error-block').hide();
+
+        form.find('.not-get-mail,.send-mail').off('click').click(function(e){
+            formData = {seller: shopperId, date:date+' '+time+':00', email:emailText, description:explainText};
+            formData.act = 'resend';
+            $.ajax({
+                method: "POST",
+                url: document.location,
+                data: formData
+            })
+                .done(function( msg ) {
+                    var results = JSON.parse(msg);
+                    if (results.errors && results.errors.length != 0) {
+                        var errorBlock = form.find('.form-page-3 .error-block');
+                        errorBlock.html(results.errors.join('<br>'));
+                        errorBlock.show();
+                    } else {
+
+                    }
+                });
+        });
 
         form.find('.meeting-confirm').off('click').click(function(e){
             e.preventDefault();
@@ -103,11 +124,12 @@ $(function() {
             if (!explainText.length) errors.push('Введите цель митинга');
 
             if (errors.length == 0) {
-
+                formData = {seller: shopperId, date:date+' '+time+':00', email:emailText, description:explainText};
+                formData.act = 'booking';
                 $.ajax({
                     method: "POST",
                     url: document.location,
-                    data: { act: "booking", seller: shopperId, date:date+' '+time+':00', email:emailText, description:explainText }
+                    data: formData
                 })
                     .done(function( msg ) {
                         var results = JSON.parse(msg);
