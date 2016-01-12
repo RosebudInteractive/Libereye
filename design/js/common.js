@@ -1,13 +1,13 @@
 $(function() {
 
-    $.cookie('timezone', 0);
+    //$.cookie('timezone', 0);
 
     // временная зона на клиенте
-    /*if (!$.cookie('timezone') || $.cookie('timezone') != new Date().getTimezoneOffset()) {
+    if (!$.cookie('timezone') || $.cookie('timezone') != new Date().getTimezoneOffset()) {
         $.cookie('timezone', new Date().getTimezoneOffset());
         if ($.cookie('timezone') == new Date().getTimezoneOffset())
             location.reload();
-    }*/
+    }
 
 
     // загрузка новостей
