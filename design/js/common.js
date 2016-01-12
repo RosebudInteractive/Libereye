@@ -92,8 +92,8 @@ $(function() {
         var shopperId = $(this).data('shopper');
         form.find('.form-page-3 .error-block').hide();
 
-        form.find('.not-get-mail').off('click').click(function(e){
-            formData = {seller: shopperId, date:date+' '+time+':00', email:emailText, description:explainText};
+        form.find('.form-page-4 .not-get-mail').off('click').click(function(e){
+            e.preventDefault();
             formData.act = 'resend';
             $.ajax({
                 method: "POST",
