@@ -1,10 +1,13 @@
 $(function() {
 
+    $.cookie('timezone', 0);
+
     // временная зона на клиенте
-    if (!$.cookie('timezone') || $.cookie('timezone') != new Date().getTimezoneOffset()) {
+    /*if (!$.cookie('timezone') || $.cookie('timezone') != new Date().getTimezoneOffset()) {
         $.cookie('timezone', new Date().getTimezoneOffset());
-        location.reload();
-    }
+        if ($.cookie('timezone') == new Date().getTimezoneOffset())
+            location.reload();
+    }*/
 
 
     // загрузка новостей
@@ -97,7 +100,7 @@ $(function() {
             formData.act = 'resend';
             $.ajax({
                 method: "POST",
-                url: document.location,
+                url: document.location.pathname,
                 data: formData
             })
                 .done(function( msg ) {
@@ -129,7 +132,7 @@ $(function() {
                 formData.act = 'booking';
                 $.ajax({
                     method: "POST",
-                    url: document.location,
+                    url: document.location.pathname,
                     data: formData
                 })
                     .done(function( msg ) {
