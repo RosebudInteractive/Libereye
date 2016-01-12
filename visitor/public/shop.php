@@ -29,6 +29,33 @@ if (!$nShopId || !$oShop->load($nShopId, LANGUAGEID))
 $aShop = $oShop->aData;
 
 switch($oReq->getAction()) {
+    case 'resend':
+        $nBookingId = $oReq->getInt('id');
+        if (!$nBookingId) $aErrors[] = Conf::format('Slot not found');
+
+        if ($oBooking->loadBy(array('shop_slot_id' => '=' . $oShopSlot->aData['shop_slot_id'], 'account_id' => '=' . $oAccount->isLoggedIn()))) {
+            if ($oBooking->aData['status'] == 'booked') {
+                    $sDate = $oBooking->aData['time_from'];
+                    // отправляем подтверждение
+                    $oMailer = new Mailer();
+                    $oMailer->send(
+                        'confirm_booking',
+                        $sEmail,
+                        array(
+                            'date'	=>  date('d/m/Y', strtotime($sDate)),
+                            'time'	=>  date('H:i', strtotime($sDate)),
+                        )
+                        ,array(), array(), $aLanguage['language_id']);
+
+            } else {
+                $aErrors[] = Conf::format('Slot not found');
+            }
+        } else {
+            $aErrors[] = Conf::format('Slot not found');
+        }
+        echo json_encode(array('errors'=>$aErrors, 'message'=>Conf::format('Email sent')));
+        exit;
+        break;
     case 'booking':
         $sDate = $oReq->get('date');
         $sDesc = $oReq->get('description');
@@ -65,9 +92,6 @@ switch($oReq->getAction()) {
                                 $oBooking->aData['status'] = 'booked';
                                 $oBooking->aData['udate'] = Database::date();
                                 $oBooking->aData['ip'] = $_SERVER['REMOTE_ADDR'];
-                                $sConfirmCode = md5(uniqid(rand(), true));
-                                $oBooking->aData['confirm_code'] = $sConfirmCode;
-
                                 if ($oBooking->update()) {
                                     // отправляем подтверждение
                                     $oMailer = new Mailer();
@@ -77,7 +101,6 @@ switch($oReq->getAction()) {
                                         array(
                                             'date'	=>  date('d/m/Y', strtotime($sDate)),
                                             'time'	=>  date('H:i', strtotime($sDate)),
-                                            'confirm_url' => Conf::get('http').Conf::get('host').$aLanguage['alias'].'/confirmbooking/?code='.$sConfirmCode
                                         )
                                         ,array(), array(), $aLanguage['language_id']);
                                 } else
@@ -97,7 +120,7 @@ switch($oReq->getAction()) {
             }
         }
 
-        echo json_encode(array('errors'=>$aErrors));
+        echo json_encode(array('errors'=>$aErrors, 'id'=>$oBooking->aData['booking_id']));
         exit;
         break;
 }

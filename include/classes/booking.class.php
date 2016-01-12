@@ -57,10 +57,11 @@ class Booking extends DbItem
      */
     function loadBy($aCond)
     {
-        $sSql = 'SELECT '.$this->_joinFields($this->aFields).', a.fname, a.email, a2.fname seller, a2.email seller_email'.
+        $sSql = 'SELECT '.$this->_joinFields($this->aFields).', a.fname, a.email, a2.fname seller, a2.email seller_email, ss.time_from'.
             ' FROM '.$this->sTable.' AS '.$this->sAlias.
             ' LEFT JOIN account a USING(account_id)'.
             ' LEFT JOIN account a2 ON a2.account_id=b.seller_id'.
+            ' LEFT JOIN shop_slot ss ON ss.shop_slot_id=b.shop_slot_id'.
             '  WHERE '.$this->_parseCond($aCond, $this->aFields);
         $this->aData = $this->oDb->getRow($sSql);
         return sizeof($this->aData);

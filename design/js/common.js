@@ -92,7 +92,7 @@ $(function() {
         var shopperId = $(this).data('shopper');
         form.find('.form-page-3 .error-block').hide();
 
-        form.find('.not-get-mail,.send-mail').off('click').click(function(e){
+        form.find('.not-get-mail').off('click').click(function(e){
             formData = {seller: shopperId, date:date+' '+time+':00', email:emailText, description:explainText};
             formData.act = 'resend';
             $.ajax({
@@ -103,11 +103,12 @@ $(function() {
                 .done(function( msg ) {
                     var results = JSON.parse(msg);
                     if (results.errors && results.errors.length != 0) {
-                        var errorBlock = form.find('.form-page-3 .error-block');
-                        errorBlock.html(results.errors.join('<br>'));
-                        errorBlock.show();
+                        form.find('.form-page-4 .success-block').hide();
+                        form.find('.form-page-4 .error-block').html(results.errors.join('<br>')).show();
+                        errorBlock;
                     } else {
-
+                        form.find('.form-page-4 .error-block').hide();
+                        form.find('.form-page-4 .success-block').html(results.message).show();
                     }
                 });
         });
@@ -138,6 +139,7 @@ $(function() {
                             errorBlock.html(results.errors.join('<br>'));
                             errorBlock.show();
                         } else {
+                            formData.id = results.id;
                             form.find('.email-text').html(emailText);
                             form.find('.explain-text').html(explainText);
                             form.find('.form-page-3').hide();
