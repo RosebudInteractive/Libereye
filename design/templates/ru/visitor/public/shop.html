@@ -140,7 +140,7 @@
                             <tr>
                                 <th></th>
                                 {foreach from=$aItem.days item=aDay name=days}
-                                <th{if $smarty.foreach.days.first} class="todays"{/if}>{$aDay.title}</th>
+                                <th{if $smarty.foreach.days.first} class="todays"{/if}>{$aDay.day_title}</th>
                                 {/foreach}
                             </tr>
                             <tr data-tod="morning">
