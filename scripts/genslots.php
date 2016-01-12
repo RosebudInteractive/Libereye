@@ -33,7 +33,10 @@ $aSellers = array(20,27);
 
 for($day=0; $day<30; $day++) { // на 30 дней
     $nDateTime = strtotime(date('Y-m-d 00:00:00', time()))+$day*86400;
-    $aTime = isset($aOpenTimes[date('w', $nDateTime)]) ? $aOpenTimes[date('w', $nDateTime)]: array('time_to'=>0, 'time_from'=>0);
+    // 0 - вс 1-пн
+    // 0 - пн 1-вт
+    $nWeekDay = date('w', $nDateTime)==0 ? 6 : date('w', $nDateTime)-1;
+    $aTime = isset($aOpenTimes[$nWeekDay]) ? $aOpenTimes[$nWeekDay]: array('time_to'=>0, 'time_from'=>0);
     for($time=$aTime['time_from']; $time<$aTime['time_to']; $time+=60) {
         $sTimeFrom = strtotime(date('Y-m-d H:00:00', $nDateTime+$time*60));
         $sTimeTo = strtotime(date('Y-m-d H:00:00', $nDateTime+$time*60+3600));

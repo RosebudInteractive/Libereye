@@ -100,7 +100,6 @@ $(function() {
             formData.act = 'resend';
             $.ajax({
                 method: "POST",
-                url: document.location.pathname,
                 data: formData
             })
                 .done(function( msg ) {
@@ -108,7 +107,6 @@ $(function() {
                     if (results.errors && results.errors.length != 0) {
                         form.find('.form-page-4 .success-block').hide();
                         form.find('.form-page-4 .error-block').html(results.errors.join('<br>')).show();
-                        errorBlock;
                     } else {
                         form.find('.form-page-4 .error-block').hide();
                         form.find('.form-page-4 .success-block').html(results.message).show();
