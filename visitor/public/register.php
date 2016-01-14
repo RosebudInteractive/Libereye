@@ -33,60 +33,59 @@ $aErrors 	= array();
 
 switch ($oReq->getAction())
 {
-    case 'facebook':
+    case 'facebook_register':
+    case 'facebook_login':
         $nUserId = 0;
-        $aUserReg = array(
-            'fname' => $oReq->get('name'),
-            'email' => $oReq->get('email'),
-            'register_id' => $oReq->get('id'),
-            'token' => $oReq->get('token'),
-        );
-        $aFields = array(
-            'fname'  => array('title'=>Conf::format('Name'),  'def'=>'required'),
-            'email' => array('title'=>Conf::format('Email'),  'pattern'=>'/^[A-Za-z_0-9\.\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,}$/'),
-            'register_id' => array('title'=>Conf::format('ID'),  'def'=>'required'),
-            'token' => array('title'=>Conf::format('Token'),  'def'=>'required'),
-        );
-        $oValidator = new Validator($aFields);
-        if ($oValidator->isValid($aUserReg)){
+        $sToken = $oReq->get('token');
 
-            // Проверяем валидность данных
-            require_once Conf::get('path') . '/include/classes/utils/facebook/vendor/autoload.php';
-            $fb = new Facebook\Facebook([
-                'app_id' => Conf::get('facebook_app_id'),
-                'app_secret' => Conf::get('facebook_app_secret'),
-                'default_graph_version' => 'v2.5',
-            ]);
-            try {
-                // Returns a `Facebook\FacebookResponse` object
-                $response = $fb->get('/me?fields=id,name,email', $aUserReg['token']);
-            } catch(Facebook\Exceptions\FacebookResponseException $e) {
-                $aErrors[] = 'Facebook: Graph returned an error: ' . $e->getMessage();
-            } catch(Facebook\Exceptions\FacebookSDKException $e) {
-                $aErrors[] = 'Facebook: Facebook SDK returned an error: ' . $e->getMessage();
-            }
+        // Проверяем валидность данных
+        require_once Conf::get('path') . '/include/classes/utils/facebook/vendor/autoload.php';
+        $fb = new Facebook\Facebook([
+            'app_id' => Conf::get('facebook_app_id'),
+            'app_secret' => Conf::get('facebook_app_secret'),
+            'default_graph_version' => 'v2.5',
+        ]);
+        try {
+            // Returns a `Facebook\FacebookResponse` object
+            $response = $fb->get('/me?fields=id,name,email', $sToken);
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+            $aErrors[] = 'Facebook: Graph returned an error: ' . $e->getMessage();
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+            $aErrors[] = 'Facebook: Facebook SDK returned an error: ' . $e->getMessage();
+        }
+
+        if (!$aErrors) {
+            $user = $response->getGraphUser();
+            if (!$user['name']) $aErrors[] = Conf::format('Name required');
+            if (!$user['email']) $aErrors[] = Conf::format('Email required');
+            if (!$user['id']) $aErrors[] = Conf::format('ID required');
 
             if (!$aErrors) {
                 $user = $response->getGraphUser();
-                $oUserReg->aData = $aUserReg;
-                $oUserReg->aData['cdate'] = Database::date();
-                $oUserReg->aData['status'] = 'client';
-                $oUserReg->aData['register_type'] = 'facebook';
-                $oUserReg->aData['is_active'] = 1;
-                $oUserReg->aData['fname'] = $user['name'];
-                $oUserReg->aData['email'] = $user['email'];
-                $oUserReg->aData['register_id'] = $user['id'];
-                if ($oUserReg->isUniqueEmail()) {
-                    if (($nUserId = $oUserReg->insert())) {
-                        if (!$oUserReg->login('', '', array('client'), 'facebook', $user['id']))
+                if ($oReq->getAction() == 'facebook_register') {
+                    $oUserReg->aData = $aUserReg;
+                    $oUserReg->aData['cdate'] = Database::date();
+                    $oUserReg->aData['status'] = 'client';
+                    $oUserReg->aData['register_type'] = 'facebook';
+                    $oUserReg->aData['is_active'] = 1;
+                    $oUserReg->aData['fname'] = $user['name'];
+                    $oUserReg->aData['email'] = $user['email'];
+                    $oUserReg->aData['register_id'] = $user['id'];
+                    if ($oUserReg->isUniqueEmail()) {
+                        if (($nUserId = $oUserReg->insert())) {
+                            if (!$oUserReg->login('', '', array('client'), 'facebook', $user['id']))
+                                $aErrors = $oUserReg->getErrors();
+                        } else
                             $aErrors = $oUserReg->getErrors();
                     } else
+                        $aErrors[] = Conf::format('This email address is already registered');
+                } else {
+                    if (!$oUserReg->login('', '', array('client'), 'facebook', $user['id']))
                         $aErrors = $oUserReg->getErrors();
-                } else
-                    $aErrors[] = Conf::format('This email address is already registered');
+                }
             }
-        } else
-            $aErrors = $oValidator->getErrors();
+        }
+
         echo json_encode(array('errors'=>$aErrors, 'id'=>$nUserId));
         exit;
         break;
