@@ -188,3 +188,28 @@ function getTimezones() {
     return dates.join(';');
 }
 
+function fbLogin() {
+    FB.login(function(response) {
+        if (response.authResponse) {
+            var accessToken = response.authResponse.accessToken;
+            FB.api('/me?fields=name,email', function(response) {
+                response.act = 'facebook';
+                response.token = accessToken;
+                $.ajax({
+                    method: "POST",
+                    url: '/'+LANGUAGE+'/register/',
+                    data: response
+                })
+                    .done(function( msg ) {
+                        var results = JSON.parse(msg);
+                        if (results.errors && results.errors.length != 0) {
+                            $('.overlay-content .error-block').html(results.errors.join('<br>')).show();
+                        } else {
+                            location.reload();
+                        }
+                    });
+            });
+        }
+    }, {scope: 'email'});
+    return false;
+}

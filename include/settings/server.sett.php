@@ -37,4 +37,8 @@ $_CONF['www']   = '';
 $_CONF['hosting_type'] = 'windows'; 
 //$_CONF['hosting_type'] = 'unix';
 
+// facebook api
+$_CONF['facebook_app_id'] = '554808964685579';
+$_CONF['facebook_app_secret'] = '75d56ffe55df493608e81030f964c447';
+
 ?>

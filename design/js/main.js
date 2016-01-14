@@ -568,6 +568,11 @@ $(function() {
             $(this).parents('form').submit();
         });
 
+        $('.overlay-content .overlay-login-href').click(function(){
+            e.preventDefault();
+            $('.registration-init').click();
+        });
+
         setMargin($('.overlay-content'), 90);
     });
 
@@ -645,6 +650,11 @@ $(function() {
             });
 
             setMargin($('.overlay-content'), 90);
+        });
+
+        $('.overlay-content .overlay-login-href').click(function(){
+            e.preventDefault();
+            $('.login-init').click();
         });
 
         setMargin($('.overlay-content'), 90);

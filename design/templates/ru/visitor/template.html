@@ -141,9 +141,10 @@
             <!--<img src="/design/pic/clock-gap-1.png" />&nbsp;&nbsp;<img src="/design/pic/clock-gap-2.png" />-->
         </div>
         <div class="col-sm-3 col-md-2 col-lg-3 personal-links text-right">
+            {if $aAccount.account_id}<a href="#" class="profile">Личный кабинет</a>&nbsp;<span class="sep"></span>&nbsp;<a href="/{$aLanguage.alias}/account/logout/" class="profile">Выход</a>{else}
             <a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;
             <span class="sep"></span>&nbsp;
-            <a href="#" class="login-init">{$aPhrases['Login']}</a>
+            <a href="#" class="login-init">{$aPhrases['Login']}</a>{/if}
             <div class="visible-sm">
                 <a href="#" class="menu-activator"><img src="/design/pic/small-menu-icon.png" /></a>
                 <a href="#" class="close-menu"><img src="/design/pic/menu-close-icon.png" /></a>
@@ -338,7 +339,7 @@
             <div class="overlay-title">Войти</div>
             <br/>
             <div class="overlay-buttons login">
-                <a href="#" class="btn btn-fb btn-overlay"><span></span>&nbsp;Войти через Facebook</a>
+                <a href="#" class="btn btn-fb btn-overlay" onclick="return fbLogin();"><span></span>&nbsp;Войти через Facebook</a>
                 <a href="#" class="btn btn-vk btn-green-white btn-overlay"><span></span>&nbsp;Войти через Вконтакте</a>
                 <a href="#" class="btn btn-g btn-green-white btn-overlay"><span></span>&nbsp;Войти через Google</a>
             </div>
@@ -358,15 +359,16 @@
             <div class="error-block"></div>
             <div class="overlay-submit"><input type="submit" name="sub" value="Войти" /></div>
             <div class="overlay-line"></div>
-            <div class="text-center">Вы уже на LiberEye? <a href="#" class="overlay-login-href">Войти</a>
+            <div class="text-center">Вы еще не на LiberEye? <a href="#" class="overlay-login-href">Регистрация</a>
         </form>
 </script>
 <script id="registration-init" type="text/x-jquery-tmpl">
         <div class="overlay-title">Зарегистрируйтесь</div>
         <div>и посетите самые крупные универмаги мира.</div>
         <br/>
+        <div class="error-block" style="display:none;"></div>
         <div class="overlay-buttons">
-            <a href="#" class="btn btn-fb btn-overlay"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Facebook</a>
+            <a href="#" class="btn btn-fb btn-overlay" onclick="return fbLogin();"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Facebook</a>
             <a href="#" class="btn btn-vk btn-green-white btn-overlay"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Вконтакте</a>
             <a href="#" class="btn btn-g btn-green-white btn-overlay"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Google</a>
         </div>

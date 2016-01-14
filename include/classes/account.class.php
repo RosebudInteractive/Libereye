@@ -65,34 +65,52 @@ class Account extends DbItem
      * @return bool true - login ok, false - error
      * @see _loginAddCheck()
      */
-    function login($sLogin, $sPassword, $aStatuses=array())
+    function login($sLogin, $sPassword, $aStatuses=array(), $sRegisterType='common', $sRegisterId=0)
     {
-        
-        $sSql = 'SELECT account_id, pass, status '.
-                '  FROM '.$this->sTable.
-                '  WHERE '.$this->sLoginField.'="'.$sLogin.'"';
-        $aRow = $this->oDb->getRow($sSql);
-        if ($aRow) //user account exists
-        {
-            //check password
-            $sPassword = md5($sPassword); 
-            if ($aRow['pass'] != $sPassword)
-                $this->_addError('login.pass');
+        if ($sRegisterType == 'common') {
+            $sSql = 'SELECT account_id, pass, status ' .
+                '  FROM ' . $this->sTable .
+                '  WHERE ' . $this->sLoginField . '="' . Database::escape($sLogin) . '"';
+            $aRow = $this->oDb->getRow($sSql);
+            if ($aRow) //user account exists
+            {
+                //check password
+                $sPassword = md5($sPassword);
+                if ($aRow['pass'] != $sPassword)
+                    $this->_addError('login.pass');
 
-            //check status if needed
-            if ($aStatuses && !in_array($aRow['status'], $aStatuses))
+                //check status if needed
+                if ($aStatuses && !in_array($aRow['status'], $aStatuses))
                     $this->_addError('login.status');
 
-            if (!$this->aErrors) {
-                if ($this->_loginAddCheck($aRow['account_id']))
-                {
-                    $_SESSION[$this->sUserType]['id'] = $aRow['account_id'];
-                    $this->oDb->update($this->sTable, array('last_login'=>$this->oDb->date()), 'account_id='.$aRow['account_id']);
+                if (!$this->aErrors) {
+                    if ($this->_loginAddCheck($aRow['account_id'])) {
+                        $_SESSION[$this->sUserType]['id'] = $aRow['account_id'];
+                        $this->oDb->update($this->sTable, array('last_login' => $this->oDb->date()), 'account_id=' . $aRow['account_id']);
+                    }
                 }
-            }
+            } else
+                $this->_addError('login.error');
+        } else {
+            $sSql = 'SELECT account_id, pass, status ' .
+                '  FROM ' . $this->sTable .
+                '  WHERE register_type = "' . Database::escape($sRegisterType) . '" AND register_id = "' . Database::escape($sRegisterId) . '"';
+            $aRow = $this->oDb->getRow($sSql);
+            if ($aRow) //user account exists
+            {
+                //check status if needed
+                if ($aStatuses && !in_array($aRow['status'], $aStatuses))
+                    $this->_addError('login.status');
+
+                if (!$this->aErrors) {
+                    if ($this->_loginAddCheck($aRow['account_id'])) {
+                        $_SESSION[$this->sUserType]['id'] = $aRow['account_id'];
+                        $this->oDb->update($this->sTable, array('last_login' => $this->oDb->date()), 'account_id=' . $aRow['account_id']);
+                    }
+                }
+            } else
+                $this->_addError('login.error');
         }
-        else
-            $this->_addError('login.error');
 
         return !$this->aErrors;
     }
@@ -138,7 +156,21 @@ class Account extends DbItem
             return true;
         else 
             return false;
-    }    
+    }
+
+    /**
+     * Verify unique id
+     *
+     * @return bool
+     */
+    function isUniqueID($sRegType, $nId=0)
+    {
+        $nId = intval($nId);
+        if (!$this->oDb->getField('SELECT COUNT(*) FROM '.conf::getT('account').' WHERE register_type = "'.Database::escape($sRegType).'" AND register_id <> "'.$nId.'"', false))
+            return true;
+        else
+            return false;
+    }
 
 
     function hasPerms($mPerms)
