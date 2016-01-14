@@ -3,9 +3,10 @@ $(function() {
     //$.cookie('timezone', 0);
 
     // временная зона на клиенте
-    if (!$.cookie('timezone') || $.cookie('timezone') != new Date().getTimezoneOffset()) {
-        $.cookie('timezone', new Date().getTimezoneOffset());
-        if ($.cookie('timezone') == new Date().getTimezoneOffset())
+    var timezone = getTimezones();
+    if (!$.cookie('timezone') || $.cookie('timezone') != timezone) {
+        $.cookie('timezone', timezone);
+        if ($.cookie('timezone') == timezone)
             location.reload();
     }
 
@@ -175,5 +176,15 @@ function showFull(link, obj) {
 function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
+}
+
+function getTimezones() {
+    var dates = [];
+    var currTime = (new Date()).getTime();
+    for(var i=currTime; i<currTime+7*86400000; i+=86400000) {
+        var date = new Date(i);
+        dates.push(moment(date).format('YYYY-MM-DD')+':'+date.getTimezoneOffset());
+    }
+    return dates.join(';');
 }
 

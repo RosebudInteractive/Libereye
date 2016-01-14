@@ -163,6 +163,76 @@ class Conf
         }
     }
 
+    static function getTimezoneOffset($nTime, $sTimezoneOffset, $shiftSummer=false) {
+        $aDatesOffset = explode(';', $sTimezoneOffset);
+        $aOffsets = [];
+        foreach($aDatesOffset as $sDateOffset) {
+            $aDateOffset = explode(':', $sDateOffset);
+            $aOffsets[$aDateOffset[0]] = intval($aDateOffset[1])*60;
+        }
+        if (isset($aOffsets[date('Y-m-d', $nTime)])) {
+            if ($shiftSummer) {
+                $this_year = gmdate("Y", $nTime);//Получаем номер года
+                //Последнее воскресенье в марте указанного года в час ночи по UTC
+                $last_day_of_march = gmmktime(1, 0, 0, 3, 31, $this_year);
+                $last_sunday_of_march = strtotime("-" . gmdate("w", $last_day_of_march) . " day", $last_day_of_march);
+                //Последнее воскресенье в октябре указанного года в час ночи по UTC
+                $last_day_of_october = gmmktime(1, 0, 0, 10, 31, $this_year);
+                $last_sunday_of_october = strtotime("-" . gmdate("w", $last_day_of_october) . " day", $last_day_of_october);
+                if (($nTime > $last_sunday_of_march) && ($nTime < $last_sunday_of_october))
+                    $aOffsets[date('Y-m-d', $nTime)] += 3600;      //поправка на час вперед
+            }
+            return $aOffsets[date('Y-m-d', $nTime)];
+        }
+        return 0;
+    }
+
+    /**
+     * @param int $timestamp
+     * @param int $shiftUTC minutes
+     * @param bool $shiftSummer summer time
+     * @return int
+     */
+    static function timeShift($timestamp=0, $shiftUTC=0, $shiftSummer=false)
+    {
+        //Если функция вызвана без указания времени, берем текущее UTC-время
+        if ($timestamp==0) $timestamp=time();
+
+        if ($shiftSummer) {
+            $this_year = gmdate("Y", $timestamp);//Получаем номер года
+            //Последнее воскресенье в марте указанного года в час ночи по UTC
+            $last_day_of_march = gmmktime(1, 0, 0, 3, 31, $this_year);
+            $last_sunday_of_march = strtotime("-" . gmdate("w", $last_day_of_march) . " day", $last_day_of_march);
+            //Последнее воскресенье в октябре указанного года в час ночи по UTC
+            $last_day_of_october = gmmktime(1, 0, 0, 10, 31, $this_year);
+            $last_sunday_of_october = strtotime("-" . gmdate("w", $last_day_of_october) . " day", $last_day_of_october);
+            if (($timestamp > $last_sunday_of_march) && ($timestamp < $last_sunday_of_october))
+                $timestamp = $timestamp + 3600;      //поправка на час вперед
+        }
+
+        $timestamp = $timestamp + 60*$shiftUTC;
+        return $timestamp;
+    }
+
+    /**
+     * @param int $timestamp
+     * @param int $shiftUTC minutes
+     * @param bool $shiftSummer summer time
+     * @return int
+     */
+    static function summerShift($timestamp, $shiftSummer=false)
+    {
+        $this_year = gmdate("Y", $timestamp);//Получаем номер года
+        //Последнее воскресенье в марте указанного года в час ночи по UTC
+        $last_day_of_march = gmmktime(1, 0, 0, 3, 31, $this_year);
+        $last_sunday_of_march = strtotime("-" . gmdate("w", $last_day_of_march) . " day", $last_day_of_march);
+        //Последнее воскресенье в октябре указанного года в час ночи по UTC
+        $last_day_of_october = gmmktime(1, 0, 0, 10, 31, $this_year);
+        $last_sunday_of_october = strtotime("-" . gmdate("w", $last_day_of_october) . " day", $last_day_of_october);
+        if (($timestamp > $last_sunday_of_march) && ($timestamp < $last_sunday_of_october))
+            return true;      //поправка на час вперед
+        return false;
+    }
 }
 
 ?>

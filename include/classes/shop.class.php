@@ -61,13 +61,23 @@ class Shop extends DbItem
     {
         $this->aData = array();
         if ($nId) {
-            $sSql = 'SELECT '.join(',', $this->aFields). ', i.name promo_head'.
+            $sSql = 'SELECT '.join(',', $this->aFields). ', i.name promo_head, t.code timezone_code, p.def_phrase timezone_title '.
                 ' FROM '.$this->sTable.' AS '.$this->sAlias.
                 ' LEFT JOIN image i ON s.promo_head=i.image_id'.
+                ' LEFT JOIN timezone t ON s.timezone_id=t.timezone_id'.
+                ' LEFT JOIN phrase p ON p.phrase_id=t.title_id '.
                 ' WHERE '.$this->sId.'="'.$nId.'"';
             $this->aData = $this->oDb->getRow($sSql);
 
             if ($this->aData) {
+
+                $sShiftUTC = 0;
+                if (preg_match('@\(GMT(.*?)\)@i', $aShop['timezone_title'], $aMatches)) {
+                    list($sHours, $sMinutes) = explode(':', $aMatches[1]);
+                    $sShiftUTC = $sHours*60 + $sMinutes;
+                }
+                $this->aData['timezone_shift'] = $sShiftUTC;
+
                 $sSql = 'SELECT p.object_field, pd.phrase, pd.language_id'.
                     ' FROM  phrase p '.
                     ' LEFT JOIN phrase_det pd ON pd.phrase_id=p.phrase_id  '.

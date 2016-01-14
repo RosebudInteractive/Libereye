@@ -18,6 +18,16 @@ $oBooking   = new Booking();
 $oDb = Database::get();
 define('LANGUAGEID', 1);
 $nShopId = 1;
+$nTimeFrom = $oReq->get('from')?strtotime($oReq->get('from')):time();
+
+// данные магазина
+$oShop->load($nShopId);
+$aShop = $oShop->aData;
+$sShiftUTC = 0;
+if (preg_match('@\(GMT(.*?)\)@i', $aShop['timezone_title'], $aMatches)) {
+    list($sHours, $sMinutes) = explode(':', $aMatches[1]);
+    $sShiftUTC = $sHours*60 + $sMinutes;
+}
 
 
 // время работы
@@ -32,14 +42,14 @@ foreach ($aOpenTimesTmp as $nKey=>$aTime) {
 $aSellers = array(20,27);
 
 for($day=0; $day<30; $day++) { // на 30 дней
+    //$nDateTime = strtotime(date('Y-m-d 00:00:00', mktime(0,0,0,3,20,2016)))+$day*86400;
     $nDateTime = strtotime(date('Y-m-d 00:00:00', time()))+$day*86400;
-    // 0 - вс 1-пн
-    // 0 - пн 1-вт
     $nWeekDay = date('w', $nDateTime)==0 ? 6 : date('w', $nDateTime)-1;
     $aTime = isset($aOpenTimes[$nWeekDay]) ? $aOpenTimes[$nWeekDay]: array('time_to'=>0, 'time_from'=>0);
-    for($time=$aTime['time_from']; $time<$aTime['time_to']; $time+=60) {
-        $sTimeFrom = strtotime(date('Y-m-d H:00:00', $nDateTime+$time*60));
-        $sTimeTo = strtotime(date('Y-m-d H:00:00', $nDateTime+$time*60+3600));
+    for($time=$aTime['time_from']; $time<$aTime['time_to']-60; $time+=60) {
+
+        $sTimeFrom = strtotime(date('Y-m-d H:i:00', $nDateTime+$time*60));
+        $sTimeTo = strtotime(date('Y-m-d H:i:00', $nDateTime+$time*60+3600));
         if (!$oShopSlot->loadBy(array(
             'shop_id' => '='.$nShopId,
             'time_from' => '="'.Database::date($sTimeFrom).'"',

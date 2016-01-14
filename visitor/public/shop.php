@@ -19,7 +19,7 @@ $oBrand   = new Brand();
 $oShopSlot   = new ShopSlot();
 $oBooking   = new Booking();
 $nShopId = $oReq->getInt('id');
-$nTimezoneOffset = isset($_COOKIE['timezone'])?intval($_COOKIE['timezone'])*60:0;
+$sTimezoneOffset = isset($_COOKIE['timezone'])?$_COOKIE['timezone']:0;
 
 // валидация
 if (!$nShopId || !$oShop->load($nShopId, LANGUAGEID))
@@ -70,7 +70,7 @@ switch($oReq->getAction()) {
         if (!$aErrors) {
 
             // смещенение в UTC
-            $nTimeOffset = strtotime($sDate)+$nTimezoneOffset;
+            $nTimeOffset = strtotime($sDate) + Conf::getTimezoneOffset(strtotime($sDate), $sTimezoneOffset, $aShop['time_shift']);
 
             // если не указан продавец находим любого свободного
             if (!$iSellerId) {
@@ -125,13 +125,6 @@ switch($oReq->getAction()) {
         break;
 }
 
-// время работы
-list($aOpenTimesTmp, ) = $oOpenTime->getList(array('shop_id'=>'='.$nShopId, 'type'=>'="open"'), 0, 0, 'week_day');
-$aOpenTimes = array();
-foreach ($aOpenTimesTmp as $nKey=>$aTime) {
-    $aOpenTimes[$aTime['week_day']]['times'] = sprintf('%02d:%02d — %02d:%02d', intval($aTime['time_from']/60), $aTime['time_from']-intval($aTime['time_from']/60)*60, intval($aTime['time_to']/60), $aTime['time_to']-intval($aTime['time_to']/60)*60);
-}
-
 // группы товаров
 list($aGroups, $iGroupsCnt) = $oPgroup->getList(array('shop_id'=>'='.$nShopId), 0, 0);
 
@@ -156,56 +149,71 @@ if (mb_strlen($aShop['description']) > 600) {
     $aShop['description_part1'] = $aShop['description'];
 }
 
-// шопперы
+
+// Время со смещением временной зоны на сегодня
+$nTime = time();
+$nUtcTime = $nTime + date("Z", $nTime);
+$nTimeOffset = $nUtcTime - Conf::getTimezoneOffset(time(), $sTimezoneOffset);
+
+// время работы
+list($aOpenTimes, ) = $oOpenTime->getList(array('shop_id'=>'='.$nShopId, 'type'=>'="open"'), 0, 0, 'week_day');
+/*$aOpenTimes = array();
+foreach ($aOpenTimesTmp as $nKey=>$aTime) {
+    $aOpenTimes[$aTime['week_day']]['times'] = sprintf('%02d:%02d — %02d:%02d', intval($aTime['time_from']/60), $aTime['time_from']-intval($aTime['time_from']/60)*60, intval($aTime['time_to']/60), $aTime['time_to']-intval($aTime['time_to']/60)*60);
+}*/
+$nTodayWeekDay = date('w', $nTimeOffset)==0 ? 6 : date('w', $nTimeOffset)-1;
+$aTodayOpenTime = isset($aOpenTimes[$nTodayWeekDay]) ? $aOpenTimes[$nTodayWeekDay]: array();
+$sTodayOpenTime = '';
+if ($aTodayOpenTime) {
+    $aTodayOpenTime['time_from'] = $aTodayOpenTime['time_from'] - Conf::getTimezoneOffset($nTimeOffset, $sTimezoneOffset, $aShop['time_shift'])/60;
+    $aTodayOpenTime['time_to'] = $aTodayOpenTime['time_to'] - Conf::getTimezoneOffset($nTimeOffset, $sTimezoneOffset, $aShop['time_shift'])/60;
+    $sTodayOpenTime = $aTodayOpenTime ? sprintf('%02d:%02d — %02d:%02d', intval($aTodayOpenTime['time_from']/60), $aTodayOpenTime['time_from']-intval($aTodayOpenTime['time_from']/60)*60, intval($aTodayOpenTime['time_to']/60), $aTodayOpenTime['time_to']-intval($aTodayOpenTime['time_to']/60)*60) : '';
+}
+
+// шопперы и слоты
+$sStartTime = strtotime(date('Y-m-d', $nTimeOffset));
+$sEndTime = $sStartTime+6*86400;
 $aShoppers = $aSlots = array();
 $aWeekDays = array('Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa');
 list($aItems,) = $oAccount->getList(array('shop_id'=>'='.$nShopId, 'status'=>'="seller"'));
-if ($aItems) list($aSlots,) = $oBooking->getList(array('{#shop_id}'=>'ss.shop_id='.$nShopId, 'seller_id'=>'IN('.$oAccount->getListIds($aItems, true).')'), 0, 0, 'ss.time_from');
+if ($aItems) list($aSlots,) = $oBooking->getList(array('{#shop_id}'=>'ss.shop_id='.$nShopId, '{#time_from}'=>'time_from>="'.Database::date($sStartTime).'" AND DATE(time_from)<="'.date('Y-m-d', $sEndTime).'"', 'seller_id'=>'IN('.$oAccount->getListIds($aItems, true).')'), 0, 0, 'ss.time_from');
 
 // добавим всех шопперов
 array_unshift($aItems, array('account_id'=>0, 'fname'=>Conf::format('All shoppers')));
 
-// Время со смещением временной зоны
-$nTimeOffset = time()-$nTimezoneOffset;
-
-// дни недели
+// Формируем дни недели
 foreach($aItems as $aShopper) {
     $aShoppers[$aShopper['account_id']] = $aShopper;
     $aShoppers[$aShopper['account_id']]['total'] = 0;
     $aShoppers[$aShopper['account_id']]['days'] = array();
-    $sStartTime = strtotime(date('Y-m-d', $nTimeOffset));
-    for($time=$sStartTime; $time<$sStartTime+7*86400; $time+=86400) {
-        $sDayTitle = date('d')==date('d', $time) ? Conf::format('Today') :  date('d', $time).' '.Conf::format($aWeekDays[date('w', $time)]).'.';
+    for($time=$sStartTime; $time<=$sEndTime; $time+=86400) {
+        $sDayTitle = date('d', $nTimeOffset)==date('d', $time) ? Conf::format('Today') :  date('d', $time).' '.Conf::format($aWeekDays[date('w', $time)]).'.';
         $aShoppers[$aShopper['account_id']]['days'][$time] = array('day_title'=>$sDayTitle, 'day_date'=>date('Y-m-d', $time), 'morning'=>array('busy'=>0, 'free'=>0, 'total'=>0, 'times'=>array()),
             'day'=>array('busy'=>0, 'free'=>0, 'total'=>0, 'times'=>array()));
     }
 }
 
+// слоты
 foreach ($aSlots as $aSlot) {
-    $sDateTime = strtotime(date('Y-m-d',strtotime($aSlot['time_from'])-$nTimezoneOffset));
+    $sDateTime = strtotime(date('Y-m-d',strtotime($aSlot['time_from']) - Conf::getTimezoneOffset(strtotime($aSlot['time_from']), $sTimezoneOffset, $aShop['time_shift'])));
     if (isset($aShoppers[$aSlot['seller_id']]['days'][$sDateTime])) {
-        $sTime = strtotime($aSlot['time_from'])-$nTimezoneOffset;
+        $sTime = strtotime($aSlot['time_from']) - Conf::getTimezoneOffset(strtotime($aSlot['time_from']), $sTimezoneOffset, $aShop['time_shift']);
         $sTimeFormat = date('G:i', $sTime);
-        if (date('G', $sTime)*60+date('i', $sTime) < 720) { // утренний слот
-            if ($aSlot['status']=='free')
-                $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['morning']['times'][$sTimeFormat] = $sTimeFormat;
-            $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['morning'][$aSlot['status']=='booked'?'busy':'free'] +=1;
-            $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['morning']['total'] +=1;
-            if ($aSlot['status']=='free')
-                $aShoppers[0]['days'][$sDateTime]['morning']['times'][$sTimeFormat]  = $sTimeFormat;
-            $aShoppers[0]['days'][$sDateTime]['morning'][$aSlot['status']=='booked'?'busy':'free'] +=1;
-            $aShoppers[0]['days'][$sDateTime]['morning']['total'] +=1;
 
-        } else {
-            if ($aSlot['status']=='free')
-                $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['day']['times'][$sTimeFormat] = $sTimeFormat;
-            $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['day'][$aSlot['status']=='booked'?'busy':'free'] +=1;
-            $aShoppers[$aSlot['seller_id']]['days'][$sDateTime]['day']['total'] +=1;
-            if ($aSlot['status']=='free')
-                $aShoppers[0]['days'][$sDateTime]['day']['times'][$sTimeFormat]  = $sTimeFormat;
-            $aShoppers[0]['days'][$sDateTime]['day'][$aSlot['status']=='booked'?'busy':'free'] +=1;
-            $aShoppers[0]['days'][$sDateTime]['day']['total'] +=1;
-        }
+        // дневное или утреннее время
+        $sSlotType = 'day';
+        if (date('G', $sTime)*60+date('i', $sTime) < 720) // утренний слот
+            $sSlotType = 'morning';
+
+        if ($aSlot['status']=='free')
+            $aShoppers[$aSlot['seller_id']]['days'][$sDateTime][$sSlotType]['times'][$sTimeFormat] = $sTimeFormat;
+        $aShoppers[$aSlot['seller_id']]['days'][$sDateTime][$sSlotType][$aSlot['status']=='booked'?'busy':'free'] +=1;
+        $aShoppers[$aSlot['seller_id']]['days'][$sDateTime][$sSlotType]['total'] +=1;
+        if ($aSlot['status']=='free')
+            $aShoppers[0]['days'][$sDateTime][$sSlotType]['times'][$sTimeFormat]  = $sTimeFormat;
+        $aShoppers[0]['days'][$sDateTime][$sSlotType][$aSlot['status']=='booked'?'busy':'free'] +=1;
+        $aShoppers[0]['days'][$sDateTime][$sSlotType]['total'] +=1;
+
         if ($aSlot['status']=='free') {
             $aShoppers[$aSlot['seller_id']]['total'] +=1;
             $aShoppers[0]['total'] +=1;
@@ -231,6 +239,7 @@ $oTpl->assignSrc(array(
    'iBrandsCnt' => $iBrandsCnt,
    'sDepartmentsDataJson' => json_encode($aPtypes2Group),
    'aShoppers' => $aShoppers,
+   'sTodayOpenTime' => $sTodayOpenTime,
 ));
 
 ?>
