@@ -65,7 +65,7 @@ class Account extends DbItem
      * @return bool true - login ok, false - error
      * @see _loginAddCheck()
      */
-    function login($sLogin, $sPassword, $aStatuses=array(), $sRegisterType='common', $sRegisterId=0)
+    function login($sLogin, $sPassword, $aStatuses=array(), $sRegisterType='common', $sRegisterId=0, $bRemember=false, $bPassMd5=false)
     {
         if ($sRegisterType == 'common') {
             $sSql = 'SELECT account_id, pass, status ' .
@@ -75,7 +75,11 @@ class Account extends DbItem
             if ($aRow) //user account exists
             {
                 //check password
-                $sPassword = md5($sPassword);
+                if(!$bPassMd5) {
+                    $sPassword = md5($sPassword);
+                }
+
+                //check password
                 if ($aRow['pass'] != $sPassword)
                     $this->_addError('login.pass');
 
@@ -86,6 +90,16 @@ class Account extends DbItem
                 if (!$this->aErrors) {
                     if ($this->_loginAddCheck($aRow['account_id'])) {
                         $_SESSION[$this->sUserType]['id'] = $aRow['account_id'];
+                        if ($bRemember)
+                        {
+                            setcookie('username', $sLogin, time()+60*60*24*365, '/');
+                            setcookie('password', $sPassword, time()+60*60*24*365, '/');
+                        }
+                        else
+                        {
+                            setcookie('username', '', time()-3600*24, '/');
+                            setcookie('password', '', time()-3600*24, '/');
+                        }
                         $this->oDb->update($this->sTable, array('last_login' => $this->oDb->date()), 'account_id=' . $aRow['account_id']);
                     }
                 }
@@ -143,6 +157,8 @@ class Account extends DbItem
     function logout()
     {
         unset($_SESSION[$this->sUserType]);
+        setcookie('username', '', time()-3600*24, '/');
+        setcookie('password', '', time()-3600*24, '/');
     }
     
     /**

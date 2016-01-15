@@ -28,14 +28,23 @@ switch ($oReq->getAction())
     case 'login':
         if ($oValidator->isValid($oReq->getAll()))
         {
-            if ($oAccount->login($sLogin, $sPass)){
-                $oReq->forward('/'.$aLanguage['alias'].'/');
+            if ($oAccount->login($sLogin, $sPass, array(), 'common', 0, $oReq->get('remember'))){
+                if ($oReq->get('ajax')) {
+                    echo json_encode(array('errors'=>$aErrors));
+                    exit;
+                }
+                else
+                    $oReq->forward('/'.$aLanguage['alias'].'/');
             } 
             else           
             	$aErrors[] = Conf::format('Incorrect password or e-mail');
         }
         else
             $aErrors[] = Conf::format('Incorrect password or e-mail');
+        if ($oReq->get('ajax')) {
+            echo json_encode(array('errors'=>$aErrors));
+            exit;
+        }
         break;
 }
 

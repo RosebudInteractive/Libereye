@@ -20,6 +20,13 @@ $oLanguage = new Language();
 $oContent = new Content();
 global $_PHRASES;
 
+// Попытка логина из кукисов
+if ($oReq->_sSect != 'logout' && !$oAccount->isLoggedIn() && isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
+    if ($oAccount->login($_COOKIE['username'], $_COOKIE['password'], array(), 'common', 0, true, true))
+        $oReq->forward('/'.$aLanguage['alias'].'/');
+}
+
+// данные пользователя
 $aAccount = array();
 if ($oAccount->isLoggedIn() && $oAccount->load($oAccount->isLoggedIn())) {
 	$aAccount = $oAccount->aData;

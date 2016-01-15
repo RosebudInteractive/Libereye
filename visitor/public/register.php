@@ -19,17 +19,13 @@ $bSuccess 	= $oReq->get('success');
 $aUserReg 	= $oReq->getArray('aUser');
 
 $aFields = array(
-    'aUser[fname]' 	=> array('title'=>Conf::format('Name'),  'pattern'=>'/^.{1,255}$/'),
-  //  'aUser[lname]' 	=> array('title'=>Conf::format('Surname'),  'pattern'=>'/^.{1,255}$/'),
-    'aUser[email]' 		=> array('title'=>Conf::format('Email'),    'pattern'=>'/^[A-Za-z_0-9\.\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,}$/'),
-  //  'aUser[phone]' 		=> array('title'=>Conf::format('Phone'),    'def'=>'required'),
-  //  'aUser[address]' 		=> array('title'=>Conf::format('Delivery address'),    'def'=>'required'),
-  //  'aUser[timezone]' 		=> array('title'=>Conf::format('Time zone'),    'def'=>'required'),
-    'aUser[pass]'  	=> array('title'=>Conf::format('Password'),   'pattern'=>'/^.{6,20}$/'),
+    'fname' 	=> array('title'=>Conf::format('Name'),  'pattern'=>'/^.{1,255}$/'),
+    'email' 		=> array('title'=>Conf::format('Email'),    'pattern'=>'/^[A-Za-z_0-9\.\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,}$/'),
+    'pass'  	=> array('title'=>Conf::format('Password'),   'pattern'=>'/^.{6,20}$/'),
     'pass_confirm'  => array('title'=>Conf::format('The password again'),   'pattern'=>'/^.{6,20}$/'),
 );
 
-$oValidator = new Validator($aFields, array(array('aUser[pass]', 'pass_confirm', '==')));
+$oValidator = new Validator($aFields, array(array('pass', 'pass_confirm', '==')));
 $aErrors 	= array();
 
 switch ($oReq->getAction())
@@ -200,52 +196,51 @@ switch ($oReq->getAction())
         exit;
         break;
     case 'register':
+        $nUserId = 0;
         if ($oValidator->isValid($oReq->getAll())){
-	    	$oUserReg->aData = $aUserReg;        	        	
+            $aUserReg = $oUserReg->aData = array(
+                'fname' => $oReq->get('name'),
+                'email' => $oReq->get('email'),
+                'pass' => $oReq->get('pass'),
+                'birthday' => $oReq->get('birthday'),
+                'status' => 'client',
+                'register_type' => 'common',
+                'cdate' => Database::date(),
+            );
 	    	$oUserReg->aData['pass'] = md5($oUserReg->aData['pass']);
-	    	$oUserReg->aData['cdate'] = Database::date();
-	    	$oUserReg->aData['status'] = 'client';
-	    	
+
 	        if ($oUserReg->isUniqueEmail())
 	        {
-              /*  $oZoomUser = $oZoom->addUser(array(
-                    'email' => $aUserReg['email'],
-                    'type' => 1,
-                    'first_name' => $aUserReg['fname'],
-                ));*/
-                $oZoomUser = true;
-
-                if ($oZoomUser) {
-                    if (is_object($oZoomUser) && property_exists($oZoomUser, 'id'))
-                        $oUserReg->aData['zoom_id'] = $oZoomUser->id;
-                    if (($nUserId = $oUserReg->insert())) {
-
-                        $sConfirmCode = md5(uniqid(rand(), true));
-                        $oUserReg->aData = array('account_id'=>$nUserId, 'confirm_code'=>$sConfirmCode);
-                        $oUserReg->update();
-
-                        // отправляем подтверждение
-                        $oMailer = new Mailer();
-                        $bSended = $oMailer->send(
-                            'confirm_template',
-                            $aUserReg['email'],
-                            array(
-                                'confirm_code_url'	=>  Conf::get('http').Conf::get('host').'confirm/?code='.$sConfirmCode,
-                            )
-                        ,array(), array(), $aLanguage['language_id']);
-
+                if (($nUserId = $oUserReg->insert())) {
+                    $sConfirmCode = md5(uniqid(rand(), true));
+                    $oUserReg->aData = array('account_id'=>$nUserId, 'confirm_code'=>$sConfirmCode);
+                    $oUserReg->update();
+                    // отправляем подтверждение
+                    $oMailer = new Mailer();
+                    $bSended = $oMailer->send(
+                        'confirm_template',
+                        $aUserReg['email'],
+                        array(
+                            'confirm_code_url'	=>  Conf::get('http').Conf::get('host').'confirm/?code='.$sConfirmCode,
+                        )
+                    ,array(), array(), $aLanguage['language_id']);
+                    if ($oReq->get('ajax')) {
+                        echo json_encode(array('errors'=>$aErrors, 'id'=>$nUserId));
+                        exit;
+                    } else
                         $oReq->forward('/'.$aLanguage['alias'].'/register/success/?email=' . urlencode($aUserReg['email']));
-
-                    }else
-                        $aErrors = $oUserReg->getErrors();
-                } else {
-                    $aErrors = $oZoom->getErrors();
-                }
+                }else
+                    $aErrors = $oUserReg->getErrors();
 	        }
 	        else
 	            $aErrors[] = Conf::format('This email address is already registered');
         } else
             $aErrors = $oValidator->getErrors();
+
+        if ($oReq->get('ajax')) {
+            echo json_encode(array('errors'=>$aErrors, 'id'=>$nUserId));
+            exit;
+        }
         break;
 }
 

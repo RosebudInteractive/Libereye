@@ -395,7 +395,7 @@ $(function() {
                 dayForwardLink.show();
                 dayForwardLink.data('day-to', nextDay);
 
-                console.log(nextDay);
+                //console.log(nextDay);
             }
         });
 
@@ -425,7 +425,7 @@ $(function() {
                 dayBackLink.show();
                 dayBackLink.data('day-to', prevDay);
 
-                console.log(prevDay);
+                //console.log(prevDay);
             }
         });
     }
@@ -482,7 +482,7 @@ $(function() {
         var list = $('<ul/>');
         if (typeof departmentId != "undefined" && typeof departmentsData != "undefined") {
             for (var x in departmentsData[departmentId]) {
-                console.log(departmentsData[departmentId][x]);
+                //console.log(departmentsData[departmentId][x]);
                 list.append('<li>'+departmentsData[departmentId][x]+'</li>');
             }
         }
@@ -531,32 +531,53 @@ $(function() {
                 var inputBlock = form.find('input[name="'+this.name+'"]').parents('.input');
                 if (this.name == 'email') {
                     // Add more conditions if needed
-                    if (this.value.length == 0) {
+                    if (!validateEmail(this.value)) {
                         validation = false;
-                        errors["name_empty"] = "Введите E-mail";
+                        errors["name_empty"] = "Проверьте E-mail";
                         inputBlock.addClass('failed');
                         if (inputBlock.find('.input-error').length == 0) {
                             inputBlock.append('<div class="input-error">'+errors["name_empty"]+'</div>');
                         }
                         errorBlock.append(errors["name_empty"]+'<br/>');
+                    } else {
+                        inputBlock.removeClass('failed').addClass('success');
                     }
                 }
                 if (this.name == 'password') {
                     // Add more conditions if needed
-                    if (this.value.length == 0) {
+                    if (this.value.length < 6) {
                         validation = false;
-                        errors["password_empty"] = "Введите пароль";
+                        errors["password_empty"] = "Введите пароль (мин. 6 символов)";
                         inputBlock.addClass('failed');
                         if (inputBlock.find('.input-error').length == 0) {
                             inputBlock.append('<div class="input-error">'+errors["password_empty"]+'</div>');
                         }
                         errorBlock.append(errors["password_empty"]+'<br/>');
+                    } else {
+                        inputBlock.removeClass('failed').addClass('success');
                     }
                 }
             });
 
             if (validation == true) {
                 // Make login
+                var data = {act:'login', ajax:1};
+                data.email = $('#inEmail').val();
+                data.pass = $('#inPass').val();
+                data.remember = $('#inRemember').is(':checked')?1:0;
+                $.ajax({
+                    method: "POST",
+                    url: '/'+LANGUAGE+'/login/',
+                    data: data
+                })
+                    .done(function( msg ) {
+                        var results = JSON.parse(msg);
+                        if (results.errors && results.errors.length != 0) {
+                            $('.overlay-content .error-block').empty().html(results.errors.join('<br>')).show();
+                        } else {
+                            location.reload();
+                        }
+                    });
             } else {
                 // show errors
             }
@@ -588,6 +609,13 @@ $(function() {
 
             $('#registration-form').tmpl().appendTo('.overlay-content');
 
+            // добавляем года
+            var currYear = (new Date()).getFullYear(), yearSelect = $('#inYear'), years='';
+            for(var i=currYear; i>=currYear-100; i--) {
+                years += '<option value="'+i+'">'+i+'</option>';
+            }
+            yearSelect.append(years);
+
             $('#registration').submit(function(e) {
                 e.preventDefault();
                 var errors = [];
@@ -598,7 +626,7 @@ $(function() {
                 // Validate data
                 var validation = true;
                 $.each($(this).serializeArray(), function(){
-                    console.log(this);
+                    //console.log(this);
                     var inputBlock = form.find('input[name="'+this.name+'"]').parents('.input');
                     if (this.name == 'name') {
                         // Add more conditions if needed
@@ -616,9 +644,9 @@ $(function() {
                     }
                     if (this.name == 'email') {
                         // Add more conditions if needed
-                        if (this.value.length == 0) {
+                        if (!validateEmail(this.value)) {
                             validation = false;
-                            errors["email_empty"] = "Введите почту";
+                            errors["email_empty"] = "Проверьте E-mail";
                             inputBlock.addClass('failed');
                             if (inputBlock.find('.input-error').length == 0) {
                                 inputBlock.append('<div class="input-error">'+errors["email_empty"]+'</div>');
@@ -629,17 +657,66 @@ $(function() {
                         }
                     }
                     if (this.name == 'password') {
-
+                        if (this.value.length < 6) {
+                            validation = false;
+                            errors["password_empty"] = "Введите пароль (мин. 6 символов)";
+                            inputBlock.addClass('failed');
+                            if (inputBlock.find('.input-error').length == 0) {
+                                inputBlock.append('<div class="input-error">'+errors["password_empty"]+'</div>');
+                            }
+                            errorBlock.append(errors["password_empty"]+'<br/>');
+                        } else {
+                            inputBlock.removeClass('failed').addClass('success');
+                        }
+                    }
+                    if (this.name == 'password-check') {
+                        if (this.value.length < 6) {
+                            validation = false;
+                            errors["password-check_empty"] = "Введите пароль повторно";
+                            inputBlock.addClass('failed');
+                            if (inputBlock.find('.input-error').length == 0) {
+                                inputBlock.append('<div class="input-error">'+errors["password-check_empty"]+'</div>');
+                            }
+                            errorBlock.append(errors["password-check_empty"]+'<br/>');
+                        } else {
+                            if (this.value != $('#inPass').val()) {
+                                validation = false;
+                                errors["password-check_empty"] = "Пароли не совпадают";
+                                inputBlock.addClass('failed');
+                                if (inputBlock.find('.input-error').length == 0) {
+                                    inputBlock.append('<div class="input-error">'+errors["password-check_empty"]+'</div>');
+                                }
+                                errorBlock.append(errors["password-check_empty"]+'<br/>');
+                            } else {
+                                inputBlock.removeClass('failed').addClass('success');
+                            }
+                        }
                     }
                 });
 
                 if (validation == true) {
-                    showOverlay();
-                    $('#registration-success').tmpl({"email": form.find('input[name="email"]').val()}).appendTo('.overlay-content');
+                    var data = {act:'register', ajax:1};
+                    data.fname = $('#inName').val();
+                    data.email = $('#inEmail').val();
+                    data.pass = $('#inPass').val();
+                    data.pass_confirm = $('#inPass').val();
+                    data.birthday = $('#inYear').val()+'-'+$('#inMonth').val()+'-'+$('#inDay').val();
+                    $.ajax({
+                        method: "POST",
+                        url: '/'+LANGUAGE+'/register/',
+                        data: data
+                    })
+                        .done(function( msg ) {
+                            var results = JSON.parse(msg);
+                            if (results.errors && results.errors.length != 0) {
+                                $('.overlay-content .error-block').empty().html(results.errors.join('<br>')).show();
+                            } else {
+                                showOverlay();
+                                $('#registration-success').tmpl({"email": form.find('input[name="email"]').val()}).appendTo('.overlay-content');
+                            }
+                        });
                 } else {
-
                     // show errors
-
                 }
 
             });
