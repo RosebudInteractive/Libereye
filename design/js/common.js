@@ -255,7 +255,7 @@ function isValidDate(d) {
 // =========================== Facebook init ========================
 window.fbAsyncInit = function() {
     FB.init({
-        appId      : '554808964685579',
+        appId      : apiConfigJson.facebook_app_id, //'554808964685579',
         xfbml      : true,
         version    : 'v2.5'
     });
@@ -272,14 +272,14 @@ window.fbAsyncInit = function() {
 
 // =========================== VK init ==============================
 VK.init({
-    apiId: 5227859
+    apiId: apiConfigJson.vk_app_id // 5227859
 });
 // =========================== VK init ==============================
 
 // =========================== google init ==============================
 
 function googleQuery(action) {
-    var clientId = '958156450156-vq1irfc7amfeb240r4bspfd0b3pguhaj.apps.googleusercontent.com';
+    var clientId = apiConfigJson.google_client_id; //'958156450156-vq1irfc7amfeb240r4bspfd0b3pguhaj.apps.googleusercontent.com';
     var scopes = ['https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'];
     gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, function(authResult1){
         if (authResult1 && !authResult1.error) {
@@ -299,7 +299,7 @@ function googleQuery(action) {
 
 // Use a button to handle authentication the first time.
 function handleClientLoad() {
-    var apiKey = 'AIzaSyBxofvhjTDmlxHcXFzAGvHyS0kjMRthd_A';
+    var apiKey = apiConfigJson.google_app_id;//'AIzaSyBxofvhjTDmlxHcXFzAGvHyS0kjMRthd_A';
     gapi.client.setApiKey(apiKey);
 }
 

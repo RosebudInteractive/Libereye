@@ -81,9 +81,16 @@ $oTpl->assign(array(
 
     'aLanguages' => $aLanguages,
     'aContentPages' => $aContentPages ,
-    'REQUEST_URI' => preg_replace('@^/(ru|en|fr)/@si', '/', $_SERVER['REQUEST_URI'])
+    'REQUEST_URI' => preg_replace('@^/(ru|en|fr)/@si', '/', $_SERVER['REQUEST_URI']),
+));
 
-
+$oTpl->assignSrc(array(
+    'apiConfigJson' => json_encode(array(
+        'facebook_app_id' => Conf::get('facebook_app_id'),
+        'vk_app_id' => Conf::get('vk_app_id'),
+        'google_app_id' => Conf::get('google_app_id'),
+        'google_client_id' => Conf::get('google_client_id'),
+    )),
 ));
 // View
 $oTpl->view('visitor/'.$oReq->getSectionFile('html'));

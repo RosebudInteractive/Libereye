@@ -44,9 +44,9 @@ switch ($oReq->getAction())
         $client = new Google_Client();
         $client->setApplicationName("Google+ PHP Starter Application");
 
-        $client->setClientId('958156450156-vq1irfc7amfeb240r4bspfd0b3pguhaj.apps.googleusercontent.com');
-        $client->setClientSecret('ZKZTRZv0PN6uuvC9FOmYbJsD');
-        $client->setDeveloperKey('AIzaSyBxofvhjTDmlxHcXFzAGvHyS0kjMRthd_A');
+        $client->setClientId(Conf::get('google_client_id'));
+        $client->setClientSecret(Conf::get('google_app_secret'));
+        $client->setDeveloperKey(Conf::get('google_app_id'));
         // {"access_token":"TOKEN", "refresh_token":"TOKEN", "token_type":"Bearer",
         // "expires_in":3600, "id_token":"TOKEN", "created":1320790426}
         $client->setAccessToken(json_encode(array(

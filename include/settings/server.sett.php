@@ -45,4 +45,9 @@ $_CONF['facebook_app_secret'] = '75d56ffe55df493608e81030f964c447';
 $_CONF['vk_app_id'] = '5227859';
 $_CONF['vk_app_secret'] = 'Vj64AfKe8iYwoFEfwAO8';
 
+// google api
+$_CONF['google_app_id'] = 'AIzaSyBxofvhjTDmlxHcXFzAGvHyS0kjMRthd_A';
+$_CONF['google_client_id'] = '958156450156-vq1irfc7amfeb240r4bspfd0b3pguhaj.apps.googleusercontent.com';
+$_CONF['google_app_secret'] = 'ZKZTRZv0PN6uuvC9FOmYbJsD';
+
 ?>
