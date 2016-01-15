@@ -11,6 +11,7 @@ Conf::loadClass('utils/Zoom');
 Conf::loadClass('utils/Validator');
 Conf::loadClass('utils/file/Image');
 Conf::loadClass('utils/mail/Mailer');
+Conf::loadClass('utils/vk/Vk');
 
 $oUserReg  	= new Account();
 $oZoom  	= new Zoom();
@@ -33,6 +34,53 @@ $aErrors 	= array();
 
 switch ($oReq->getAction())
 {
+    case 'vk_register':
+    case 'vk_login':
+        $nUserId = 0;
+        $aSession = $oReq->getArray('session');
+        $oVk = new Vk(Conf::get('vk_app_id'), Conf::get('vk_app_secret'), $aSession);
+        if ($oVk->authOpenAPIMember()) {
+            require_once Conf::get('path') . '/include/classes/utils/vk/VK.php';
+            require_once Conf::get('path') . '/include/classes/utils/vk/VKException.php';
+            try {
+                $vk = new VK\VK(Conf::get('vk_app_id'), Conf::get('vk_app_secret'), $aSession['sid']);
+                $user = $vk->api('users.get', array('fields' => 'uid,first_name,last_name,email'));
+                if (isset($user['response']) && isset($user['response'][0]) && isset($user['response'][0]['uid'])) {
+                    if (!$user['response'][0]['first_name']) $aErrors[] = Conf::format('Name required');
+                    if (!$user['response'][0]['uid']) $aErrors[] = Conf::format('ID required');
+                    if (!$aErrors) {
+                        if ($oReq->getAction() == 'vk_register') {
+                            $oUserReg->aData = array();
+                            $oUserReg->aData['cdate'] = Database::date();
+                            $oUserReg->aData['status'] = 'client';
+                            $oUserReg->aData['register_type'] = 'vk';
+                            $oUserReg->aData['is_active'] = 1;
+                            $oUserReg->aData['fname'] = $user['response'][0]['first_name'] . ' ' . $user['response'][0]['last_name'];
+                            $oUserReg->aData['register_id'] = $user['response'][0]['uid'];
+                            $oUserReg->aData['email'] = $user['response'][0]['uid'] . '@vk.com';
+                            if ($oUserReg->isUniqueRegID('vk', $user['response'][0]['uid'])) {
+                                if (($nUserId = $oUserReg->insert())) {
+                                    if (!$oUserReg->login('', '', array('client'), 'vk', $user['response'][0]['uid']))
+                                        $aErrors = $oUserReg->getErrors();
+                                } else
+                                    $aErrors = $oUserReg->getErrors();
+                            } else
+                                $aErrors[] = Conf::format('This account already registered');
+                        } else {
+                            if (!$oUserReg->login('', '', array('client'), 'vk', $user['response'][0]['uid']))
+                                $aErrors = $oUserReg->getErrors();
+                        }
+                    }
+                } else
+                    $aErrors[] = Conf::format('User not authorized');
+            } catch (VK\VKException $error) {
+                $aErrors[] = $error->getMessage();
+            }
+        } else
+            $aErrors[] = Conf::format('User not authorized');
+        echo json_encode(array('errors'=>$aErrors, 'id'=>$nUserId));
+        exit;
+        break;
     case 'facebook_register':
     case 'facebook_login':
         $nUserId = 0;
@@ -71,21 +119,20 @@ switch ($oReq->getAction())
                     $oUserReg->aData['fname'] = $user['name'];
                     $oUserReg->aData['email'] = $user['email'];
                     $oUserReg->aData['register_id'] = $user['id'];
-                    if ($oUserReg->isUniqueEmail()) {
+                    if ($oUserReg->isUniqueRegID('facebook', $user['id'])) {
                         if (($nUserId = $oUserReg->insert())) {
                             if (!$oUserReg->login('', '', array('client'), 'facebook', $user['id']))
                                 $aErrors = $oUserReg->getErrors();
                         } else
                             $aErrors = $oUserReg->getErrors();
                     } else
-                        $aErrors[] = Conf::format('This email address is already registered');
+                        $aErrors[] = Conf::format('This account already registered');
                 } else {
                     if (!$oUserReg->login('', '', array('client'), 'facebook', $user['id']))
                         $aErrors = $oUserReg->getErrors();
                 }
             }
         }
-
         echo json_encode(array('errors'=>$aErrors, 'id'=>$nUserId));
         exit;
         break;

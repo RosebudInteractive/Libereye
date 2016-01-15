@@ -163,10 +163,10 @@ class Account extends DbItem
      *
      * @return bool
      */
-    function isUniqueID($sRegType, $nId=0)
+    function isUniqueRegID($sRegType, $nRegId, $nId=0)
     {
         $nId = intval($nId);
-        if (!$this->oDb->getField('SELECT COUNT(*) FROM '.conf::getT('account').' WHERE register_type = "'.Database::escape($sRegType).'" AND register_id <> "'.$nId.'"', false))
+        if (!$this->oDb->getField('SELECT COUNT(*) FROM '.conf::getT('account').' WHERE register_type = "'.Database::escape($sRegType).'" AND register_id = "'.Database::escape($nRegId).'" AND account_id <> "'.$nId.'"', false))
             return true;
         else
             return false;

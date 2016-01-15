@@ -161,6 +161,8 @@ $(function() {
 
 });
 
+
+
 // описание магазина
 function showFull(link, obj) {
     if ($(obj).is(':visible')) {
@@ -192,25 +194,47 @@ function fbQuery(action) {
     FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
             var accessToken = response.authResponse.accessToken;
-            tryLogin('facebook_'+action, accessToken);
+            tryLogin({act:'facebook_'+action, token:accessToken});
         } else {
             // the user isn't logged in to Facebook.
             FB.login(function(response) {
                 if (response.authResponse) {
                     var accessToken = response.authResponse.accessToken;
-                    tryLogin('facebook_'+action, accessToken);
+                    tryLogin({act:'facebook_'+action, token:accessToken});
                 }
-            });
+            },{scope: 'email'});
         }
     });
     return false;
 }
 
-function tryLogin(action, accessToken) {
+function vkQuery(action) {
+    VK.Auth.getLoginStatus(function(response) {
+        if (response.session) {
+            /* Авторизованный в Open API пользователь */
+            var data = {act:'vk_'+action, session:response.session};
+            tryLogin(data);
+        } else {
+            /* Неавторизованный в Open API пользователь */
+            VK.Auth.login(function(response) {
+                if (response.session) {
+                    /* Пользователь успешно авторизовался */
+                    var data = {act:'vk_'+action, session:response.session};
+                    tryLogin(data);
+                } else {
+                    /* Пользователь нажал кнопку Отмена в окне авторизации */
+                }
+            }, 4194304);
+        }
+    });
+    return false;
+}
+
+function tryLogin(data) {
     $.ajax({
         method: "POST",
         url: '/'+LANGUAGE+'/register/',
-        data: {act:action, token:accessToken}
+        data: data
     })
         .done(function( msg ) {
             var results = JSON.parse(msg);
@@ -221,3 +245,33 @@ function tryLogin(action, accessToken) {
             }
         });
 }
+
+function isValidDate(d) {
+    if ( Object.prototype.toString.call(d) !== "[object Date]" )
+        return false;
+    return !isNaN(d.getTime());
+}
+
+// =========================== Facebook init ========================
+window.fbAsyncInit = function() {
+    FB.init({
+        appId      : '554808964685579',
+        xfbml      : true,
+        version    : 'v2.5'
+    });
+};
+
+(function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+// =========================== Facebook init ========================
+
+// =========================== VK init ==============================
+VK.init({
+    apiId: 5227859
+});
+// =========================== VK init ==============================

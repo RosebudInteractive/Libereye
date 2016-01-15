@@ -72,7 +72,7 @@ class Shop extends DbItem
             if ($this->aData) {
 
                 $sShiftUTC = 0;
-                if (preg_match('@\(GMT(.*?)\)@i', $aShop['timezone_title'], $aMatches)) {
+                if (preg_match('@\(GMT(.*?)\)@i', $this->aData['timezone_title'], $aMatches)) {
                     list($sHours, $sMinutes) = explode(':', $aMatches[1]);
                     $sShiftUTC = $sHours*60 + $sMinutes;
                 }

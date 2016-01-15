@@ -41,4 +41,8 @@ $_CONF['hosting_type'] = 'windows';
 $_CONF['facebook_app_id'] = '554808964685579';
 $_CONF['facebook_app_secret'] = '75d56ffe55df493608e81030f964c447';
 
+// vk api
+$_CONF['vk_app_id'] = '5227859';
+$_CONF['vk_app_secret'] = 'Vj64AfKe8iYwoFEfwAO8';
+
 ?>
