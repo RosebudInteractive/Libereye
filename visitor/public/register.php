@@ -34,6 +34,66 @@ $aErrors 	= array();
 
 switch ($oReq->getAction())
 {
+    case 'google_register':
+    case 'google_login':
+        $nUserId = 0;
+        $aSession = $oReq->getArray('session');
+
+        // login
+        require_once Conf::get('path') . '/include/classes/utils/google/vendor/autoload.php';
+        $client = new Google_Client();
+        $client->setApplicationName("Google+ PHP Starter Application");
+
+        $client->setClientId('958156450156-vq1irfc7amfeb240r4bspfd0b3pguhaj.apps.googleusercontent.com');
+        $client->setClientSecret('ZKZTRZv0PN6uuvC9FOmYbJsD');
+        $client->setDeveloperKey('AIzaSyBxofvhjTDmlxHcXFzAGvHyS0kjMRthd_A');
+        // {"access_token":"TOKEN", "refresh_token":"TOKEN", "token_type":"Bearer",
+        // "expires_in":3600, "id_token":"TOKEN", "created":1320790426}
+        $client->setAccessToken(json_encode(array(
+            'access_token' => $aSession['access_token'],
+            'token_type' => $aSession['token_type'],
+            'created' => $aSession['issued_at'],
+            'expires_in' => $aSession['expires_in'],
+            'refresh_token' => 'TOKEN',
+            'id_token' => 'TOKEN',
+        )));
+        $client->setScopes(array('https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'));
+        $oauth = new Google_Service_Oauth2($client);
+        $user = $oauth->userinfo->get();
+        if ($user->email)
+        if (!$user->givenName) $aErrors[] = Conf::format('Name required');
+        if (!$user->email) $aErrors[] = Conf::format('Email required');
+        if (!$user->id) $aErrors[] = Conf::format('ID required');
+
+        if (!$aErrors) {
+            if ($oReq->getAction() == 'google_register') {
+                $oUserReg->aData = array();
+                $oUserReg->aData['cdate'] = Database::date();
+                $oUserReg->aData['status'] = 'client';
+                $oUserReg->aData['register_type'] = 'google';
+                $oUserReg->aData['is_active'] = 1;
+                $oUserReg->aData['fname'] = $user->givenName.' '.$user->familyName;
+                $oUserReg->aData['email'] = $user->email;
+                $oUserReg->aData['register_id'] = $user->id;
+                if ($oUserReg->isUniqueEmail()) {
+                    if ($oUserReg->isUniqueRegID('google', $user->id)) {
+                        if (($nUserId = $oUserReg->insert())) {
+                            if (!$oUserReg->login('', '', array('client'), 'google', $user->id))
+                                $aErrors = $oUserReg->getErrors();
+                        } else
+                            $aErrors = $oUserReg->getErrors();
+                    } else
+                        $aErrors[] = Conf::format('This account already registered');
+                } else
+                    $aErrors[] = Conf::format('This email already registered');
+            } else {
+                if (!$oUserReg->login('', '', array('client'), 'google', $user->id))
+                    $aErrors = $oUserReg->getErrors();
+            }
+        }
+        echo json_encode(array('errors'=>$aErrors, 'id'=>$nUserId));
+        exit;
+        break;
     case 'vk_register':
     case 'vk_login':
         $nUserId = 0;
@@ -119,14 +179,17 @@ switch ($oReq->getAction())
                     $oUserReg->aData['fname'] = $user['name'];
                     $oUserReg->aData['email'] = $user['email'];
                     $oUserReg->aData['register_id'] = $user['id'];
-                    if ($oUserReg->isUniqueRegID('facebook', $user['id'])) {
-                        if (($nUserId = $oUserReg->insert())) {
-                            if (!$oUserReg->login('', '', array('client'), 'facebook', $user['id']))
+                    if ($oUserReg->isUniqueEmail()) {
+                        if ($oUserReg->isUniqueRegID('facebook', $user['id'])) {
+                            if (($nUserId = $oUserReg->insert())) {
+                                if (!$oUserReg->login('', '', array('client'), 'facebook', $user['id']))
+                                    $aErrors = $oUserReg->getErrors();
+                            } else
                                 $aErrors = $oUserReg->getErrors();
                         } else
-                            $aErrors = $oUserReg->getErrors();
+                            $aErrors[] = Conf::format('This account already registered');
                     } else
-                        $aErrors[] = Conf::format('This account already registered');
+                        $aErrors[] = Conf::format('This email already registered');
                 } else {
                     if (!$oUserReg->login('', '', array('client'), 'facebook', $user['id']))
                         $aErrors = $oUserReg->getErrors();

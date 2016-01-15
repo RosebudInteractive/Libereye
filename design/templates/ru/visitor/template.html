@@ -28,6 +28,7 @@
     <script src="/design/js/moment.js"></script>
     <script src="/design/js/moment-timezone-with-data.js"></script>
     <script src="/design/js/common.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 </head>
 <body>
 <div class="header-gap"></div>
@@ -319,7 +320,7 @@
             <div class="overlay-buttons login">
                 <a href="#" class="btn btn-fb btn-overlay" onclick="return fbQuery('login');"><span></span>&nbsp;Войти через Facebook</a>
                 <a href="#" class="btn btn-vk btn-green-white btn-overlay" onclick="return vkQuery('login');"><span></span>&nbsp;Войти через Вконтакте</a>
-                <a href="#" class="btn btn-g btn-green-white btn-overlay"><span></span>&nbsp;Войти через Google</a>
+                <a href="#" class="btn btn-g btn-green-white btn-overlay" onclick="return googleQuery('login');"><span></span>&nbsp;Войти через Google</a>
             </div>
             <div class="or or-short"><span>или</span></div>
             <div class="inputs">
@@ -348,7 +349,7 @@
         <div class="overlay-buttons">
             <a href="#" class="btn btn-fb btn-overlay" onclick="return fbQuery('register');"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Facebook</a>
             <a href="#" class="btn btn-vk btn-green-white btn-overlay" onclick="return vkQuery('register');"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Вконтакте</a>
-            <a href="#" class="btn btn-g btn-green-white btn-overlay"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Google</a>
+            <a href="#" class="btn btn-g btn-green-white btn-overlay" onclick="return googleQuery('register');"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Google</a>
         </div>
         <div class="or or-short"><span>или</span></div>
         <div class="email-registration-block"><a href="#" id="email-registration">Регистрация через E-mail</a></div>

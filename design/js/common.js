@@ -275,3 +275,49 @@ VK.init({
     apiId: 5227859
 });
 // =========================== VK init ==============================
+
+// =========================== google init ==============================
+
+function googleQuery(action) {
+    var clientId = '958156450156-vq1irfc7amfeb240r4bspfd0b3pguhaj.apps.googleusercontent.com';
+    var scopes = ['https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'];
+    gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, function(authResult1){
+        if (authResult1 && !authResult1.error) {
+            var data = {act:'google_'+action, session:authResult1};
+            tryLogin(data);
+        } else {
+            gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, function(authResult2){
+                if (authResult2 && !authResult2.error) {
+                    var data = {act:'google_'+action, session:authResult2};
+                    tryLogin(data);
+                }
+            });
+        }
+    });
+    return false;
+}
+
+// Use a button to handle authentication the first time.
+function handleClientLoad() {
+    var apiKey = 'AIzaSyBxofvhjTDmlxHcXFzAGvHyS0kjMRthd_A';
+    gapi.client.setApiKey(apiKey);
+}
+
+// Load the API and make an API call.  Display the results on the screen.
+function makeApiCall() {
+    gapi.client.load('plus', 'v1', function() {
+        var request = gapi.client.plus.people.get({
+            'userId': 'me'
+        });
+        request.execute(function(resp) {
+            var heading = document.createElement('h4');
+            var image = document.createElement('img');
+            image.src = resp.image.url;
+            heading.appendChild(image);
+            heading.appendChild(document.createTextNode(resp.displayName));
+
+            document.getElementById('content').appendChild(heading);
+        });
+    });
+}
+// =========================== google init ==============================
