@@ -221,7 +221,7 @@ switch ($oReq->getAction())
                         'confirm_template',
                         $aUserReg['email'],
                         array(
-                            'confirm_code_url'	=>  Conf::get('http').Conf::get('host').'confirm/?code='.$sConfirmCode,
+                            'confirm_code_url'	=>  Conf::get('http').Conf::get('host').'/'.$aLanguage['alias'].'/confirm/?code='.$sConfirmCode,
                         )
                     ,array(), array(), $aLanguage['language_id']);
                     if ($oReq->get('ajax')) {

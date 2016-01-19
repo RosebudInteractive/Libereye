@@ -14,6 +14,7 @@ $sConfirmCode = $oReq->get('code');
 $bConfirmed = false;
 if ($sConfirmCode && $oAccount->loadBy(array('confirm_code'=>'="'.Database::escape($sConfirmCode).'"', 'is_active'=>'=0')))
 {
+    $oAccount->aData = array('account_id'=>$oAccount->aData['account_id']);
     $oAccount->aData['is_active'] = 1;
     $oAccount->aData['confirm_date'] = Database::date();
     $bConfirmed = $oAccount->update();
