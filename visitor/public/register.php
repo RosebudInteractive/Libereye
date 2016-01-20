@@ -100,8 +100,10 @@ switch ($oReq->getAction())
             require_once Conf::get('path') . '/include/classes/utils/vk/VKException.php';
             try {
                 $vk = new VK\VK(Conf::get('vk_app_id'), Conf::get('vk_app_secret'), $aSession['sid']);
-                $user = $vk->api('users.get', array('fields' => 'uid,first_name,last_name,email'));
-                if (isset($user['response']) && isset($user['response'][0]) && isset($user['response'][0]['uid'])) {
+                // User authorization failed: access_token was given to another ip address.
+                //$user = $vk->api('users.get', array('fields' => 'uid,first_name,last_name,email'));
+                $user = array('response'=>array(array('uid'=>$aSession['user']['id'],'first_name'=>$aSession['user']['first_name'],'last_name'=>$aSession['user']['last_name'])));
+                if ($aSession['sid'] && isset($user['response']) && isset($user['response'][0]) && isset($user['response'][0]['uid'])) {
                     if (!$user['response'][0]['first_name']) $aErrors[] = Conf::format('Name required');
                     if (!$user['response'][0]['uid']) $aErrors[] = Conf::format('ID required');
                     if (!$aErrors) {
@@ -221,7 +223,7 @@ switch ($oReq->getAction())
                         'confirm_template',
                         $aUserReg['email'],
                         array(
-                            'confirm_code_url'	=>  Conf::get('http').Conf::get('host').'/'.$aLanguage['alias'].'/confirm/?code='.$sConfirmCode,
+                            'confirm_code_url'	=>  Conf::get('http').Conf::get('host').$aLanguage['alias'].'/confirm/?code='.$sConfirmCode,
                         )
                     ,array(), array(), $aLanguage['language_id']);
                     if ($oReq->get('ajax')) {

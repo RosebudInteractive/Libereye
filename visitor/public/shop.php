@@ -61,6 +61,7 @@ switch($oReq->getAction()) {
         $sDesc = $oReq->get('description');
         $sEmail = $oReq->get('email');
         $iSellerId = $oReq->getInt('seller');
+        $iBookingId = 0;
 
         if (!$sDate) $aErrors[] = Conf::format('Date is not specified');
         if (!$sEmail) $aErrors[] = Conf::format('Email is not specified');
@@ -84,6 +85,7 @@ switch($oReq->getAction()) {
                 if ($oAccount->loadBy(array('account_id' => '=' . $iSellerId, 'status' => '="seller"'))) {
                     if ($oShopSlot->loadBy(array('shop_id' => '=' . $nShopId, 'time_from' => '="' . Database::date($nTimeOffset) . '"'))) {
                         if ($oBooking->loadBy(array('shop_slot_id' => '=' . $oShopSlot->aData['shop_slot_id'], 'seller_id' => '=' . $iSellerId))) {
+                            $iBookingId = $oBooking->aData['booking_id'];
                             if ($oBooking->aData['status'] == 'free') {
                                 $oBooking->aData = array('booking_id'=>$oBooking->aData['booking_id']);
                                 if ($oAccount->isLoggedIn()) $oBooking->aData['account_id'] = $oAccount->isLoggedIn();
@@ -120,7 +122,7 @@ switch($oReq->getAction()) {
             }
         }
 
-        echo json_encode(array('errors'=>$aErrors, 'id'=>$oBooking->aData['booking_id']));
+        echo json_encode(array('errors'=>$aErrors, 'id'=>$iBookingId));
         exit;
         break;
 }

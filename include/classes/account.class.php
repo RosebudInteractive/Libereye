@@ -70,7 +70,7 @@ class Account extends DbItem
         if ($sRegisterType == 'common') {
             $sSql = 'SELECT account_id, pass, status ' .
                 '  FROM ' . $this->sTable .
-                '  WHERE ' . $this->sLoginField . '="' . Database::escape($sLogin) . '"';
+                '  WHERE ' . $this->sLoginField . '="' . Database::escape($sLogin) . '" AND is_active=1';
             $aRow = $this->oDb->getRow($sSql);
             if ($aRow) //user account exists
             {

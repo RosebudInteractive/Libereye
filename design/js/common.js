@@ -101,7 +101,8 @@ $(function() {
             formData.act = 'resend';
             $.ajax({
                 method: "POST",
-                data: formData
+                data: formData,
+                url:document.location.pathname
             })
                 .done(function( msg ) {
                     var results = JSON.parse(msg);
@@ -156,9 +157,6 @@ $(function() {
             }
         });
     });
-
-
-
 });
 
 
@@ -191,25 +189,29 @@ function getTimezones() {
 }
 
 function fbQuery(action) {
-    FB.getLoginStatus(function(response) {
+    //FB.getLoginStatus(function(response) {
+        var response = FBLoginStatus;
         if (response.status === 'connected') {
             var accessToken = response.authResponse.accessToken;
             tryLogin({act:'facebook_'+action, token:accessToken});
         } else {
             // the user isn't logged in to Facebook.
             FB.login(function(response) {
+                FBLoginStatus = response;
                 if (response.authResponse) {
                     var accessToken = response.authResponse.accessToken;
                     tryLogin({act:'facebook_'+action, token:accessToken});
                 }
             },{scope: 'email'});
         }
-    });
+    //});
     return false;
 }
 
+VKLoginStatus = false;
 function vkQuery(action) {
-    VK.Auth.getLoginStatus(function(response) {
+    //VK.Auth.getLoginStatus(function(response) {
+        var response = VKLoginStatus;
         if (response.session) {
             /* Авторизованный в Open API пользователь */
             var data = {act:'vk_'+action, session:response.session};
@@ -217,6 +219,7 @@ function vkQuery(action) {
         } else {
             /* Неавторизованный в Open API пользователь */
             VK.Auth.login(function(response) {
+                VKLoginStatus = response;
                 if (response.session) {
                     /* Пользователь успешно авторизовался */
                     var data = {act:'vk_'+action, session:response.session};
@@ -226,7 +229,7 @@ function vkQuery(action) {
                 }
             }, 4194304);
         }
-    });
+    //});
     return false;
 }
 
@@ -259,6 +262,8 @@ window.fbAsyncInit = function() {
         xfbml      : true,
         version    : 'v2.5'
     });
+    FBLoginStatus = false;
+    FB.getLoginStatus(function(response) {FBLoginStatus = response;});
 };
 
 (function(d, s, id){
@@ -274,6 +279,9 @@ window.fbAsyncInit = function() {
 VK.init({
     apiId: apiConfigJson.vk_app_id // 5227859
 });
+VK.Auth.getLoginStatus(function(response) {
+    VKLoginStatus = response;
+});
 // =========================== VK init ==============================
 
 // =========================== google init ==============================
@@ -281,26 +289,34 @@ VK.init({
 function googleQuery(action) {
     var clientId = apiConfigJson.google_client_id; //'958156450156-vq1irfc7amfeb240r4bspfd0b3pguhaj.apps.googleusercontent.com';
     var scopes = ['https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'];
-    gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, function(authResult1){
+    //gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, function(authResult1){
+        var authResult1 = GOOGLEauthorize;
         if (authResult1 && !authResult1.error) {
-            var data = {act:'google_'+action, session:authResult1};
+            var data = {act:'google_'+action, session:{access_token:authResult1.access_token, token_type:authResult1.token_type, issued_at:authResult1.issued_at, expires_in:authResult1.expires_in}};
             tryLogin(data);
         } else {
             gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, function(authResult2){
+                GOOGLEauthorize = authResult2;
                 if (authResult2 && !authResult2.error) {
-                    var data = {act:'google_'+action, session:authResult2};
+                    var data = {act:'google_'+action, session:{access_token:authResult2.access_token, token_type:authResult2.token_type, issued_at:authResult2.issued_at, expires_in:authResult2.expires_in}};
                     tryLogin(data);
                 }
             });
         }
-    });
+    //});
     return false;
 }
 
 // Use a button to handle authentication the first time.
 function handleClientLoad() {
+    var clientId = apiConfigJson.google_client_id; //'958156450156-vq1irfc7amfeb240r4bspfd0b3pguhaj.apps.googleusercontent.com';
+    var scopes = ['https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'];
     var apiKey = apiConfigJson.google_app_id;//'AIzaSyBxofvhjTDmlxHcXFzAGvHyS0kjMRthd_A';
     gapi.client.setApiKey(apiKey);
+    GOOGLEauthorize = false;
+    gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, function(authResult1){
+        GOOGLEauthorize = authResult1;
+    });
 }
 
 // Load the API and make an API call.  Display the results on the screen.
