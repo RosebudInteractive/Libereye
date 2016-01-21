@@ -110,6 +110,14 @@ class Account extends DbItem
                 '  FROM ' . $this->sTable .
                 '  WHERE register_type = "' . Database::escape($sRegisterType) . '" AND register_id = "' . Database::escape($sRegisterId) . '"';
             $aRow = $this->oDb->getRow($sSql);
+
+            if ($sLogin && !$aRow) { // by login
+                $sSql = 'SELECT account_id, pass, status ' .
+                    '  FROM ' . $this->sTable .
+                    '  WHERE ' . $this->sLoginField . '="' . Database::escape($sLogin) . '" AND is_active=1';
+                $aRow = $this->oDb->getRow($sSql);
+            }
+
             if ($aRow) //user account exists
             {
                 //check status if needed

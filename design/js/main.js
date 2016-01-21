@@ -499,14 +499,15 @@ $(function() {
 
 
     var slider = $('.left-column .left-slider');
-    $(window).bind('resize scroll load',function(){
+    var scrollLeft = function(){
         if (window.innerWidth < 950) {
             slider.css({'position':'static'});
-        } else if ($(this).scrollTop() + slider.height() + 124 < ($(document).height() - ($('.container.footer').height() + $('.container.footer-bottom').height() + 115 + 33))) {
+        } else if ($(window).scrollTop() + slider.height() + 124 < ($(document).height() - ($('.container.footer').height() + $('.container.footer-bottom').height() + 115 + 33))) {
             var scrolled = $(window).scrollTop();
             slider.css({'position': 'relative'/*, 'top': scrolled + 'px'*/}).stop().animate({top: scrolled + 'px'}, 300);
         }
-    });
+    };
+    $(window).bind('resize scroll load', scrollLeft);
 
     var gallery = $('.gallery .images');
     gallery.jScrollPane({autoReinitialise: true});

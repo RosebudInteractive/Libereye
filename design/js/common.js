@@ -142,7 +142,7 @@ $(function() {
                             errorBlock.html(results.errors.join('<br>'));
                             errorBlock.show();
                         } else {
-                            formData.id = results.id;
+                            formData.bid = results.id;
                             form.find('.email-text').html(emailText);
                             form.find('.explain-text').html(explainText);
                             form.find('.form-page-3').hide();

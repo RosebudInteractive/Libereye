@@ -74,16 +74,24 @@ switch ($oReq->getAction())
                 if ($oUserReg->isUniqueEmail()) {
                     if ($oUserReg->isUniqueRegID('google', $user->id)) {
                         if (($nUserId = $oUserReg->insert())) {
-                            if (!$oUserReg->login('', '', array('client'), 'google', $user->id))
+                            if (!$oUserReg->login($user->email, '', array('client'), 'google', $user->id))
                                 $aErrors = $oUserReg->getErrors();
                         } else
                             $aErrors = $oUserReg->getErrors();
-                    } else
-                        $aErrors[] = Conf::format('This account already registered');
-                } else
-                    $aErrors[] = Conf::format('This email already registered');
+                    } else {
+                        if (!$oUserReg->login($user->email, '', array('client'), 'google', $user->id))
+                            $aErrors = $oUserReg->getErrors();
+                        // $aErrors[] = Conf::format('This account already registered');
+                    }
+
+                } else {
+                    if (!$oUserReg->login($user->email, '', array('client'), 'google', $user->id))
+                        $aErrors = $oUserReg->getErrors();
+                    // $aErrors[] = Conf::format('This email already registered');
+                }
+
             } else {
-                if (!$oUserReg->login('', '', array('client'), 'google', $user->id))
+                if (!$oUserReg->login($user->email, '', array('client'), 'google', $user->id))
                     $aErrors = $oUserReg->getErrors();
             }
         }
@@ -122,8 +130,11 @@ switch ($oReq->getAction())
                                         $aErrors = $oUserReg->getErrors();
                                 } else
                                     $aErrors = $oUserReg->getErrors();
-                            } else
-                                $aErrors[] = Conf::format('This account already registered');
+                            } else {
+                                if (!$oUserReg->login('', '', array('client'), 'vk', $user['response'][0]['uid']))
+                                    $aErrors = $oUserReg->getErrors();
+                                //$aErrors[] = Conf::format('This account already registered');
+                            }
                         } else {
                             if (!$oUserReg->login('', '', array('client'), 'vk', $user['response'][0]['uid']))
                                 $aErrors = $oUserReg->getErrors();
@@ -180,14 +191,20 @@ switch ($oReq->getAction())
                     if ($oUserReg->isUniqueEmail()) {
                         if ($oUserReg->isUniqueRegID('facebook', $user['id'])) {
                             if (($nUserId = $oUserReg->insert())) {
-                                if (!$oUserReg->login('', '', array('client'), 'facebook', $user['id']))
+                                if (!$oUserReg->login($user['email'], '', array('client'), 'facebook', $user['id']))
                                     $aErrors = $oUserReg->getErrors();
                             } else
                                 $aErrors = $oUserReg->getErrors();
-                        } else
-                            $aErrors[] = Conf::format('This account already registered');
-                    } else
-                        $aErrors[] = Conf::format('This email already registered');
+                        } else {
+                            if (!$oUserReg->login($user['email'], '', array('client'), 'facebook', $user['id']))
+                                $aErrors = $oUserReg->getErrors();
+                            //$aErrors[] = Conf::format('This account already registered');
+                        }
+                    } else {
+                        if (!$oUserReg->login($user['email'], '', array('client'), 'facebook', $user['id']))
+                            $aErrors = $oUserReg->getErrors();
+                        //$aErrors[] = Conf::format('This email already registered');
+                    }
                 } else {
                     if (!$oUserReg->login('', '', array('client'), 'facebook', $user['id']))
                         $aErrors = $oUserReg->getErrors();

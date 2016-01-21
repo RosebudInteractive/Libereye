@@ -31,10 +31,10 @@ $aShop = $oShop->aData;
 switch($oReq->getAction()) {
     case 'resend':
         $sDate = $oReq->get('date');
-        $nBookingId = $oReq->getInt('id');
+        $nBookingId = $oReq->getInt('bid');
         if (!$nBookingId) $aErrors[] = Conf::format('Slot not found');
 
-        if ($oBooking->loadBy(array('shop_slot_id' => '=' . $oShopSlot->aData['shop_slot_id'], 'account_id' => '=' . $oAccount->isLoggedIn()))) {
+        if ($oBooking->loadBy(array('booking_id' => '=' . $nBookingId, 'account_id' => '=' . $oAccount->isLoggedIn()))) {
             if ($oBooking->aData['status'] == 'booked') {
                     // отправляем подтверждение
                     $oMailer = new Mailer();

@@ -36,4 +36,17 @@ $_CONF['www']   = '';
 //$_CONF['hosting_type'] = 'windows'; 
 $_CONF['hosting_type'] = 'unix';
 
+// facebook api
+$_CONF['facebook_app_id'] = '1037221113009513';
+$_CONF['facebook_app_secret'] = 'd06a518678556eb93a39c3dcaae5d05b';
+
+// vk api
+$_CONF['vk_app_id'] = '5233032';
+$_CONF['vk_app_secret'] = 'OMP1lwfHMENBWQ7Lpjcl'; 
+
+// google api
+$_CONF['google_app_id'] = 'AIzaSyBxofvhjTDmlxHcXFzAGvHyS0kjMRthd_A';
+$_CONF['google_client_id'] = '958156450156-vq1irfc7amfeb240r4bspfd0b3pguhaj.apps.googleusercontent.com';
+$_CONF['google_app_secret'] = 'ZKZTRZv0PN6uuvC9FOmYbJsD';
+
 ?>
