@@ -502,12 +502,18 @@ $(function() {
     var scrollLeft = function(){
         if (window.innerWidth < 950) {
             slider.css({'position':'static'});
-        } else if ($(window).scrollTop() + slider.height() + 124 < ($(document).height() - ($('.container.footer').height() + $('.container.footer-bottom').height() + 115 + 33))) {
+        } else {
             var scrolled = $(window).scrollTop();
+            var maxScroll = $(window).scrollTop() + slider.height() + 124;
+            var currHeight = $(document).height() - ($('.container.footer').height() + $('.container.footer-bottom').height() + 115 + 33);
+            if (maxScroll >= currHeight)
+                scrolled = $(window).scrollTop() - $('.container.footer').height() - $('.container.footer-bottom').height();
             slider.css({'position': 'relative'/*, 'top': scrolled + 'px'*/}).stop().animate({top: scrolled + 'px'}, 300);
         }
     };
-    $(window).bind('resize scroll load', scrollLeft);
+    $(window).scroll(scrollLeft);
+    $(window).resize(scrollLeft);
+   // scrollLeft();
 
     var gallery = $('.gallery .images');
     gallery.jScrollPane({autoReinitialise: true});
