@@ -32,7 +32,10 @@ switch($oReq->getAction()) {
     case 'resend':
         $sDate = $oReq->get('date');
         $nBookingId = $oReq->getInt('bid');
+        $sEmail = $oReq->get('email');
         if (!$nBookingId) $aErrors[] = Conf::format('Slot not found');
+        if (!$sEmail) $aErrors[] = Conf::format('Email is not specified');
+        if ($sEmail && !filter_var($sEmail, FILTER_VALIDATE_EMAIL)) $aErrors[] = Conf::format('Email is incorrect');
 
         if ($oBooking->loadBy(array('booking_id' => '=' . $nBookingId, 'account_id' => '=' . $oAccount->isLoggedIn()))) {
             if ($oBooking->aData['status'] == 'booked') {
