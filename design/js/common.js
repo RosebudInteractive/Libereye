@@ -124,8 +124,8 @@ $(function() {
             var time = $(this).parents('.form-page').find('.time-text').html();
             var that = this;
             var errors = [];
-            if (!validateEmail(emailText)) errors.push('Введите E-mail');
-            if (!explainText.length) errors.push('Введите цель митинга');
+            if (!validateEmail(emailText)) errors.push(PHRASES["Enter E-mail"]);
+            if (!explainText.length) errors.push(PHRASES["Enter the purpose of the meeting"]);
 
             if (errors.length == 0) {
                 formData = {seller: shopperId, date:date+' '+time+':00', email:emailText, description:explainText};

@@ -185,7 +185,7 @@
             {$aPhrases['All Rights Reserved']}
         </div>
         <div class="col-sm-3 col-md-5 col-lg-6 text-right">
-            <a href="/admin/">{$aPhrases['Service entrance']}</a>
+            <a href="/admin/">{$aPhrases['Sign up using']}</a>
         </div>
     </div>
 </div>
@@ -198,12 +198,13 @@
         </form>
 </script>
 <script id="registration-form" type="text/x-jquery-tmpl">
+        {/literal}
         <form action="" id="registration" method="post">
-            <div>Зарегистрируйтесь c помощью <a href="#" onclick="return fbQuery('register');">Facebook</a>, <a href="#" onclick="return vkQuery('register');">Вконтакте</a> или <a href="#" onclick="return googleQuery('register');">Google</a>.</div>
+            <div>{$aPhrases['Sign up using']} <a href="#" onclick="return fbQuery('register');">Facebook</a>, <a href="#" onclick="return vkQuery('register');">VK</a> {$aPhrases['or']} <a href="#" onclick="return googleQuery('register');">Google</a>.</div>
             <div class="or"><span>или</span></div>
             <div class="inputs">
                 <div class="input">
-                    <label for="inName">Имя</label>
+                    <label for="inName">{$aPhrases['Name']}</label>
                     <input id="inName" type="text" name="name" value=""  />
                 </div>
                 <div class="input">
@@ -211,16 +212,16 @@
                     <input id="inEmail" type="text" name="email" value=""  />
                 </div>
                 <div class="input">
-                    <label for="inPass">Пароль</label>
+                    <label for="inPass">{$aPhrases['Password']}</label>
                     <input id="inPass" type="password" name="password" value=""  />
                 </div>
                 <div class="input">
-                    <label for="inPassA">Повторите<br/>пароль</label>
+                    <label for="inPassA">{$aPhrases['Repeat password']}</label>
                     <input id="inPassA" type="password" name="password-check" value=""  />
                 </div>
-                <div class="overlay-subtitle">День рождения</div>
+                <div class="overlay-subtitle">{$aPhrases['Birthday']}</div>
                 <div class="input">
-                    <label for="inMonth">Месяц</label>
+                    <label for="inMonth">{$aPhrases['Month']}</label>
                     <div class="select">
                         <select id="inMonth" name="bmonth">
                             <option value="00"></option>
@@ -240,7 +241,7 @@
                     </div>
                 </div>
                 <div class="input">
-                    <label for="inDay">День</label>
+                    <label for="inDay">{$aPhrases['Day']}</label>
                     <div class="select day-select">
                         <select id="inDay" name="bday">
                             <option value="00"></option>
@@ -277,7 +278,7 @@
                             <option value="31">31</option>
                         </select>
                     </div>
-                    <label for="inYear">Год</label>
+                    <label for="inYear">{$aPhrases['Year']}</label>
                     <div class="select year-select">
                         <select id="inYear" name="byear">
                             <option value="0"></option>
@@ -286,9 +287,10 @@
                 </div>
             </div>
             <div class="error-block"></div>
-            <div class="overlay-submit"><input type="submit" name="sub" value="Зарегистрироваться" /></div>
+            <div class="overlay-submit"><input type="submit" name="sub" value="{$aPhrases['Sign up']}" /></div>
             <div class="overlay-line"></div>
             <div class="text-center">Вы уже на LiberEye? <a href="#" class="overlay-login-href">Войти</a>
+            {literal}
         </form>
 </script>
 <script id="login-init" type="text/x-jquery-tmpl">

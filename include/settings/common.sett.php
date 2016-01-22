@@ -10,7 +10,7 @@ global $_CONF;
 $_CONF['session.timeout'] = 24*60;
 
 //debug
-$_CONF['debug']        = 0;
+$_CONF['debug']        = 1;
 $_CONF['debug_level']  = E_ALL;
 $_CONF['debug_mail']   = 'projects_errors@mail.ru';
 $_CONF['debug_errors_dir']   = $_CONF['path'].'logs/';

@@ -11,8 +11,12 @@ Conf::loadClass('utils/Validator');
 Conf::loadClass('utils/Sorter');
 Conf::loadClass('utils/Pager');
 Conf::loadClass('Shop');
+Conf::loadClass('Image');
+Conf::loadClass('OpenTime');
 
+$oImage 		= new Image();
 $oShop = new Shop();
+$oOpenTime = new OpenTime();
 
 
 // ========== processing actions ==========
@@ -21,7 +25,12 @@ switch($oReq->getAction())
     case 'load':
         $iShopId = $oReq->getInt('id');
         if ($iShopId && $oShop->load($iShopId)) {
-            echo json_encode($oShop->aData);
+            list($aOpenTimes, ) = $oOpenTime->getList(array('shop_id'=>'='.$iShopId), 0, 0, 'week_day');
+            $aItem = $oShop->aData;
+            foreach($aOpenTimes as $aOpenTime) {
+                $aItem['open_time'][$aOpenTime['week_day']] = sprintf('%02d:%02d-%02d:%02d', intval($aOpenTime['time_from']/60), $aOpenTime['time_from']-intval($aOpenTime['time_from']/60)*60, intval($aOpenTime['time_to']/60), $aOpenTime['time_to']-intval($aOpenTime['time_to']/60)*60);
+            }
+            echo json_encode($aItem);
             exit;
         }
         echo '{"error":"Магазин не найден"}';
@@ -62,7 +71,10 @@ switch($oReq->getAction())
     case 'create':
         $iShopId = $oReq->getInt('id');
         $aShop = $oReq->getArray('aShop');
+        $aImages = $oReq->get('images') ? explode(',', $oReq->get('images')) : array();
         $oShop->aData = $aShop;
+        if ($aImages && intval($aImages[0]))
+            $oShop->aData['promo_head'] = intval($aImages[0]);
         if ($iShopId) {
             $oShop->aData['shop_id'] = $iShopId;
             if (!$oShop->update(array(), true, array('title', 'description', 'brand_desc'))){
@@ -73,6 +85,46 @@ switch($oReq->getAction())
                 $aErrors = $oShop->getErrors();
             }
         }
+
+        if (!$aErrors) {
+            $aOpenTime = $oReq->getArray('open_time');
+            foreach($aOpenTime as $nWeekDay=>$sOpenTime) {
+                $nWeekDay = intval($nWeekDay);
+                if ($sOpenTime) {
+                    list($aFrom, $aTo) = explode('-', $sOpenTime, 2);
+                    list($iFromHour, $iFromMinute) = explode(':', $aFrom, 2);
+                    $iFrom = 60*intval($iFromHour) + intval($iFromMinute);
+                    list($iToHour, $iToMinute) = explode(':', $aTo, 2);
+                    $iTo = 60*intval($iToHour) + intval($iToMinute);
+                    if ($iTo>=0 && $iTo<=1440 && $iFrom>=0 && $iFrom<=1440 && $iFrom<$iTo && $nWeekDay>=0 && $nWeekDay<=6) {
+                        if ($oOpenTime->loadBy(array('shop_id'=>'='.$iShopId, 'week_day'=>'='.intval($nWeekDay)))) {
+                            $oOpenTime->aData = array('open_time_id'=>$oOpenTime->aData['open_time_id']);
+                            $oOpenTime->aData['time_from'] = $iFrom;
+                            $oOpenTime->aData['time_to'] = $iTo;
+                            if (!$oOpenTime->update())
+                                $aErrors += $oOpenTime->getErrors();
+                        } else {
+                            $oOpenTime->aData = array(
+                                'shop_id' => $iShopId,
+                                'week_day' => $nWeekDay,
+                                'time_from' => $iFrom,
+                                'time_to' => $iTo,
+                            );
+                            if (!$oOpenTime->insert())
+                                $aErrors += $oOpenTime->getErrors();
+                        }
+                    } else {
+                        $aErrors[] = 'Ошибка в расписании #'.$nWeekDay;
+                    }
+                } else {
+                    if ($oOpenTime->loadBy(array('shop_id'=>'='.$iShopId, 'week_day'=>'='.intval($nWeekDay)))) {
+                        if (!$oOpenTime->delete($oOpenTime->aData['open_time_id']))
+                            $aErrors += $oOpenTime->getErrors();
+                    }
+                }
+            }
+        }
+
         echo '{ "id":"'.$iShopId.'", "error":'.json_encode($aErrors).'}';
         exit;
         break;
@@ -82,6 +134,23 @@ switch($oReq->getAction())
             $aErrors = $oShop->getErrors();
         }
         echo '{ "id":"'.$iShopId.'", "error":'.json_encode($aErrors).'}';
+        break;
+
+    case 'upload':
+        $iImageId = 0;
+        $sImageName = '';
+        if (isset($_FILES['upload']) && isset($_FILES['upload']['tmp_name'])) {
+            $sExt = strtolower(substr($_FILES['upload']['name'], strrpos($_FILES['upload']['name'], '.')+1));
+            if ($iImageId = $oImage->upload($_FILES['upload']['tmp_name'], 'shop', 0, $sExt) ) {
+                $sImageName = $oImage->aData['name'];
+            }
+            else
+                $aErrors = $oImage->getErrors();
+        } else {
+            $aErrors[] = 'File not upload';
+        }
+        echo '{ "status":"'.($aErrors?'error':'server').'", "id":"'.$iImageId.'", "sname":"'.$sImageName.'"}';
+        exit;
         break;
 }
 

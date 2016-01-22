@@ -163,7 +163,7 @@ $(function() {
             bindDayShiftEvents(clicked, form);
 
 
-            form.find('.day-text').html(dayText + ' в');
+            form.find('.day-text').html(dayText + ' '+PHRASES['at']);
             form.find('[name="date"]').val(dayDate);
             form.find('.controls .day-text').html(dayText);
             form.find('.form-page-1').hide();
@@ -377,7 +377,7 @@ $(function() {
                 prevDay = findDay(findDay(nextDay, 'prev'), 'prev');
 
             generateTimes(prevDay, form);
-            form.find('.day-text').html(prevDay.data('daytext') + ' в');
+            form.find('.day-text').html(prevDay.data('daytext') + ' '+PHRASES['at']);
             form.find('.controls .day-text').html(prevDay.data('daytext'));
 
             nextDay = findDay(prevDay, 'next');
@@ -407,7 +407,7 @@ $(function() {
                 nextDay = findDay(findDay(prevDay, 'next'), 'next');
 
             generateTimes(nextDay, form);
-            form.find('.day-text').html(nextDay.data('daytext') + ' в');
+            form.find('.day-text').html(nextDay.data('daytext') + ' '+PHRASES['at']);
             form.find('.controls .day-text').html(nextDay.data('daytext'));
 
             prevDay = findDay(nextDay, 'prev');
@@ -559,7 +559,7 @@ $(function() {
                     // Add more conditions if needed
                     if (this.value.length < 6) {
                         validation = false;
-                        errors["password_empty"] = "Введите пароль (мин. 6 символов)";
+                        errors["password_empty"] = PHRASES['Enter the password'];
                         inputBlock.addClass('failed');
                         if (inputBlock.find('.input-error').length == 0) {
                             inputBlock.append('<div class="input-error">'+errors["password_empty"]+'</div>');
@@ -644,7 +644,7 @@ $(function() {
                         // Add more conditions if needed
                         if (this.value.length == 0) {
                             validation = false;
-                            errors["name_empty"] = "Введите имя";
+                            errors["name_empty"] = PHRASES["Enter name"];
                             inputBlock.addClass('failed');
                             if (inputBlock.find('.input-error').length == 0) {
                                 inputBlock.append('<div class="input-error">'+errors["name_empty"]+'</div>');
@@ -658,7 +658,7 @@ $(function() {
                         // Add more conditions if needed
                         if (!validateEmail(this.value)) {
                             validation = false;
-                            errors["email_empty"] = "Проверьте E-mail";
+                            errors["email_empty"] = PHRASES["Check Email"];
                             inputBlock.addClass('failed');
                             if (inputBlock.find('.input-error').length == 0) {
                                 inputBlock.append('<div class="input-error">'+errors["email_empty"]+'</div>');
@@ -671,7 +671,7 @@ $(function() {
                     if (this.name == 'password') {
                         if (this.value.length < 6) {
                             validation = false;
-                            errors["password_empty"] = "Введите пароль (мин. 6 символов)";
+                            errors["password_empty"] = PHRASES['Enter the password'];
                             inputBlock.addClass('failed');
                             if (inputBlock.find('.input-error').length == 0) {
                                 inputBlock.append('<div class="input-error">'+errors["password_empty"]+'</div>');
@@ -684,7 +684,7 @@ $(function() {
                     if (this.name == 'password-check') {
                         if (this.value.length < 6) {
                             validation = false;
-                            errors["password-check_empty"] = "Введите пароль повторно";
+                            errors["password-check_empty"] = PHRASES["Enter password again"];
                             inputBlock.addClass('failed');
                             if (inputBlock.find('.input-error').length == 0) {
                                 inputBlock.append('<div class="input-error">'+errors["password-check_empty"]+'</div>');
@@ -693,7 +693,7 @@ $(function() {
                         } else {
                             if (this.value != $('#inPass').val()) {
                                 validation = false;
-                                errors["password-check_empty"] = "Пароли не совпадают";
+                                errors["password-check_empty"] = PHRASES["Passwords do not match"];
                                 inputBlock.addClass('failed');
                                 if (inputBlock.find('.input-error').length == 0) {
                                     inputBlock.append('<div class="input-error">'+errors["password-check_empty"]+'</div>');

@@ -51,7 +51,7 @@ function showForm(winId, node){
 }
 
 
-function editNode(node, el, grid, options){
+function editNode(node, el, grid, options, cb){
     var id  = grid.getItem(node.row)[options.id], translated = options.translated;
     webix.ajax(options.urls.load+"?id="+id, function(text, data){
         data = data.json();
@@ -68,6 +68,7 @@ function editNode(node, el, grid, options){
                 $$(translated[j]+LANGUAGES[i].language_id).setValue(value);
             }
         }
+        if (cb) cb(data);
         showForm("win1", el);
     });
 
@@ -98,6 +99,8 @@ function removeNode(node, grid, options){
 function saveItem(options) {
     if ($$("form").validate()){
         var data = $$('form').getValues();
+        if (options.images)
+            data.images = options.images;
         webix.ajax().post(options.urls.create, data, {
             success: function(text, data){
                 data = data.json()
