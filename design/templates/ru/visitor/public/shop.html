@@ -145,7 +145,7 @@
                                 {/foreach}
                             </tr>
                             <tr data-tod="morning">
-                                <td class="tod">Утро</td>
+                                <td class="tod">{$aPhrases['Morning']}</td>
                                 {foreach from=$aItem.days item=aSubDay  name=days}
                                 <td{if $smarty.foreach.days.first} class="todays"{/if}>
                                     <div class="pie-wrap">
@@ -156,7 +156,7 @@
                                 {/foreach}
                             </tr>
                             <tr data-tod="day">
-                                <td class="tod">День</td>
+                                <td class="tod">{$aPhrases['Day']}</td>
                                 {foreach from=$aItem.days item=aSubDay name=days}
                                 <td{if $smarty.foreach.days.first} class="todays"{/if}>
                                     <div class="pie-wrap">
@@ -172,24 +172,24 @@
                 <div class="form-page form-page-2" style="display: none;">
                     <div class="controls">
                         <div class="day-name day-text">{$aPhrases['Today']} в</div>
-                        <div class="prev"><a href="#" data-page="1">Назад</a></div>
-                        <div class="cancel"><a href="#">Отмена</a></div>
+                        <div class="prev"><a href="#" data-page="1">{$aPhrases['Back']}</a></div>
+                        <div class="cancel"><a href="#">{$aPhrases['Cancel']}</a></div>
                         <a class="prev-day" href="#"><img src="/design/pic/shopper_date_back.png"></a>
                         <a class="next-day" href="#"><img src="/design/pic/shopper_date_forward.png"></a>
                         <div style="clear:both"></div>
                     </div>
                     <div class="times day" data-fname="time">
-                        <div class="time" data-value="14:00">14:00</div>
+                        <div class="time" data-value=""></div>
                     </div>
                     <div class="times morning" data-fname="time">
-                        <div class="time" data-value="14:00">14:00</div>
+                        <div class="time" data-value=""></div>
                     </div>
                 </div>
                 <div class="form-page form-page-3" style="display: none;">
                     <input type="hidden" name="date" value="" />
                     <div class="controls">
-                        <div class="prev"><a href="#" data-page="2">Назад</a></div>
-                        <div class="cancel"><a href="#">Отмена</a></div>
+                        <div class="prev"><a href="#" data-page="2">{$aPhrases['Back']}</a></div>
+                        <div class="cancel"><a href="#">{$aPhrases['Cancel']}</a></div>
                         <div style="clear:both"></div>
                     </div>
                     <div class="confirmation">
@@ -199,14 +199,14 @@
                                 <div><input type="text" name="email" value="{$aAccount.email}" /></div>
                             </div>
                             <div class="email-explain">
-                                Ваш действующий e-mail на который мы вышлем подтверждение митинга.
+                                {$aPhrases['Your valid e-mail']}
                             </div>
-                            <textarea name="info" placeholder="Опишите цель митинга"></textarea>
+                            <textarea name="info" placeholder="{$aPhrases['Describe the purpose of the meeting']}"></textarea>
                         </div>
                         <div class="confirm-right">
-                            <div class="confirmed-title">Митинг состоится</div>
-                            <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
-                            <div class="confirmed-time time-text">18:00</div>
+                            <div class="confirmed-title">{$aPhrases['The meeting will be']}</div>
+                            <div class="confirmed-day day-text">{$aPhrases['Today']} {$aPhrases['at']}</div>
+                            <div class="confirmed-time time-text"></div>
                             <div class="error-block"></div>
                             <a class="btn btn-green meeting-confirm" href="#meeting">{$aPhrases['Order meeting']}</a>
                         </div>
@@ -215,24 +215,23 @@
                 <div class="form-page form-page-4" style="display: none;">
                     <div class="confirmation">
                         <div class="confirm-left">
-                            <div class="confirmed-day">Ура!</div>
+                            <div class="confirmed-day">{$aPhrases['Hooray']}!</div>
                             <div class="confirmed-explain">
-                                Мы отправили на почту <strong class="email-text">Example@mail.com</strong> уведомление о митинге. Пожалуйста откройте письмо и перейдите по ссылке чтобы подтвердить бронь.
+                                {$aPhrases['We sent notification']}
                             </div>
                             <div class="confirm-target">
-                                <span>Цель митинга</span>
-                                <div class="explain-text">Мы поговорим о том, как структурировать шрифты, которые нас окружают и научиться разбираться в них. Как отличать одни шрифты от других и правильно их применять и сочетать. Немного погрузимся в историю и сравним типографику прошлого и современности.</div>
+                                <span>{$aPhrases['The purpose of the meeting']}</span>
+                                <div class="explain-text"></div>
                             </div>
                         </div>
                         <div class="confirm-right">
-                            <div class="confirmed-title">Митинг состоится</div>
-                            <div class="confirmed-day day-text">{$aPhrases['Today']} в</div>
+                            <div class="confirmed-title">{$aPhrases['The meeting will be']}</div>
+                            <div class="confirmed-day day-text">{$aPhrases['Today']} {$aPhrases['at']}</div>
                             <div class="confirmed-time time-text">18:00</div>
                             <div class="error-block"></div>
                             <div class="success-block"></div>
                             <div class="confirmed-links">
-                                <a href="#" class="not-get-mail">Я не получил(а) письма.<br/>
-                                Отправить еще раз.</a>
+                                <a href="#" class="not-get-mail">{$aPhrases['I not get mail']}</a>
                             </div>
                         </div>
                     </div>

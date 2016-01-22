@@ -323,9 +323,9 @@ $(function() {
             timesBlockOther.show();
         } else {
             // both has times
-            var todText = {"day": "дневные", "morning": "утренние"};
-            timesBlockClicked.append('<a href="#" class="time-toggle">Посмотреть '+todText[otherTOD]+' часы ('+timesOther.length+')</a>')
-            timesBlockOther.append('<a href="#" class="time-toggle">Посмотреть '+todText[clickedTOD]+' часы ('+timesClicked.length+')</a>')
+            var todText = {"day": PHRASES['View daylight hours'], "morning": PHRASES['View morning']};
+            timesBlockClicked.append('<a href="#" class="time-toggle">'+todText[otherTOD]+' ('+timesOther.length+')</a>')
+            timesBlockOther.append('<a href="#" class="time-toggle">'+todText[clickedTOD]+' ('+timesClicked.length+')</a>')
         }
 
     }

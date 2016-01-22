@@ -61,6 +61,7 @@ if ($oReq->_sPart == 'private' && !$oAccount->isLoggedIn()){
 
 $oTpl->assignSrc(array(
     'aPhrases' =>  $_PHRASES,
+    'aPhrasesJson' =>  json_encode($_PHRASES),
     'aLanguage' => $aLanguage,
 ));
 

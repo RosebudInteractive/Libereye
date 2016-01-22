@@ -14,7 +14,11 @@
     <link rel="stylesheet" href='/design/css/common.css' type='text/css'/>
     <link rel="stylesheet" href='/design/css/clock.css' type='text/css'/>
 
-    <script>LANGUAGE = '{$aLanguage.alias}'; apiConfigJson = {$apiConfigJson};</script>
+    <script>
+        LANGUAGE = '{$aLanguage.alias}';
+        apiConfigJson = {$apiConfigJson};
+        PHRASES = {$aPhrasesJson};
+    </script>
     <script src="/design/js/vendor/jquery.min.js"></script>
     <script src="/design/js/vendor/jquery.cycle.min.js"></script>
     <script src="/design/js/vendor/jquery.mousewheel.js"></script>
@@ -42,29 +46,9 @@
             <div class="slide" style="background-image: url('/design/pic/slider_gap.jpg');">
                 <div class="row slide-info">
                     <div class="col-sm-3 col-md-5 col-lg-7">
-                        <div class="info-title">Galeries Lafayette</div>
+                        <div class="info-title">{$aShopLafayette.title}</div>
                         <div class="info-text">
-                            Пространстве магазинов "Galeries Lafayettе" представлена исчерпывающая гамма коллекций предметов роскоши, - от часов и ювелирных украшений, одежды, обуви и аксессуаров класса Люкс (для женщин, мужчин,
-
-                            подростков и детей), - до завораживающих своей красотой и качеством предметов для дома от известных мировых Домов моды и дизайна. Такое богатство и
-                            «Galeries Lafayettе». Среди «Больших магазинов» "Galeries Lafayettе" исторически
-                            занимает лидирующие позиции. Его репутация неприкосновенна, а прошлое «за
-                            давностью лет» окутано флером таинственных историй и ярких событий,
-                            запоминающих и волнующих воображение. О них Вы узнаете позже.
-
-                            Для представителей мировых элит "Galeries Lafayettе" был единственным
-
-                            магазином в Париже, обязательным для посещения. За ним тянутся
-
-                            многочисленные легенды и истории, подобные шлейфу дорогих духов, который
-
-                            никогда не исчезает окончательно, а лишь приобретает различные оттенки и
-
-                            звучания, превращаясь из сандалового дерева то в розу, то в фиалку, меняя свой
-
-                            характер в зависимости от времени суток и обстоятельств, но, между тем,
-
-                            оставляет за собой право на решающий аккорд.
+                            {$aShopLafayette.description}
                         </div>
                     </div>
                     <div class="col-sm-3 col-md-5 col-md-7 links">
@@ -125,7 +109,7 @@
             <!--<img src="/design/pic/clock-gap-1.png" />&nbsp;&nbsp;<img src="/design/pic/clock-gap-2.png" />-->
         </div>
         <div class="col-sm-3 col-md-2 col-lg-3 personal-links text-right">
-            {if $aAccount.account_id}<a href="#" class="profile">Личный кабинет</a>&nbsp;<span class="sep"></span>&nbsp;<a href="/{$aLanguage.alias}/account/logout/" class="profile">Выход</a>{else}<a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="#" class="login-init">{$aPhrases['Login']}</a>{/if}
+            {if $aAccount.account_id}<a href="#" class="profile">{$aPhrases['Personal Area']}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="/{$aLanguage.alias}/account/logout/" class="profile">{$aPhrases['Logout']}</a>{else}<a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="#" class="login-init">{$aPhrases['Login']}</a>{/if}
             <div class="visible-sm">
                 <a href="#" class="menu-activator"><img src="/design/pic/small-menu-icon.png" /></a>
                 <a href="#" class="close-menu"><img src="/design/pic/menu-close-icon.png" /></a>
@@ -146,7 +130,7 @@
         <div class="col-sm-2 col-md-1 col-lg-2"></div>
         <div class="hidden-sm col-md-2 col-lg-2"><span class="clock black"><span class="city">{$aPhrases['London']}</span></span>&nbsp;&nbsp;<span class="clock black"><span class="city">{$aPhrases['Paris']}</span></span><!--<img src="/design/pic/clock-gap-1_black.png" />&nbsp;&nbsp;<img src="/design/pic/clock-gap-2_black.png" />--></div>
         <div class="col-sm-3 col-md-2 col-lg-3 personal-links text-right">
-            {if $aAccount.account_id}<a href="#" class="profile">Личный кабинет</a>&nbsp;<span class="sep"></span>&nbsp;<a href="/{$aLanguage.alias}/account/logout/" class="profile">Выход</a>{else}<a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="#" class="login-init">{$aPhrases['Login']}</a>{/if}
+            {if $aAccount.account_id}<a href="#" class="profile">{$aPhrases['Personal Area']}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="/{$aLanguage.alias}/account/logout/" class="profile">{$aPhrases['Logout']}</a>{else}<a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="#" class="login-init">{$aPhrases['Login']}</a>{/if}
             <div class="visible-sm">
                 <a href="#" class="menu-activator"><img src="/design/pic/small-menu-icon_black.png" /></a>
                 <a href="#" class="close-menu">

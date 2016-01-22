@@ -1,7 +1,9 @@
 <?php
+Conf::loadClass('Shop');
 Conf::loadClass('Content');
 
-$oContent   = &new Content();
+$oShop   = new Shop();
+$oContent   = new Content();
 
 // контент
 $sPage = $oReq->get('content', 'main.html');
@@ -71,11 +73,16 @@ foreach ($aChildPages as $nKey=>$aChildPage) {
 	$aChildPages[$nKey]['content_title'] = strip_tags($aChildPage['content']);
 }
 
+// get shop lafaet
+$oShop->load(1, LANGUAGEID);
+$aShopLafayette = $oShop->aData;
+
 // Variables
 $oTpl->assignSrc(array(
 	'aPage' => $aPage,
 	'aParentPage' => $aParentPage,
 	'aChildPages' => $aChildPages,
+	'aShopLafayette' => $aShopLafayette,
 ));
 
 ?>
