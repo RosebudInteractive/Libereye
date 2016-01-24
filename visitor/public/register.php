@@ -257,7 +257,7 @@ switch ($oReq->getAction())
                         //$aErrors[] = Conf::format('This email already registered');
                     }
                 } else {
-                    if (!$oUserReg->login('', '', array('client'), 'facebook', $user['id']))
+                    if (!$oUserReg->login($user['email'], '', array('client'), 'facebook', $user['id']))
                         $aErrors = $oUserReg->getErrors();
                 }
             }
