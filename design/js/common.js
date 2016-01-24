@@ -124,7 +124,7 @@ $(function() {
             var time = $(this).parents('.form-page').find('.time-text').html();
             var that = this;
             var errors = [];
-            if (!validateEmail(emailText)) errors.push(PHRASES["Enter E-mail"]);
+            //if (!validateEmail(emailText)) errors.push(PHRASES["Enter E-mail"]);
             if (!explainText.length) errors.push(PHRASES["Enter the purpose of the meeting"]);
 
             if (errors.length == 0) {
@@ -143,7 +143,7 @@ $(function() {
                             errorBlock.show();
                         } else {
                             formData.bid = results.id;
-                            form.find('.email-text').html(emailText);
+                            form.find('.email-text').html(results.email);
                             form.find('.explain-text').html(explainText);
                             form.find('.form-page-3').hide();
                             form.find('.form-page-4').show();

@@ -32,7 +32,7 @@ switch($oReq->getAction()) {
     case 'resend':
         $sDate = $oReq->get('date');
         $nBookingId = $oReq->getInt('bid');
-        $sEmail = $oReq->get('email');
+        $sEmail = $aAccount['email'];//$oReq->get('email');
         if (!$nBookingId) $aErrors[] = Conf::format('Slot not found');
         if (!$sEmail) $aErrors[] = Conf::format('Email is not specified');
         if ($sEmail && !filter_var($sEmail, FILTER_VALIDATE_EMAIL)) $aErrors[] = Conf::format('Email is incorrect');
@@ -56,13 +56,13 @@ switch($oReq->getAction()) {
         } else {
             $aErrors[] = Conf::format('Slot not found');
         }
-        echo json_encode(array('errors'=>$aErrors, 'message'=>Conf::format('Email sent')));
+        echo json_encode(array('errors'=>$aErrors, 'message'=>Conf::format('Email sent again')));
         exit;
         break;
     case 'booking':
         $sDate = $oReq->get('date');
         $sDesc = $oReq->get('description');
-        $sEmail = $oReq->get('email');
+        $sEmail = $aAccount['email'];//$oReq->get('email');
         $iSellerId = $oReq->getInt('seller');
         $iBookingId = 0;
 
@@ -125,7 +125,7 @@ switch($oReq->getAction()) {
             }
         }
 
-        echo json_encode(array('errors'=>$aErrors, 'id'=>$iBookingId));
+        echo json_encode(array('errors'=>$aErrors, 'id'=>$iBookingId, 'email'=>$sEmail));
         exit;
         break;
 }

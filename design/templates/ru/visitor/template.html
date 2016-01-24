@@ -15,7 +15,7 @@
     <link rel="stylesheet" href='/design/css/clock.css' type='text/css'/>
 
     <script>
-        LANGUAGE = '{$aLanguage.alias}';
+        LANGUAGE = '{$aLanguage.alias}'; LOGGEDIN = {if $aAccount.account_id}true{else}false{/if};
         apiConfigJson = {$apiConfigJson};
         PHRASES = {$aPhrasesJson};
     </script>
@@ -318,7 +318,7 @@
             <div class="error-block"></div>
             <div class="overlay-submit"><input type="submit" name="sub" value="Войти" /></div>
             <div class="overlay-line"></div>
-            <div class="text-center">Вы еще не на LiberEye? <a href="#" class="overlay-login-href">Регистрация</a>
+            <div class="text-center">Вы еще не зарегистрированы на LiberEye? <a href="#" class="overlay-login-href">Регистрация</a>
         </form>
 </script>
 <script id="registration-init" type="text/x-jquery-tmpl">
