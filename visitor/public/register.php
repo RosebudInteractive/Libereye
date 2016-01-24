@@ -98,6 +98,57 @@ switch ($oReq->getAction())
         echo json_encode(array('errors'=>$aErrors, 'id'=>$nUserId));
         exit;
         break;
+
+    case 'vk_response':
+        $nUserId = 0;
+        if ($oReq->get('code')) {
+            require_once Conf::get('path') . '/include/classes/utils/vk/VK.php';
+            require_once Conf::get('path') . '/include/classes/utils/vk/VKException.php';
+            try {
+                $vk = new VK\VK(Conf::get('vk_app_id'), Conf::get('vk_app_secret'));
+                $access_token = $vk->getAccessToken($oReq->get('code'), Conf::get('http').Conf::get('host').$aLanguage['alias'].'/register/?act=vk_response');
+                $user = $vk->api('users.get');
+                if (isset($user['response']) && isset($user['response'][0]) && isset($user['response'][0]['uid'])) {
+                    $user['response'][0]['email'] = $access_token['email'];
+                    if (!$user['response'][0]['first_name']) $aErrors[] = Conf::format('Name required');
+                    if (!$user['response'][0]['uid']) $aErrors[] = Conf::format('ID required');
+                    if (!$user['response'][0]['email']) $aErrors[] = Conf::format('Email required');
+                    if (!$aErrors) {
+                        $oUserReg->aData = array();
+                        $oUserReg->aData['cdate'] = Database::date();
+                        $oUserReg->aData['status'] = 'client';
+                        $oUserReg->aData['register_type'] = 'vk';
+                        $oUserReg->aData['is_active'] = 1;
+                        $oUserReg->aData['fname'] = $user['response'][0]['first_name'] . ' ' . $user['response'][0]['last_name'];
+                        $oUserReg->aData['register_id'] = $user['response'][0]['uid'];
+                        $oUserReg->aData['email'] = $user['response'][0]['email']; //$user['response'][0]['uid'] . '@vk.com';
+                        if ($oUserReg->isUniqueRegID('vk', $user['response'][0]['uid'])) {
+                            if (($nUserId = $oUserReg->insert())) {
+                                if (!$oUserReg->login($user['response'][0]['email'], '', array('client'), 'vk', $user['response'][0]['uid']))
+                                    $aErrors = $oUserReg->getErrors();
+                            } else
+                                $aErrors = $oUserReg->getErrors();
+                        } else {
+                            if (!$oUserReg->login($user['response'][0]['email'], '', array('client'), 'vk', $user['response'][0]['uid']))
+                                $aErrors = $oUserReg->getErrors();
+                        }
+                    }
+                } else
+                    $aErrors[] = Conf::format('User not authorized');
+            } catch (VK\VKException $error) {
+                $aErrors[] = $error->getMessage();
+            }
+        } else
+           $aErrors[] = Conf::format('User not authorized');
+        echo '<script>window.opener.vkRepsonse('.json_encode(array('errors'=>$aErrors, 'id'=>$nUserId)).');</script>';
+        exit;
+        break;
+    case 'vk_redirect':
+        $oReq->forward('http://oauth.vk.com/authorize?client_id='.Conf::get('vk_app_id').'&display=popup&scope=email&response_type=code&response_type=code&redirect_uri='.
+            urlencode(Conf::get('http').Conf::get('host').$aLanguage['alias'].'/register/?act=vk_response')
+        );
+        exit;
+        break;
     case 'vk_register':
     case 'vk_login':
         $nUserId = 0;

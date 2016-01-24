@@ -109,7 +109,7 @@
             <!--<img src="/design/pic/clock-gap-1.png" />&nbsp;&nbsp;<img src="/design/pic/clock-gap-2.png" />-->
         </div>
         <div class="col-sm-3 col-md-2 col-lg-3 personal-links text-right">
-            {if $aAccount.account_id}<a href="#" class="profile">{$aPhrases['Personal Area']}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="/{$aLanguage.alias}/account/logout/" class="profile">{$aPhrases['Logout']}</a>{else}<a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="#" class="login-init">{$aPhrases['Login']}</a>{/if}
+            {if $aAccount.account_id}<a href="#" class="profile">{$aAccount.fname}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="/{$aLanguage.alias}/account/logout/" class="profile">{$aPhrases['Logout']}</a>{else}<a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="#" class="login-init">{$aPhrases['Login']}</a>{/if}
             <div class="visible-sm">
                 <a href="#" class="menu-activator"><img src="/design/pic/small-menu-icon.png" /></a>
                 <a href="#" class="close-menu"><img src="/design/pic/menu-close-icon.png" /></a>

@@ -209,7 +209,10 @@ function fbQuery(action) {
 }
 
 VKLoginStatus = false;
+VKWin = null;
 function vkQuery(action) {
+    VKWin = window.open('/'+LANGUAGE+'/register/?act=vk_redirect',"","width=500,height=600");
+    return true;
     //VK.Auth.getLoginStatus(function(response) {
         var response = VKLoginStatus;
         if (response.session) {
@@ -217,6 +220,8 @@ function vkQuery(action) {
             var data = {act:'vk_'+action, session:response.session};
             tryLogin(data);
         } else {
+            VKWin = window.open('/'+LANGUAGE+'/register/?act=vk_redirect');
+            return true;
             /* Неавторизованный в Open API пользователь */
             VK.Auth.login(function(response) {
                 VKLoginStatus = response;
@@ -231,6 +236,14 @@ function vkQuery(action) {
         }
     //});
     return false;
+}
+function vkRepsonse(results) {
+    if (VKWin) VKWin.close();
+    if (results.errors && results.errors.length != 0) {
+        $('.overlay-content .error-block').html(results.errors.join('<br>')).show();
+    } else {
+        location.reload();
+    }
 }
 
 function tryLogin(data) {
