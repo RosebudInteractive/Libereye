@@ -269,7 +269,7 @@ switch ($oReq->getAction())
         $nUserId = 0;
         if ($oValidator->isValid($oReq->getAll())){
             $aUserReg = $oUserReg->aData = array(
-                'fname' => $oReq->get('name'),
+                'fname' => $oReq->get('fname'),
                 'email' => $oReq->get('email'),
                 'pass' => $oReq->get('pass'),
                 'birthday' => $oReq->get('birthday'),
