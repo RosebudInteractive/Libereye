@@ -122,15 +122,20 @@ switch ($oReq->getAction())
                         $oUserReg->aData['fname'] = $user['response'][0]['first_name'] . ' ' . $user['response'][0]['last_name'];
                         $oUserReg->aData['register_id'] = $user['response'][0]['uid'];
                         $oUserReg->aData['email'] = $user['response'][0]['email']; //$user['response'][0]['uid'] . '@vk.com';
-                        if ($oUserReg->isUniqueRegID('vk', $user['response'][0]['uid'])) {
-                            if (($nUserId = $oUserReg->insert())) {
+                        if ($oUserReg->isUniqueEmail()) {
+                            if ($oUserReg->isUniqueRegID('vk', $user['response'][0]['uid'])) {
+                                if (($nUserId = $oUserReg->insert())) {
+                                    if (!$oUserReg->login($user['response'][0]['email'], '', array('client'), 'vk', $user['response'][0]['uid']))
+                                        $aErrors = $oUserReg->getErrors();
+                                } else
+                                    $aErrors = $oUserReg->getErrors();
+                            } else {
                                 if (!$oUserReg->login($user['response'][0]['email'], '', array('client'), 'vk', $user['response'][0]['uid']))
                                     $aErrors = $oUserReg->getErrors();
-                            } else
-                                $aErrors = $oUserReg->getErrors();
+                            }
                         } else {
-                            if (!$oUserReg->login($user['response'][0]['email'], '', array('client'), 'vk', $user['response'][0]['uid']))
-                                $aErrors = $oUserReg->getErrors();
+                                if (!$oUserReg->login($user['response'][0]['email'], '', array('client'), 'vk', $user['response'][0]['uid']))
+                                    $aErrors = $oUserReg->getErrors();
                         }
                     }
                 } else
