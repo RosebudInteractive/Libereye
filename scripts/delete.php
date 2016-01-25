@@ -13,7 +13,7 @@ $_CONF['debug'] = 1;
 $sEmail = $oReq->get('email');
 if ($sEmail) {
     $oAccount = new Account();
-    //$oBooking = new Booking();
+    $oBooking = new Booking();
     if ($oAccount->loadBy(array('email'=>'="'.Database::escape($sEmail).'"'))) {
         $oBooking->oDb->query('UPDATE booking SET account_id=NULL WHERE account_id='.$oAccount->aData['account_id']);
         if ($oAccount->delete($oAccount->aData['account_id']))
