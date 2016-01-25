@@ -85,8 +85,9 @@ function removeNode(node, grid, options){
                 webix.ajax().post(options.urls.destroy, data, {
                     success: function(text, data){
                         grid.clearSelection();
+                        grid.clearAll();
                         grid.load(options.urls.get);
-                        webix.message("Бренд успешно удален");
+                        webix.message("Объект успешно удален");
                     }
                 });
                 return false;
@@ -101,6 +102,7 @@ function saveItem(options) {
         var data = $$('form').getValues();
         if (options.images)
             data.images = options.images;
+        var that = this;
         webix.ajax().post(options.urls.create, data, {
             success: function(text, data){
                 data = data.json()
@@ -108,11 +110,12 @@ function saveItem(options) {
                     webix.message({ type:"error", text:Array.isArray(data.error)?data.error.join("\n"):data.error });
                 } else {
                     webix.message("Изменения сохранены");
+                    $$('gridItem').clearSelection();
+                    $$('gridItem').clearAll();
+                    $$('gridItem').load(options.urls.get);
+                    that.getTopParentView().hide(); //hide window
                 }
-                $$('gridItem').clearSelection();
-                $$('gridItem').load(options.urls.get);
             }
         });
-        this.getTopParentView().hide(); //hide window
     }
 }

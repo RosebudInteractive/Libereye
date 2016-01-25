@@ -88,8 +88,10 @@ webix.ready(function(){
             }},
             {},
             { view:"button", width:80, value:"Обновить", click:function(){
-                $$('gridItem').clearSelection();
-                $$('gridItem').load(options.urls.get);
+                var griItem = $$('gridItem');
+                griItem.clearSelection();
+                griItem.clearAll();
+                griItem.load(options.urls.get);
             }}
         ]
     };

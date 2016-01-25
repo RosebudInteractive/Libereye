@@ -1,23 +1,19 @@
 <?php
 /** ============================================================
- * Class Purchase.
+ * Class PhraseDet.
  * 
  * @author Rudenko S.
  * @package
  * ============================================================ */
 require_once 'classes/utils/dbitem.class.php';
 
-class Language extends DbItem
+class PhraseDet extends DbItem
 {
 
-    function Language()
+    function PhraseDet()
     {
         parent::DbItem();
-        $this->_initTable('language');
-    }
-
-    function getDefLanguage() {
-        return $this->oDb->getField('select language_id from language where is_default=1 limit 1');
+        $this->_initTable('phrase_det');
     }
 
 }

@@ -6,11 +6,16 @@ $bNoSession = true;
 // Необходимые классы
 require_once dirname(__FILE__).'/../include/visitor.inc.php';
 Conf::loadClass('Account');
+Conf::loadClass('Booking');
+
+$_CONF['debug'] = 1;
 
 $sEmail = $oReq->get('email');
 if ($sEmail) {
     $oAccount = new Account();
+    //$oBooking = new Booking();
     if ($oAccount->loadBy(array('email'=>'="'.Database::escape($sEmail).'"'))) {
+     //   $oBooking->deleteByCond(array('account_id'=>'='.$oAccount->aData['account_id']));
         if ($oAccount->delete($oAccount->aData['account_id']))
             echo 'Account with email '.$sEmail.' deleted';
         else
