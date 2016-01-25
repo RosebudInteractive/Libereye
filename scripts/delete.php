@@ -15,7 +15,7 @@ if ($sEmail) {
     $oAccount = new Account();
     //$oBooking = new Booking();
     if ($oAccount->loadBy(array('email'=>'="'.Database::escape($sEmail).'"'))) {
-        $oBooking->deleteByCond(array('account_id'=>'='.$oAccount->aData['account_id']));
+        $oBooking->oDb->query('UPDATE booking SET account_id=NULL WHERE account_id='.$oAccount->aData['account_id']);
         if ($oAccount->delete($oAccount->aData['account_id']))
             echo 'Account with email '.$sEmail.' deleted';
         else
