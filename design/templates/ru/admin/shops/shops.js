@@ -37,9 +37,11 @@ webix.ready(function(){
                 if (sel.length > 0) {
                     $$('editBtn').enable();
                     $$('delBtn').enable();
+                    $$('manageBtn').enable();
                 } else {
                     $$('editBtn').disable();
                     $$('delBtn').disable();
+                    $$('manageBtn').disable();
                 }
             }
         },
@@ -85,6 +87,9 @@ webix.ready(function(){
 
             }}, { view:"button", width:100, disabled:true, value:"Удалить", id:"delBtn",  click:function(){
                 removeNode($$('gridItem').getSelectedId(true)[0], $$('gridItem'), options);
+            }},{ view:"button", width:100, disabled:true, value:"Управлять", id:"manageBtn",  click:function(){
+                var id  = $$('gridItem').getItem($$('gridItem').getSelectedId(true)[0])[options.id];
+                document.location = '/admin/index.php/part_shops/sect_shop_edit/id_'+id;
             }},
             {},
             { view:"button", width:80, value:"Обновить", click:function(){

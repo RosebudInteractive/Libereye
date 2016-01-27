@@ -11,11 +11,13 @@ Conf::loadClass('utils/Validator');
 Conf::loadClass('utils/Sorter');
 Conf::loadClass('utils/Pager');
 Conf::loadClass('Shop');
+Conf::loadClass('ShopSlot');
 Conf::loadClass('Image');
 Conf::loadClass('OpenTime');
 
 $oImage 		= new Image();
 $oShop = new Shop();
+$oShopSlot = new ShopSlot();
 $oOpenTime = new OpenTime();
 
 
@@ -63,6 +65,58 @@ switch($oReq->getAction())
                 $aShopsSuggest[] = array("id"=>$aItem['shop_id'],"value"=>$aItem['title']);
             }
             echo json_encode($aShopsSuggest);
+        }
+        exit;
+        break;
+
+    case 'loadslot':
+        $iShopSlotId = $oReq->getInt('id');
+        if ($iShopSlotId && $oShopSlot->load($iShopSlotId)) {
+            $aItem = $oShopSlot->aData;
+            $aItem['time_from'] = Database::date(strtotime($aItem['time_from'])+$aItem['time_shift']*60);
+            $aItem['time_to'] = Database::date(strtotime($aItem['time_to'])+$aItem['time_shift']*60);
+            echo json_encode($aItem);
+            exit;
+        }
+        echo '{"error":"Слот не найден"}';
+        exit;
+        break;
+
+    case 'getslots':
+        // search
+        $iShopId = $oReq->getInt('id');
+        if ($iShopId && $oShop->load($iShopId)) {
+            $aShop = $oShop->aData;
+            $aCond = array('shop_id'=>'='.$iShopId, 'time_from'=>'>="'.Database::date(time() + date("Z")).'"');
+            if (isset($_GET['filter']))
+            {
+                if (isset($_GET['filter']['value']) && $_GET['filter']['value'])
+                    $aCond['{#title}'] = 'pd1.phrase LIKE "%'.Database::escapeLike($_GET['filter']['value']).'%"';
+                if (isset($_GET['filter']['title']) && $_GET['filter']['title'])
+                    $aCond['{#title}'] = 'pd1.phrase LIKE "%'.Database::escapeLike($_GET['filter']['title']).'%"';
+                if (isset($_GET['filter']['description']) && $_GET['filter']['description'])
+                    $aCond['{#description}'] = 'pd2.phrase LIKE "%'.Database::escapeLike($_GET['filter']['description']).'%"';
+            }
+
+            $iPos = $oReq->getInt('start');
+            $iPageSize = $oReq->getInt('count', 10000);
+            $aSort = $oReq->getArray('sort' , array('time_from'=>'asc'));
+            list($aItems, $iCnt) = $oShopSlot->getListOffset($aCond, $iPos, $iPageSize, str_replace('=', ' ', http_build_query($aSort, ' ', ', ')));
+
+            if (!$oReq->get('suggest')) {
+                foreach ($aItems as $nKey => $aItem) {
+                    $aItems[$nKey]['time_from'] = Database::date(strtotime($aItem['time_from'])+$aShop['time_shift']*60);
+                    $aItems[$nKey]['time_to'] = Database::date(strtotime($aItem['time_to'])+$aShop['time_shift']*60);
+                }
+                echo '{"pos":' . $iPos . ', "total_count":"' . $iCnt . '","data":' . json_encode($aItems) . '}';
+            } else {
+                $aShopsSuggest = array();
+                foreach($aItems as $aItem){
+                    $aShopsSuggest[] = array("id"=>$aItem['shop_slot_id'],"value"=>$aItem['title']);
+                }
+                echo json_encode($aShopsSuggest);
+            }
+            exit;
         }
         exit;
         break;

@@ -1,0 +1,17 @@
+<script>
+    var aShopJson = {$aShopJson};
+    var aSellersJson = {$aSellersJson};
+</script>
+<script language='JavaScript' src='design/templates/ru/admin/shops/shop_edit.js'></script>
+        <div style="padding: 0 20px;">
+<div id="hk"><a href="{url link='admin.shops'}">Магазины</a>&nbsp;&gt;&nbsp;{if $aShop.shop_id}Управление магазином: {$aShop.title.1}{else}Добавление магазина{/if} <hr /></div>
+<h1 class="first">{if $aShop.shop_id}Управление магазином: {$aShop.title.1}{else}Добавление магазина{/if}</h1>
+        </div>
+<div id="main">
+    <div id="left" style="width:0;">
+    </div>
+    <div id="middle2" style="margin-left: 0px;">
+        <div id="shop_edit_form"></div>
+        <div id="paging_here"></div>
+    </div>
+</div>

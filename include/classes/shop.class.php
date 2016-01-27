@@ -39,6 +39,7 @@ class Shop extends DbItem
             $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).
                     ', pd1.phrase title'.
                     ', pd2.phrase timezone'.
+                    ', t.time_shift'.
                     ' FROM '.$this->sTable.' AS '.$this->sAlias.
                     ' LEFT JOIN phrase p1 ON p1.object_id='.$this->sAlias.'.shop_id AND p1.object_type_id='.$this->nObjectType.'   AND p1.object_field="title" '.
                     ' LEFT JOIN phrase_det pd1 ON pd1.phrase_id=p1.phrase_id AND pd1.language_id='.$nLangId.'  '.
@@ -61,7 +62,7 @@ class Shop extends DbItem
     {
         $this->aData = array();
         if ($nId) {
-            $sSql = 'SELECT '.join(',', $this->aFields). ', i.name promo_head, t.code timezone_code, p.def_phrase timezone_title '.
+            $sSql = 'SELECT '.join(',', $this->aFields). ', i.name promo_head, t.code timezone_code, p.def_phrase timezone_title, t.time_shift '.
                 ' FROM '.$this->sTable.' AS '.$this->sAlias.
                 ' LEFT JOIN image i ON s.promo_head=i.image_id'.
                 ' LEFT JOIN timezone t ON s.timezone_id=t.timezone_id'.

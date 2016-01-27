@@ -12,7 +12,6 @@ $_TBL['setting']        = array('setting',       's', 'id');
 $_TBL['content']        = array('content',          'c', 'content_id');
 $_TBL['purchase']       = array('purchase',          'p', 'purchase_id');
 $_TBL['image'] 	        = array('image',          'i', 'image_id');
-$_TBL['booking'] 	        = array('booking',          'b', 'booking_id');
 $_TBL['work_time'] 	        = array('work_time',          'w', 'work_time_id');
 $_TBL['zoom_api'] 	        = array('zoom_api',          'z', 'id');
 $_TBL['paypal_api'] 	        = array('paypal_api',          'pp', 'id');
@@ -30,6 +29,7 @@ $_TBL['pgroup'] 	        = array('pgroup',          'pg', 'pgroup_id');
 $_TBL['ptype'] 	        = array('ptype',          'pt', 'ptype_id');
 $_TBL['ptype2group'] 	        = array('ptype2group',          'p2g', 'ptype2group_id');
 $_TBL['shop_slot'] 	        = array('shop_slot',          'ss', 'shop_slot_id');
+$_TBL['timezone'] 	        = array('timezone',          't', 'timezone_id');
 
 
 ?>

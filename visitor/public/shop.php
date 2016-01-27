@@ -7,7 +7,6 @@ Conf::loadClass('Ptype');
 Conf::loadClass('Ptype2group');
 Conf::loadClass('Brand');
 Conf::loadClass('ShopSlot');
-Conf::loadClass('Booking');
 Conf::loadClass('utils/mail/Mailer');
 
 $oShop   = new Shop();
@@ -17,7 +16,6 @@ $oPtype   = new Ptype();
 $oPtype2group   = new Ptype2group();
 $oBrand   = new Brand();
 $oShopSlot   = new ShopSlot();
-$oBooking   = new Booking();
 $nShopId = $oReq->getInt('id');
 $sTimezoneOffset = isset($_COOKIE['timezone'])?$_COOKIE['timezone']:0;
 
@@ -31,14 +29,14 @@ $aShop = $oShop->aData;
 switch($oReq->getAction()) {
     case 'resend':
         $sDate = $oReq->get('date');
-        $nBookingId = $oReq->getInt('bid');
+        $nShopSlotId = $oReq->getInt('bid');
         $sEmail = $aAccount['email'];//$oReq->get('email');
-        if (!$nBookingId) $aErrors[] = Conf::format('Slot not found');
+        if (!$nShopSlotId) $aErrors[] = Conf::format('Slot not found');
         if (!$sEmail) $aErrors[] = Conf::format('Email is not specified');
         if ($sEmail && !filter_var($sEmail, FILTER_VALIDATE_EMAIL)) $aErrors[] = Conf::format('Email is incorrect');
 
-        if ($oBooking->loadBy(array('booking_id' => '=' . $nBookingId, 'account_id' => '=' . $oAccount->isLoggedIn()))) {
-            if ($oBooking->aData['status'] == 'booked') {
+        if ($oShopSlot->loadBy(array('shop_slot_id' => '=' . $nShopSlotId, 'account_id' => '=' . $oAccount->isLoggedIn()))) {
+            if ($oShopSlot->aData['status'] == 'booked') {
                     // отправляем подтверждение
                     $oMailer = new Mailer();
                     $oMailer->send(
@@ -64,7 +62,7 @@ switch($oReq->getAction()) {
         $sDesc = $oReq->get('description');
         $sEmail = $aAccount['email'];//$oReq->get('email');
         $iSellerId = $oReq->getInt('seller');
-        $iBookingId = 0;
+        $iShopSlotId = 0;
 
         if (!$sDate) $aErrors[] = Conf::format('Date is not specified');
         if (!$sEmail) $aErrors[] = Conf::format('Email is not specified');
@@ -87,17 +85,17 @@ switch($oReq->getAction()) {
             if (!$aErrors) {
                 if ($oAccount->loadBy(array('account_id' => '=' . $iSellerId, 'status' => '="seller"'))) {
                     if ($oShopSlot->loadBy(array('shop_id' => '=' . $nShopId, 'time_from' => '="' . Database::date($nTimeOffset) . '"'))) {
-                        if ($oBooking->loadBy(array('shop_slot_id' => '=' . $oShopSlot->aData['shop_slot_id'], 'seller_id' => '=' . $iSellerId))) {
-                            $iBookingId = $oBooking->aData['booking_id'];
-                            if ($oBooking->aData['status'] == 'free') {
-                                $oBooking->aData = array('booking_id'=>$oBooking->aData['booking_id']);
-                                if ($oAccount->isLoggedIn()) $oBooking->aData['account_id'] = $oAccount->isLoggedIn();
-                                $oBooking->aData['email'] = $sEmail;
-                                $oBooking->aData['description'] = $sDesc;
-                                $oBooking->aData['status'] = 'booked';
-                                $oBooking->aData['udate'] = Database::date();
-                                $oBooking->aData['ip'] = $_SERVER['REMOTE_ADDR'];
-                                if ($oBooking->update()) {
+                        if ($oShopSlot->loadBy(array('shop_slot_id' => '=' . $oShopSlot->aData['shop_slot_id'], 'seller_id' => '=' . $iSellerId))) {
+                            $iShopSlotId = $oShopSlot->aData['shop_slot_id'];
+                            if ($oShopSlot->aData['status'] == 'free') {
+                                $oShopSlot->aData = array('shop_slot_id'=>$oShopSlot->aData['shop_slot_id']);
+                                if ($oAccount->isLoggedIn()) $oShopSlot->aData['account_id'] = $oAccount->isLoggedIn();
+                                $oShopSlot->aData['email'] = $sEmail;
+                                $oShopSlot->aData['description'] = $sDesc;
+                                $oShopSlot->aData['status'] = 'booked';
+                                $oShopSlot->aData['udate'] = Database::date();
+                                $oShopSlot->aData['ip'] = $_SERVER['REMOTE_ADDR'];
+                                if ($oShopSlot->update()) {
                                     // отправляем подтверждение
                                     $oMailer = new Mailer();
                                     $oMailer->send(
@@ -109,7 +107,7 @@ switch($oReq->getAction()) {
                                         )
                                         ,array(), array(), $aLanguage['language_id']);
                                 } else
-                                    $aErrors = $oBooking->getErrors();
+                                    $aErrors = $oShopSlot->getErrors();
                             } else {
                                 $aErrors[] = Conf::format('Slot is already booked');
                             }
@@ -125,7 +123,7 @@ switch($oReq->getAction()) {
             }
         }
 
-        echo json_encode(array('errors'=>$aErrors, 'id'=>$iBookingId, 'email'=>$sEmail));
+        echo json_encode(array('errors'=>$aErrors, 'id'=>$iShopSlotId, 'email'=>$sEmail));
         exit;
         break;
 }
@@ -181,7 +179,7 @@ $sEndTime = $sStartTime+6*86400;
 $aShoppers = $aSlots = array();
 $aWeekDays = array('Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa');
 list($aItems,) = $oAccount->getList(array('shop_id'=>'='.$nShopId, 'status'=>'="seller"'));
-if ($aItems) list($aSlots,) = $oBooking->getList(array('{#shop_id}'=>'ss.shop_id='.$nShopId, '{#time_from}'=>'time_from>="'.Database::date($sStartTime).'" AND DATE(time_from)<="'.date('Y-m-d', $sEndTime).'"', 'seller_id'=>'IN('.$oAccount->getListIds($aItems, true).')'), 0, 0, 'ss.time_from');
+if ($aItems) list($aSlots,) = $oShopSlot->getList(array('{#shop_id}'=>'ss.shop_id='.$nShopId, '{#time_from}'=>'time_from>="'.Database::date($sStartTime).'" AND DATE(time_from)<="'.date('Y-m-d', $sEndTime).'"', 'seller_id'=>'IN('.$oAccount->getListIds($aItems, true).')'), 0, 0, 'ss.time_from');
 
 // добавим всех шопперов
 array_unshift($aItems, array('account_id'=>0, 'fname'=>Conf::format('All shoppers')));
