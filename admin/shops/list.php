@@ -284,64 +284,33 @@ switch($oReq->getAction())
     case 'updateseller':
     case 'createseller':
         $iShopId = $oReq->getInt('id');
-        $aAccountPost = $oReq->getArray('aShop');
+        $iAccountId = $oReq->getInt('account_id');
         $aImages = $oReq->get('images') ? explode(',', $oReq->get('images')) : array();
-        $oShop->aData = $aShopPost;
+        $oAccount->aData = array(
+            'fname'=>$oReq->get('fname'),
+            'email'=>$oReq->get('email'),
+        );
         if ($aImages && intval($aImages[0]))
-            $oShop->aData['promo_head'] = intval($aImages[0]);
-        if ($aShopPost) {
-            if ($iShopId) {
-                $oShop->aData['shop_id'] = $iShopId;
-                if (!$oShop->update(array(), true, array('title', 'description', 'brand_desc'))) {
-                    $aErrors = $oShop->getErrors();
-                }
-            } else {
-                if (!($iShopId = $oShop->insert(true, array('title', 'description', 'brand_desc')))) {
-                    $aErrors = $oShop->getErrors();
-                }
-            }
+            $oAccount->aData['image_id'] = intval($aImages[0]);
+        if ($iAccountId) {
+            if ($oReq->get('pass'))
+                $oAccount->aData['pass'] = md5($oReq->get('pass'));
+            if ($oAccount->isUniqueEmail($iAccountId)) {
+                $oAccount->aData['account_id'] = $iAccountId;
+                if (!$oAccount->update())
+                    $aErrors = $oAccount->getErrors();
+            } else
+                $aErrors[] = 'Такой емайл уже зарегистрирован в системе';
+        } else {
+            if ($oAccount->isUniqueEmail()) {
+                $oAccount->aData['status'] = 'seller';
+                $oAccount->aData['shop_id'] = $iShopId;
+                if (!($iAccountId = $oAccount->insert()))
+                    $aErrors = $oAccount->getErrors();
+            } else
+                $aErrors[] = 'Такой емайл уже зарегистрирован в системе';
         }
-
-        if (!$aErrors) {
-            $aOpenTime = $oReq->getArray('open_time');
-            foreach($aOpenTime as $nWeekDay=>$sOpenTime) {
-                $nWeekDay = intval($nWeekDay);
-                if ($sOpenTime) {
-                    list($aFrom, $aTo) = explode('-', $sOpenTime, 2);
-                    list($iFromHour, $iFromMinute) = explode(':', $aFrom, 2);
-                    $iFrom = 60*intval($iFromHour) + intval($iFromMinute) - $aShop['time_shift'];
-                    list($iToHour, $iToMinute) = explode(':', $aTo, 2);
-                    $iTo = 60*intval($iToHour) + intval($iToMinute) - $aShop['time_shift'];
-                    if ($iTo>=0 && $iTo<=1440 && $iFrom>=0 && $iFrom<=1440 && $iFrom<$iTo && $nWeekDay>=0 && $nWeekDay<=6) {
-                        if ($oOpenTime->loadBy(array('shop_id'=>'='.$iShopId, 'week_day'=>'='.intval($nWeekDay)))) {
-                            $oOpenTime->aData = array('open_time_id'=>$oOpenTime->aData['open_time_id']);
-                            $oOpenTime->aData['time_from'] = $iFrom;
-                            $oOpenTime->aData['time_to'] = $iTo;
-                            if (!$oOpenTime->update())
-                                $aErrors += $oOpenTime->getErrors();
-                        } else {
-                            $oOpenTime->aData = array(
-                                'shop_id' => $iShopId,
-                                'week_day' => $nWeekDay,
-                                'time_from' => $iFrom,
-                                'time_to' => $iTo,
-                            );
-                            if (!$oOpenTime->insert())
-                                $aErrors += $oOpenTime->getErrors();
-                        }
-                    } else {
-                        $aErrors[] = 'Ошибка в расписании #'.$nWeekDay;
-                    }
-                } else {
-                    if ($oOpenTime->loadBy(array('shop_id'=>'='.$iShopId, 'week_day'=>'='.intval($nWeekDay)))) {
-                        if (!$oOpenTime->delete($oOpenTime->aData['open_time_id']))
-                            $aErrors += $oOpenTime->getErrors();
-                    }
-                }
-            }
-        }
-
-        echo '{ "id":"'.$iShopId.'", "error":'.json_encode($aErrors).'}';
+        echo '{ "id":"'.$iAccountId.'", "error":'.json_encode($aErrors).'}';
         exit;
         break;
 

@@ -79,7 +79,7 @@ webix.ready(function(){
                 removeNode(slotGrid.getSelectedId(true)[0], slotGrid, options);
             }}, { view:"button", width:150, /*disabled:true,*/ value:"Генерация слотов", id:"genBtnS",  click:function(){
                 var id  = getSelField(sellerGrid, 'account_id');
-                $$('account_id').setValue(id);
+                $$('seller_id_gen').setValue(id);
                 showForm("winGen", this.$view);
             }},
             {},
