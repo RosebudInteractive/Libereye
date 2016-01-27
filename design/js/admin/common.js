@@ -75,6 +75,17 @@ function editNode(node, el, grid, options, cb){
     return false;
 };
 
+function loadItem(url, options, cb){
+    webix.ajax(url, function(text, data){
+        data = data.json();
+        if (data.error) {
+            webix.message({type:"error", text:data.error});
+            return false;
+        }
+        if (cb) cb(data);
+    });
+};
+
 function removeNode(node, grid, options){
     webix.confirm({
         text:"Вы уверены?", ok:"Да", cancel:"Отмена",

@@ -214,4 +214,13 @@ webix.ready(function(){
         body:formSlot
     });
 
+    loadItem("/admin/index.php/part_shops/act_load?id="+aShopJson.shop_id, options, function(item){
+        $$('open_time0').setValue(item.open_time && item.open_time[0] ? item.open_time[0] : '');
+        $$('open_time1').setValue(item.open_time && item.open_time[1] ? item.open_time[1] : '');
+        $$('open_time2').setValue(item.open_time && item.open_time[2] ? item.open_time[2] : '');
+        $$('open_time3').setValue(item.open_time && item.open_time[3] ? item.open_time[3] : '');
+        $$('open_time4').setValue(item.open_time && item.open_time[4] ? item.open_time[4] : '');
+        $$('open_time5').setValue(item.open_time && item.open_time[5] ? item.open_time[5] : '');
+        $$('open_time6').setValue(item.open_time && item.open_time[6] ? item.open_time[6] : '');
+    });
 });
