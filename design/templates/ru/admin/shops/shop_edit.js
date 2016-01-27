@@ -4,6 +4,7 @@ webix.ready(function(){
         translated: [],
         urls: {
             get: "/admin/index.php/part_shops/act_getslots/id_"+aShopJson.shop_id,
+            getsellers: "/admin/index.php/part_shops/act_getsellers/id_"+aShopJson.shop_id,
             load: "/admin/index.php/part_shops/act_loadslot",
             destroy: "/admin/index.php/part_shops/act_destroyslot",
             update: "/admin/index.php/part_shops/act_createslot",
@@ -52,6 +53,30 @@ webix.ready(function(){
             }}
         ]
     };
+    var buttonsS = {
+        view:"toolbar", elements:[
+            { view:"button", width:100, value:"Добавить",  click:function(){
+                $$('form2').setValues({id:0}, true);
+
+                showForm("win1", this.$view);
+            }},
+            { view:"button", width:100, disabled:true, value:"Изменить", id:"editBtnS", click:function(){
+                editNode(slotGrid.getSelectedId(true)[0], $$("editBtn").$view, slotGrid, options, function(item){
+
+                });
+
+            }}, { view:"button", width:100, disabled:true, value:"Удалить", id:"delBtnS",  click:function(){
+                removeNode(slotGrid.getSelectedId(true)[0], slotGrid, options);
+            }},
+            {},
+            { view:"button", width:80, value:"Обновить", click:function(){
+                var griItem = $$('sellerGrid');
+                griItem.clearSelection();
+                griItem.clearAll();
+                griItem.load(options.urls.getsellers);
+            }}
+        ]
+    };
 
     var form = {
         id: "form",
@@ -69,6 +94,35 @@ webix.ready(function(){
                 {view:"text", name:"open_time[5]", id:"open_time5", placeholder:"Сб" },
                 {view:"text", name:"open_time[6]", id:"open_time6", placeholder:"Вс" }
             ]},
+            {},
+            {cols:[
+                {template:'Шопперы:', width:100, height:43, borderless:true},
+                {rows:[buttonsS,{
+                    id: "sellerGrid",
+                    view:"datatable",
+                    columns:[
+                        { id:"seller",	sort:"text", header:["Имя", {content:"selectFilter"}], width:600}
+                    ],
+                    select:"row",
+                    height:200,
+                    width:'100%',
+                    on:{
+                        onSelectChange:function(){
+                            var sel = this.getSelectedId(true);
+                            if (sel.length > 0) {
+                                $$('editBtnS').enable();
+                                $$('delBtnS').enable();
+                            } else {
+                                $$('editBtnS').disable();
+                                $$('delBtnS').disable();
+                            }
+                        }
+                    },
+                    url:options.urls.getsellers
+                }]}
+
+            ]},
+            {},
             {cols:[
                 {template:'Слоты:', width:100, height:43, borderless:true},
                 {rows:[buttons,{
