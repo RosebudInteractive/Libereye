@@ -406,9 +406,10 @@ switch($oReq->getAction())
     case 'upload':
         $iImageId = 0;
         $sImageName = '';
+        $sType = $oReq->get('type', 'shop');
         if (isset($_FILES['upload']) && isset($_FILES['upload']['tmp_name'])) {
             $sExt = strtolower(substr($_FILES['upload']['name'], strrpos($_FILES['upload']['name'], '.')+1));
-            if ($iImageId = $oImage->upload($_FILES['upload']['tmp_name'], 'shop', 0, $sExt) ) {
+            if ($iImageId = $oImage->upload($_FILES['upload']['tmp_name'], $sType, 0, $sExt) ) {
                 $sImageName = $oImage->aData['name'];
             }
             else

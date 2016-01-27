@@ -258,7 +258,7 @@ webix.ready(function(){
                         return 'нет';
                 }, id:'promo_head', width:100,borderless:true},
                 { view:"list", scroll:false, id:"doclist", type:"uploader", borderless:true },{
-                    view:"uploader", upload:"/admin/index.php/part_shops/act_upload",
+                    view:"uploader", upload:"/admin/index.php/part_shops/act_upload/type_account",
                     id:"files", name:"files",
                     value:"Выбрать",
                     link:"doclist",
@@ -270,7 +270,17 @@ webix.ready(function(){
                 {},
                 { view:"button", width:100, type:"form", value: "Сохранить", click:function(){
                     var that = this;
-                    saveItemForm.apply(that, [$$('formSeller'), sellerGrid, optionsSeller]);
+                    $$("files").send(function(){ //sending files
+                        var images = [];
+                        $$("files").files.data.each(function(obj){
+                            var status = obj.status;
+                            if(status=='server' && obj.id!="0") {
+                                images.push(obj.id);
+                            }
+                        });
+                        options.images = images.join(',');
+                        saveItemForm.apply(that, [$$('formSeller'), sellerGrid, optionsSeller]);
+                    });
                 }},
                 { view:"button", width:100,  value:"Отмена", click:function(){
                     this.getTopParentView().hide(); //hide window
