@@ -14,11 +14,13 @@ Conf::loadClass('Shop');
 Conf::loadClass('ShopSlot');
 Conf::loadClass('Image');
 Conf::loadClass('OpenTime');
+Conf::loadClass('Account');
 
 $oImage 		= new Image();
 $oShop = new Shop();
 $oShopSlot = new ShopSlot();
 $oOpenTime = new OpenTime();
+$oAccount = new Account();
 
 
 // ========== processing actions ==========
@@ -69,6 +71,39 @@ switch($oReq->getAction())
         exit;
         break;
 
+    case 'getsellers':
+        $iShopId = $oReq->getInt('id');
+        if ($iShopId && $oShop->load($iShopId)) {
+            $aShop = $oShop->aData;
+            $aCond = array('shop_id'=>'='.$iShopId, 'status'=>'="seller"');
+            if (isset($_GET['filter']))
+            {
+                if (isset($_GET['filter']['fname']) && $_GET['filter']['fname'])
+                    $aCond['fname'] = 'LIKE "%'.Database::escapeLike($_GET['filter']['fname']).'%"';
+            }
+
+            $iPos = $oReq->getInt('start');
+            $iPageSize = $oReq->getInt('count', 10000);
+            $aSort = $oReq->getArray('sort' , array('fname'=>'asc'));
+            list($aItems, $iCnt) = $oAccount->getListOffset($aCond, $iPos, $iPageSize, str_replace('=', ' ', http_build_query($aSort, ' ', ', ')));
+
+            if (!$oReq->get('suggest')) {
+                foreach($aItems as $nKey=>$aItem){
+                    unset($aItems[$nKey]['pass']);
+                }
+                echo '{"pos":' . $iPos . ', "total_count":"' . $iCnt . '","data":' . json_encode($aItems) . '}';
+            } else {
+                $aShopsSuggest = array();
+                foreach($aItems as $aItem){
+                    $aShopsSuggest[] = array("id"=>$aItem['shop_slot_id'],"value"=>$aItem['title']);
+                }
+                echo json_encode($aShopsSuggest);
+            }
+            exit;
+        }
+        exit;
+        break;
+
     case 'loadslot':
         $iShopSlotId = $oReq->getInt('id');
         if ($iShopSlotId && $oShopSlot->load($iShopSlotId)) {
@@ -87,7 +122,7 @@ switch($oReq->getAction())
         $iShopId = $oReq->getInt('id');
         if ($iShopId && $oShop->load($iShopId)) {
             $aShop = $oShop->aData;
-            $aCond = array('shop_id'=>'='.$iShopId, 'time_from'=>'>="'.Database::date(time() + date("Z")).'"');
+            $aCond = array('shop_id'=>'='.$iShopId, 'time_from'=>'>="'.Database::date(time() - date("Z")).'"');
             if (isset($_GET['filter']))
             {
                 if (isset($_GET['filter']['value']) && $_GET['filter']['value'])
@@ -118,6 +153,61 @@ switch($oReq->getAction())
             }
             exit;
         }
+        exit;
+        break;
+
+    case 'genslots':
+        $iShopId = $oReq->getInt('id');
+        $nStartDate = strtotime(date('Y-m-d 00:00:00', strtotime($oReq->get('time_from'))));
+        $nToDate = strtotime(date('Y-m-d 00:00:00', strtotime($oReq->get('time_to'))));
+        $nSellerId = $oReq->getInt('seller_id');
+        $bPublish = $oReq->getInt('publish');
+
+        if (!$nStartDate) $aErrors[] = 'Дата начала генерации слотов не указана';
+        if (!$nToDate) $aErrors[] = 'Дата конца генерации слотов не указана';
+        if (!$nSellerId) $aErrors[] = 'Шоппер не указан';
+        if ($nToDate && $nStartDate && $nStartDate>$nToDate) $aErrors[] = 'Дата начала больше даты конца';
+        if ($nToDate && $nStartDate && $nToDate-$nStartDate>2678400) $aErrors[] = 'Разрешается генерировать слоты не более чем на 31 день';
+
+        if (!$aErrors){
+            if ($iShopId && $oShop->load($iShopId)) {
+                $aShop = $oShop->aData;
+
+                // время работы
+                $aOpenTimes = array();
+                list($aOpenTimesTmp, ) = $oOpenTime->getList(array('shop_id'=>'='.$iShopId, 'type'=>'="open"'), 0, 0, 'week_day');
+                $aOpenTimes = array();
+                foreach ($aOpenTimesTmp as $nKey=>$aTime) {
+                    $aOpenTimes[$aTime['week_day']] = $aTime;
+                }
+
+                for($day=$nStartDate; $day<=$nToDate; $day+=86400) { // на 30 дней
+                    $nDateTime = strtotime(date('Y-m-d 00:00:00', $day));
+                    $nWeekDay = date('w', $nDateTime)==0 ? 6 : date('w', $nDateTime)-1;
+                    $aTime = isset($aOpenTimes[$nWeekDay]) ? $aOpenTimes[$nWeekDay]: array('time_to'=>0, 'time_from'=>0);
+                    for($time=$aTime['time_from']; $time<$aTime['time_to']-60; $time+=60) {
+                        $sTimeFrom = strtotime(date('Y-m-d H:i:00', $nDateTime+$time*60));
+                        $sTimeTo = strtotime(date('Y-m-d H:i:00', $nDateTime+$time*60+3600));
+                        if (!$oShopSlot->loadBy(array(
+                            'shop_id' => '='.$iShopId,
+                            'time_from' => '>="'.Database::date($sTimeFrom).'"',
+                            'time_to' => '<="'.Database::date($sTimeTo).'"'))) {
+                            $oShopSlot->aData = array(
+                                'shop_id' => $iShopId,
+                                'time_from' => Database::date($sTimeFrom),
+                                'time_to' => Database::date($sTimeTo),
+                                'seller_id' => $nSellerId,
+                                'status' => $bPublish?'free':'draft',
+                                'cdate' => Database::date(),
+                                'udate' => Database::date(),
+                            );
+                            $nShopSlotId = $oShopSlot->insert();
+                        }
+                    }
+                }
+            }
+        }
+        echo json_encode(array('error'=>join('<br>', $aErrors), 'message'=>'Ok'));
         exit;
         break;
 

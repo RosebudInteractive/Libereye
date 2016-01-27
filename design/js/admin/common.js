@@ -75,14 +75,20 @@ function editNode(node, el, grid, options, cb){
     return false;
 };
 
-function loadItem(url, options, cb){
-    webix.ajax(url, function(text, data){
-        data = data.json();
-        if (data.error) {
-            webix.message({type:"error", text:data.error});
-            return false;
+function loadItem(url, postData, cb){
+    webix.ajax().post(url, postData, {
+        success: function(text, data) {
+            data = data.json();
+            if (data.error)
+                webix.message({type: "error", text: data.error});
+            if (cb) cb(data);
+        },
+        error: function(text, data) {
+            data = data.json();
+            if (data.error)
+                webix.message({type: "error", text: data.error});
+            if (cb) cb(data);
         }
-        if (cb) cb(data);
     });
 };
 
@@ -129,4 +135,22 @@ function saveItem(options) {
             }
         });
     }
+}
+
+function showProgress(id){
+    $$(id).disable();
+    $$(id).showProgress({
+        type:"icon",
+        delay:3000
+    });
+}
+function hideProgress(id){
+    $$(id).enable();
+    $$(id).hideProgress();
+}
+
+function getSelField(grid, id) {
+    var item = grid.getItem(grid.getSelectedId(true)[0]);
+    if (item) return item[id];
+    return false;
 }

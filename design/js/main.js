@@ -157,7 +157,7 @@ $(function() {
         form.find('.pie-wrap').not('.filled').find('.pie-text').click(function(){
 
             // if not logged
-            if (!LOGGEDIN) {$('.registration-init').click();return;}
+            if (!LOGGEDIN) {$('.login-init').click();return;}
 
             var clicked = $(this);
             dayText = clicked.data('daytext');

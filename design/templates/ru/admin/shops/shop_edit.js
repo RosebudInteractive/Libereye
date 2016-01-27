@@ -13,7 +13,6 @@ webix.ready(function(){
         id: 'shop_slot_id'
     };
 
-
     function getSellers() {
         var sellers = [];
         for(var i in aSellersJson)
@@ -57,7 +56,6 @@ webix.ready(function(){
         view:"toolbar", elements:[
             { view:"button", width:100, value:"Добавить",  click:function(){
                 $$('form2').setValues({id:0}, true);
-
                 showForm("win1", this.$view);
             }},
             { view:"button", width:100, disabled:true, value:"Изменить", id:"editBtnS", click:function(){
@@ -67,6 +65,10 @@ webix.ready(function(){
 
             }}, { view:"button", width:100, disabled:true, value:"Удалить", id:"delBtnS",  click:function(){
                 removeNode(slotGrid.getSelectedId(true)[0], slotGrid, options);
+            }}, { view:"button", width:150, /*disabled:true,*/ value:"Генерация слотов", id:"genBtnS",  click:function(){
+                var id  = getSelField(sellerGrid, 'account_id');
+                $$('seller_id_gen').setValue(id);
+                showForm("winGen", this.$view);
             }},
             {},
             { view:"button", width:80, value:"Обновить", click:function(){
@@ -77,7 +79,6 @@ webix.ready(function(){
             }}
         ]
     };
-
     var form = {
         id: "form",
         view:"form",
@@ -94,17 +95,19 @@ webix.ready(function(){
                 {view:"text", name:"open_time[5]", id:"open_time5", placeholder:"Сб" },
                 {view:"text", name:"open_time[6]", id:"open_time6", placeholder:"Вс" }
             ]},
-            {},
+            {height:10, borderless:true},
             {cols:[
                 {template:'Шопперы:', width:100, height:43, borderless:true},
                 {rows:[buttonsS,{
                     id: "sellerGrid",
                     view:"datatable",
                     columns:[
-                        { id:"seller",	sort:"text", header:["Имя", {content:"selectFilter"}], width:600}
+                        { id:"fname",	sort:"text", header:"Имя", width:300},
+                        { id:"email",	sort:"text", header:"Email", width:200},
+                        { id:"phone",	sort:"text", header:"Phone", width:210}
                     ],
                     select:"row",
-                    height:200,
+                    height:150,
                     width:'100%',
                     on:{
                         onSelectChange:function(){
@@ -112,9 +115,11 @@ webix.ready(function(){
                             if (sel.length > 0) {
                                 $$('editBtnS').enable();
                                 $$('delBtnS').enable();
+                              //  $$('genBtnS').enable();
                             } else {
                                 $$('editBtnS').disable();
                                 $$('delBtnS').disable();
+                               // $$('genBtnS').disable();
                             }
                         }
                     },
@@ -122,7 +127,7 @@ webix.ready(function(){
                 }]}
 
             ]},
-            {},
+            {height:10, borderless:true},
             {cols:[
                 {template:'Слоты:', width:100, height:43, borderless:true},
                 {rows:[buttons,{
@@ -136,12 +141,15 @@ webix.ready(function(){
                     },
                     columns:[
                         //{ id:"id",	header:"", css:"id", width:50},
+                        { id:"ch1", header:{ content:"masterCheckbox" }, template:"{common.checkbox()}", width:40},
                         { id:"seller",	sort:"text", header:["Шоппер", {content:"selectFilter"}], width:250},
-                        { id:"time_from", sort:"int",	header:["Дата начала", {content:"datepickerFilter"}] , width:180, format:webix.Date.dateToStr("%d.%m.%y %H:%i")},
-                        { id:"time_to", sort:"int",	header:["Дата конца", {content:"datepickerFilter"}], 	width:180, format:webix.Date.dateToStr("%d.%m.%y %H:%i")},
+                        { id:"time_from", sort:"int",	header:["Дата начала", {content:"datepickerFilter"}] , width:150, format:webix.Date.dateToStr("%d.%m.%y %H:%i")},
+                        { id:"time_to", sort:"int",	header:["Дата конца", {content:"datepickerFilter"}], 	width:150, format:webix.Date.dateToStr("%d.%m.%y %H:%i")},
                         { id:"status",	sort:"text",	header:["Статус", {content:"selectFilter"}], 	width:100}
                     ],
                     select:"row",
+                   // multiselect:true,
+                    checkboxRefresh:true,
                     height:300,
                     width:'100%',
                     on:{
@@ -154,6 +162,12 @@ webix.ready(function(){
                                 $$('editBtn').disable();
                                 $$('delBtn').disable();
                             }
+                        },
+                        onCheck: function(row, column, state){
+                            /*if (state == 1)
+                                this.select(row, true);
+                            else
+                                this.unselect(row, true);*/
                         }
                     },
                     url:options.urls.get
@@ -188,8 +202,6 @@ webix.ready(function(){
             labelWidth:140
         }
     };
-
-
     var formSlot = {
         id: "formSlot",
         view:"form",
@@ -215,22 +227,54 @@ webix.ready(function(){
             ]}
         ]}
         ],
-
         elementsConfig:{
             labelWidth:140
         }
     };
-
-
-
+    var formGen = {
+        id: "formGen",
+        view:"form",
+        width:600, borderless:true,
+        //borderless:true,
+        elements: [ {rows : [
+            {view:"select", label:"Шоппер", name:"seller_id", id:"seller_id_gen", placeholder:"Шоппер", value:0, options:getSellers() },
+            {cols:[
+                {view:"datepicker", name:"time_from", id:"time_from_gen", placeholder:"Начало", value:new Date() },
+                {view:"datepicker", name:"time_to", id:"time_to_gen", placeholder:"Конец", value:new Date(((new Date()).setDate((new Date()).getDate()+31))) }
+            ]},
+            {view:"checkbox", name:"publish", label:"Опубликовать"},
+            { margin:5, cols:[
+                {},
+                { view:"button", width:130, type:"form", value: "Генерировать", click:function(){
+                    var that = this;
+                    showProgress('formGen');
+                    loadItem("/admin/index.php/part_shops/act_genslots?id="+aShopJson.shop_id, $$('formGen').getValues(), function(item){
+                        hideProgress('formGen');
+                        if (!item.error) {
+                            slotGrid.clearSelection();
+                            slotGrid.clearAll();
+                            slotGrid.load(options.urls.get);
+                            that.getTopParentView().hide(); //hide window
+                        }
+                    });
+                }},
+                { view:"button", width:100,  value:"Отмена", click:function(){
+                    this.getTopParentView().hide(); //hide window
+                }}
+            ]}
+        ]}
+        ],
+        elementsConfig:{
+            labelWidth:140
+        }
+    };
     var formObj = webix.ui({
         container:"shop_edit_form",
         rows:[
            form
         ]
     });
-
-    var slotGrid = $$('slotsGrid'), parentFilterByAll = slotGrid.filterByAll;
+    var slotGrid = $$('slotsGrid'), sellerGrid = $$('sellerGrid'), parentFilterByAll = slotGrid.filterByAll;
     $$('slotsGrid').filterByAll=function(){
         //gets filter values
         var seller = this.getFilter("seller").value;
@@ -263,12 +307,20 @@ webix.ready(function(){
     webix.ui({
         view:"popup",
         id:"win1",
-        width:870,
+        width:500,
         head:false,
         body:formSlot
     });
 
-    loadItem("/admin/index.php/part_shops/act_load?id="+aShopJson.shop_id, options, function(item){
+    webix.ui({
+        view:"popup",
+        id:"winGen",
+        width:400,
+        head:false,
+        body:formGen
+    });
+
+    loadItem("/admin/index.php/part_shops/act_load?id="+aShopJson.shop_id, {}, function(item){
         $$('open_time0').setValue(item.open_time && item.open_time[0] ? item.open_time[0] : '');
         $$('open_time1').setValue(item.open_time && item.open_time[1] ? item.open_time[1] : '');
         $$('open_time2').setValue(item.open_time && item.open_time[2] ? item.open_time[2] : '');
@@ -277,4 +329,9 @@ webix.ready(function(){
         $$('open_time5').setValue(item.open_time && item.open_time[5] ? item.open_time[5] : '');
         $$('open_time6').setValue(item.open_time && item.open_time[6] ? item.open_time[6] : '');
     });
+
+    //adding progress bar functionality to it
+    webix.extend($$("formGen"), webix.ProgressBar);
+
+
 });
