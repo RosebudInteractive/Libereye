@@ -6,11 +6,23 @@ webix.ready(function(){
             get: "/admin/index.php/part_shops/act_getslots/id_"+aShopJson.shop_id,
             getsellers: "/admin/index.php/part_shops/act_getsellers/id_"+aShopJson.shop_id,
             load: "/admin/index.php/part_shops/act_loadslot",
-            destroy: "/admin/index.php/part_shops/act_destroyslot",
-            update: "/admin/index.php/part_shops/act_createslot",
-            create: "/admin/index.php/part_shops/act_createslot"
+            destroy: "/admin/index.php/part_shops/act_destroyslot/id_"+aShopJson.shop_id,
+            update: "/admin/index.php/part_shops/act_createslot/id_"+aShopJson.shop_id,
+            create: "/admin/index.php/part_shops/act_createslot/id_"+aShopJson.shop_id
         },
         id: 'shop_slot_id'
+    };
+
+    var optionsSeller = {
+        translated: [],
+        urls: {
+            get: "/admin/index.php/part_shops/act_getsellers/id_"+aShopJson.shop_id,
+            load: "/admin/index.php/part_shops/act_loadseller",
+            destroy: "/admin/index.php/part_shops/act_destroyseller/id_"+aShopJson.shop_id,
+            update: "/admin/index.php/part_shops/act_createseller/id_"+aShopJson.shop_id,
+            create: "/admin/index.php/part_shops/act_createseller/id_"+aShopJson.shop_id
+        },
+        id: 'account_id'
     };
 
     function getSellers() {
@@ -23,7 +35,7 @@ webix.ready(function(){
     var buttons = {
         view:"toolbar", elements:[
             { view:"button", width:100, value:"Добавить",  click:function(){
-                $$('form').setValues({id:0}, true);
+                $$('formSlot').setValues({shop_slot_id:0}, true);
                 $$('time_from_slot').setValue('');
                 $$('time_to_slot').setValue('');
                 $$('seller_id_slot').define("options", getSellers());
@@ -33,6 +45,7 @@ webix.ready(function(){
             }},
             { view:"button", width:100, disabled:true, value:"Изменить", id:"editBtn", click:function(){
                 editNode(slotGrid.getSelectedId(true)[0], $$("editBtn").$view, slotGrid, options, function(item){
+                    $$('formSlot').setValues({shop_slot_id:getSelField(slotGrid, 'shop_slot_id')}, true);
                     $$('time_from_slot').setValue(item.time_from ? item.time_from : '');
                     $$('time_to_slot').setValue(item.time_to ? item.time_to : '');
                     $$('seller_id_slot').define("options", getSellers());
@@ -55,11 +68,10 @@ webix.ready(function(){
     var buttonsS = {
         view:"toolbar", elements:[
             { view:"button", width:100, value:"Добавить",  click:function(){
-                $$('form2').setValues({id:0}, true);
-                showForm("win1", this.$view);
+                showForm("winSeller", this.$view);
             }},
             { view:"button", width:100, disabled:true, value:"Изменить", id:"editBtnS", click:function(){
-                editNode(slotGrid.getSelectedId(true)[0], $$("editBtn").$view, slotGrid, options, function(item){
+                editNode(slotGrid.getSelectedId(true)[0], $$("editBtn").$view, sellerGrid, optionsSeller, function(item){
 
                 });
 
@@ -67,7 +79,7 @@ webix.ready(function(){
                 removeNode(slotGrid.getSelectedId(true)[0], slotGrid, options);
             }}, { view:"button", width:150, /*disabled:true,*/ value:"Генерация слотов", id:"genBtnS",  click:function(){
                 var id  = getSelField(sellerGrid, 'account_id');
-                $$('seller_id_gen').setValue(id);
+                $$('account_id').setValue(id);
                 showForm("winGen", this.$view);
             }},
             {},
@@ -75,14 +87,14 @@ webix.ready(function(){
                 var griItem = $$('sellerGrid');
                 griItem.clearSelection();
                 griItem.clearAll();
-                griItem.load(options.urls.getsellers);
+                griItem.load(optionsSeller.urls.get);
             }}
         ]
     };
     var form = {
         id: "form",
         view:"form",
-        width:870,
+        width:970,
         //borderless:true,
         elements: [ {rows : [
             {cols:[
@@ -93,7 +105,11 @@ webix.ready(function(){
                 {view:"text", name:"open_time[3]", id:"open_time3", placeholder:"Чт"},
                 {view:"text", name:"open_time[4]", id:"open_time4", placeholder:"Пт" },
                 {view:"text", name:"open_time[5]", id:"open_time5", placeholder:"Сб" },
-                {view:"text", name:"open_time[6]", id:"open_time6", placeholder:"Вс" }
+                {view:"text", name:"open_time[6]", id:"open_time6", placeholder:"Вс" },
+                { view:"button", width:100, type:"form", value: "Сохранить", click:function(){
+                    $$('form').setValues({id:aShopJson.shop_id}, true);
+                    saveItemForm($$('form'), null, {urls:{create:'/admin/index.php/part_shops/act_create'}});
+                }}
             ]},
             {height:10, borderless:true},
             {cols:[
@@ -148,7 +164,7 @@ webix.ready(function(){
                         { id:"status",	sort:"text",	header:["Статус", {content:"selectFilter"}], 	width:100}
                     ],
                     select:"row",
-                   // multiselect:true,
+                    multiselect:true,
                     checkboxRefresh:true,
                     height:300,
                     width:'100%',
@@ -162,38 +178,28 @@ webix.ready(function(){
                                 $$('editBtn').disable();
                                 $$('delBtn').disable();
                             }
+
+
+                            for(var i in sel) {
+
+                            }
                         },
                         onCheck: function(row, column, state){
-                            /*if (state == 1)
+                            if (state == 1)
                                 this.select(row, true);
                             else
-                                this.unselect(row, true);*/
+                                this.unselect(row, true);
+                        },
+                        onItemClick:function(id){
+                            if (this.getItem(id.row).ch1 != 1) {
+                                this.getItem(id.row).ch1 = 1;
+                                this.refresh(id.row);
+                            }
                         }
                     },
                     url:options.urls.get
                 }]}
 
-            ]},
-
-            { margin:5, cols:[
-                {},
-                { view:"button", width:100, type:"form", value: "Сохранить", click:function(){
-                    var that = this;
-                    $$("files").send(function(){ //sending files
-                        var images = [];
-                        $$("files").files.data.each(function(obj){
-                            var status = obj.status;
-                            if(status=='server' && obj.id!="0") {
-                                images.push(obj.id);
-                            }
-                        });
-                        options.images = images.join(',');
-                        saveItem.apply(that, [options]);
-                    });
-                }},
-                { view:"button", width:100,  value:"Отмена", click:function(){
-                    this.getTopParentView().hide(); //hide window
-                }}
             ]}
         ]}
         ],
@@ -202,6 +208,7 @@ webix.ready(function(){
             labelWidth:140
         }
     };
+
     var formSlot = {
         id: "formSlot",
         view:"form",
@@ -219,7 +226,7 @@ webix.ready(function(){
                 {},
                 { view:"button", width:100, type:"form", value: "Сохранить", click:function(){
                     var that = this;
-
+                    saveItemForm.apply(that, [$$('formSlot'), slotGrid, options]);
                 }},
                 { view:"button", width:100,  value:"Отмена", click:function(){
                     this.getTopParentView().hide(); //hide window
@@ -231,6 +238,51 @@ webix.ready(function(){
             labelWidth:140
         }
     };
+    var formSeller = {
+        id: "formSeller",
+        view:"form",
+        width:800, borderless:true,
+        //borderless:true,
+        elements: [ {rows : [
+            {view:"text", label:"Имя", name:"fname", id:"fname", required:true, invalidMessage: "Поле обязательное" },
+            {view:"text", label:"Email", name:"email", id:"email", required:true, validate:webix.rules.isEmail, invalidMessage: "Проверьте email" },
+            {view:"text", type:"password", label:"Пароль", name:"pass", id:"pass", required:true, invalidMessage: "Поле обязательное" },
+            {view:"text", type:"password", label:"Пароль еще раз", name:"pass_confirm", id:"spass_confirm", required:true, invalidMessage: "Поле обязательное" },
+            {cols:[
+                {template:'Иконка:', width:100,borderless:true},
+                {template:function (obj) {
+                    // obj is a data record object
+                    if (obj.src)
+                        return '<a href="'+obj.src+'" target="_blank"><img src="'+obj.src+'" height="30"/></a>';
+                    else
+                        return 'нет';
+                }, id:'promo_head', width:100,borderless:true},
+                { view:"list", scroll:false, id:"doclist", type:"uploader", borderless:true },{
+                    view:"uploader", upload:"/admin/index.php/part_shops/act_upload",
+                    id:"files", name:"files",
+                    value:"Выбрать",
+                    link:"doclist",
+                    autosend:false, //!important
+                    sync: false, width:100, multiple:false,borderless:true
+                }]},
+
+            { margin:5, cols:[
+                {},
+                { view:"button", width:100, type:"form", value: "Сохранить", click:function(){
+                    var that = this;
+                    saveItemForm.apply(that, [$$('formSeller'), sellerGrid, optionsSeller]);
+                }},
+                { view:"button", width:100,  value:"Отмена", click:function(){
+                    this.getTopParentView().hide(); //hide window
+                }}
+            ]}
+        ]}
+        ],
+        elementsConfig:{
+            labelWidth:140
+        }
+    };
+
     var formGen = {
         id: "formGen",
         view:"form",
@@ -240,7 +292,7 @@ webix.ready(function(){
             {view:"select", label:"Шоппер", name:"seller_id", id:"seller_id_gen", placeholder:"Шоппер", value:0, options:getSellers() },
             {cols:[
                 {view:"datepicker", name:"time_from", id:"time_from_gen", placeholder:"Начало", value:new Date() },
-                {view:"datepicker", name:"time_to", id:"time_to_gen", placeholder:"Конец", value:new Date(((new Date()).setDate((new Date()).getDate()+31))) }
+                {view:"datepicker", name:"time_to", id:"time_to_gen", placeholder:"Конец", value:new Date(((new Date()).setDate((new Date()).getDate()+1))) }
             ]},
             {view:"checkbox", name:"publish", label:"Опубликовать"},
             { margin:5, cols:[
@@ -318,6 +370,14 @@ webix.ready(function(){
         width:400,
         head:false,
         body:formGen
+    });
+
+    webix.ui({
+        view:"popup",
+        id:"winSeller",
+        width:600,
+        head:false,
+        body:formSeller
     });
 
     loadItem("/admin/index.php/part_shops/act_load?id="+aShopJson.shop_id, {}, function(item){

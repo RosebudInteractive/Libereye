@@ -21,7 +21,10 @@ $oShop = new Shop();
 $oShopSlot = new ShopSlot();
 $oOpenTime = new OpenTime();
 $oAccount = new Account();
-
+$iShopId = $oReq->getInt('id');
+if ($iShopId && $oShop->load($iShopId)) {
+    $aShop = $oShop->aData;
+}
 
 // ========== processing actions ==========
 switch($oReq->getAction())
@@ -32,6 +35,8 @@ switch($oReq->getAction())
             list($aOpenTimes, ) = $oOpenTime->getList(array('shop_id'=>'='.$iShopId), 0, 0, 'week_day');
             $aItem = $oShop->aData;
             foreach($aOpenTimes as $aOpenTime) {
+                $aOpenTime['time_from'] +=$aShop['time_shift'];
+                $aOpenTime['time_to'] +=$aShop['time_shift'];
                 $aItem['open_time'][$aOpenTime['week_day']] = sprintf('%02d:%02d-%02d:%02d', intval($aOpenTime['time_from']/60), $aOpenTime['time_from']-intval($aOpenTime['time_from']/60)*60, intval($aOpenTime['time_to']/60), $aOpenTime['time_to']-intval($aOpenTime['time_to']/60)*60);
             }
             echo json_encode($aItem);
@@ -122,7 +127,7 @@ switch($oReq->getAction())
         $iShopId = $oReq->getInt('id');
         if ($iShopId && $oShop->load($iShopId)) {
             $aShop = $oShop->aData;
-            $aCond = array('shop_id'=>'='.$iShopId, 'time_from'=>'>="'.Database::date(time() - date("Z")).'"');
+            $aCond = array('shop_id'=>'='.$iShopId, 'time_from'=>'>="'.Database::date(strtotime(date('Y-m-d 00:00:00',time() - date("Z")))).'"');
             if (isset($_GET['filter']))
             {
                 if (isset($_GET['filter']['value']) && $_GET['filter']['value'])
@@ -181,15 +186,16 @@ switch($oReq->getAction())
                     $aOpenTimes[$aTime['week_day']] = $aTime;
                 }
 
-                for($day=$nStartDate; $day<=$nToDate; $day+=86400) { // на 30 дней
+                for($day=$nStartDate; $day<=$nToDate; $day+=86400) {
                     $nDateTime = strtotime(date('Y-m-d 00:00:00', $day));
                     $nWeekDay = date('w', $nDateTime)==0 ? 6 : date('w', $nDateTime)-1;
                     $aTime = isset($aOpenTimes[$nWeekDay]) ? $aOpenTimes[$nWeekDay]: array('time_to'=>0, 'time_from'=>0);
-                    for($time=$aTime['time_from']; $time<$aTime['time_to']-60; $time+=60) {
+                    for($time=$aTime['time_from']; $time<=$aTime['time_to']-60; $time+=60) {
                         $sTimeFrom = strtotime(date('Y-m-d H:i:00', $nDateTime+$time*60));
                         $sTimeTo = strtotime(date('Y-m-d H:i:00', $nDateTime+$time*60+3600));
                         if (!$oShopSlot->loadBy(array(
                             'shop_id' => '='.$iShopId,
+                            'seller_id' => '='.$nSellerId,
                             'time_from' => '>="'.Database::date($sTimeFrom).'"',
                             'time_to' => '<="'.Database::date($sTimeTo).'"'))) {
                             $oShopSlot->aData = array(
@@ -214,19 +220,21 @@ switch($oReq->getAction())
     case 'update':
     case 'create':
         $iShopId = $oReq->getInt('id');
-        $aShop = $oReq->getArray('aShop');
+        $aShopPost = $oReq->getArray('aShop');
         $aImages = $oReq->get('images') ? explode(',', $oReq->get('images')) : array();
-        $oShop->aData = $aShop;
+        $oShop->aData = $aShopPost;
         if ($aImages && intval($aImages[0]))
             $oShop->aData['promo_head'] = intval($aImages[0]);
-        if ($iShopId) {
-            $oShop->aData['shop_id'] = $iShopId;
-            if (!$oShop->update(array(), true, array('title', 'description', 'brand_desc'))){
-                $aErrors = $oShop->getErrors();
-            }
-        } else {
-            if (!($iShopId = $oShop->insert(true, array('title', 'description', 'brand_desc')))){
-                $aErrors = $oShop->getErrors();
+        if ($aShopPost) {
+            if ($iShopId) {
+                $oShop->aData['shop_id'] = $iShopId;
+                if (!$oShop->update(array(), true, array('title', 'description', 'brand_desc'))) {
+                    $aErrors = $oShop->getErrors();
+                }
+            } else {
+                if (!($iShopId = $oShop->insert(true, array('title', 'description', 'brand_desc')))) {
+                    $aErrors = $oShop->getErrors();
+                }
             }
         }
 
@@ -237,9 +245,9 @@ switch($oReq->getAction())
                 if ($sOpenTime) {
                     list($aFrom, $aTo) = explode('-', $sOpenTime, 2);
                     list($iFromHour, $iFromMinute) = explode(':', $aFrom, 2);
-                    $iFrom = 60*intval($iFromHour) + intval($iFromMinute);
+                    $iFrom = 60*intval($iFromHour) + intval($iFromMinute) - $aShop['time_shift'];
                     list($iToHour, $iToMinute) = explode(':', $aTo, 2);
-                    $iTo = 60*intval($iToHour) + intval($iToMinute);
+                    $iTo = 60*intval($iToHour) + intval($iToMinute) - $aShop['time_shift'];
                     if ($iTo>=0 && $iTo<=1440 && $iFrom>=0 && $iFrom<=1440 && $iFrom<$iTo && $nWeekDay>=0 && $nWeekDay<=6) {
                         if ($oOpenTime->loadBy(array('shop_id'=>'='.$iShopId, 'week_day'=>'='.intval($nWeekDay)))) {
                             $oOpenTime->aData = array('open_time_id'=>$oOpenTime->aData['open_time_id']);
@@ -272,12 +280,158 @@ switch($oReq->getAction())
         echo '{ "id":"'.$iShopId.'", "error":'.json_encode($aErrors).'}';
         exit;
         break;
+
+    case 'updateseller':
+    case 'createseller':
+        $iShopId = $oReq->getInt('id');
+        $aAccountPost = $oReq->getArray('aShop');
+        $aImages = $oReq->get('images') ? explode(',', $oReq->get('images')) : array();
+        $oShop->aData = $aShopPost;
+        if ($aImages && intval($aImages[0]))
+            $oShop->aData['promo_head'] = intval($aImages[0]);
+        if ($aShopPost) {
+            if ($iShopId) {
+                $oShop->aData['shop_id'] = $iShopId;
+                if (!$oShop->update(array(), true, array('title', 'description', 'brand_desc'))) {
+                    $aErrors = $oShop->getErrors();
+                }
+            } else {
+                if (!($iShopId = $oShop->insert(true, array('title', 'description', 'brand_desc')))) {
+                    $aErrors = $oShop->getErrors();
+                }
+            }
+        }
+
+        if (!$aErrors) {
+            $aOpenTime = $oReq->getArray('open_time');
+            foreach($aOpenTime as $nWeekDay=>$sOpenTime) {
+                $nWeekDay = intval($nWeekDay);
+                if ($sOpenTime) {
+                    list($aFrom, $aTo) = explode('-', $sOpenTime, 2);
+                    list($iFromHour, $iFromMinute) = explode(':', $aFrom, 2);
+                    $iFrom = 60*intval($iFromHour) + intval($iFromMinute) - $aShop['time_shift'];
+                    list($iToHour, $iToMinute) = explode(':', $aTo, 2);
+                    $iTo = 60*intval($iToHour) + intval($iToMinute) - $aShop['time_shift'];
+                    if ($iTo>=0 && $iTo<=1440 && $iFrom>=0 && $iFrom<=1440 && $iFrom<$iTo && $nWeekDay>=0 && $nWeekDay<=6) {
+                        if ($oOpenTime->loadBy(array('shop_id'=>'='.$iShopId, 'week_day'=>'='.intval($nWeekDay)))) {
+                            $oOpenTime->aData = array('open_time_id'=>$oOpenTime->aData['open_time_id']);
+                            $oOpenTime->aData['time_from'] = $iFrom;
+                            $oOpenTime->aData['time_to'] = $iTo;
+                            if (!$oOpenTime->update())
+                                $aErrors += $oOpenTime->getErrors();
+                        } else {
+                            $oOpenTime->aData = array(
+                                'shop_id' => $iShopId,
+                                'week_day' => $nWeekDay,
+                                'time_from' => $iFrom,
+                                'time_to' => $iTo,
+                            );
+                            if (!$oOpenTime->insert())
+                                $aErrors += $oOpenTime->getErrors();
+                        }
+                    } else {
+                        $aErrors[] = 'Ошибка в расписании #'.$nWeekDay;
+                    }
+                } else {
+                    if ($oOpenTime->loadBy(array('shop_id'=>'='.$iShopId, 'week_day'=>'='.intval($nWeekDay)))) {
+                        if (!$oOpenTime->delete($oOpenTime->aData['open_time_id']))
+                            $aErrors += $oOpenTime->getErrors();
+                    }
+                }
+            }
+        }
+
+        echo '{ "id":"'.$iShopId.'", "error":'.json_encode($aErrors).'}';
+        exit;
+        break;
+
+    case 'updateslot':
+    case 'createslot':
+        $iShopId = $oReq->getInt('id');
+        $iShopSlotId = $oReq->getInt('shop_slot_id');
+        if ($iShopId && $oShop->load($iShopId)) {
+            $aShop = $oShop->aData;
+            $nStartDate = strtotime(date('Y-m-d H:i:00', strtotime($oReq->get('time_from'))));
+            $nToDate = strtotime(date('Y-m-d H:i:00', strtotime($oReq->get('time_to'))));
+            $nSellerId = $oReq->getInt('seller_id');
+            $sStatus = in_array($oReq->get('status'), array('free', 'booked', 'draft'))?$oReq->get('status'):'';
+
+            if (!$nStartDate) $aErrors[] = 'Дата начала не указана';
+            if (!$nToDate) $aErrors[] = 'Дата конца не указана';
+            if (!$nSellerId) $aErrors[] = 'Шоппер не указан';
+            if (!$sStatus) $aErrors[] = 'Статус не указан';
+            if ($nToDate && $nStartDate && $nStartDate>$nToDate) $aErrors[] = 'Дата начала больше даты конца';
+            if ($nToDate && $nStartDate && $nStartDate==$nToDate) $aErrors[] = 'Дата начала совпадает с датой конца';
+
+            if (!$aErrors) {
+                if ($iShopSlotId) {
+                    if ($oShopSlot->loadBy(array('shop_id'=>'='.$iShopId, 'shop_slot_id'=>'='.$iShopSlotId))) {
+                        $aShopSlot = $oShopSlot->aData;
+                        if ($aShopSlot['status'] == 'booked') $aErrors[] = 'Слот со статусом booked не может быть изменен';
+                        else if ($sStatus == 'booked') $aErrors[] = 'Статус не может быть booked';
+                        if ($oShopSlot->loadBy(array(
+                            'shop_slot_id' => '!='.$iShopSlotId,
+                            'shop_id' => '='.$iShopId,
+                            'seller_id' => '='.$nSellerId,
+                            'time_from' => '>="'.Database::date($nStartDate - $aShop['time_shift']*60).'"',
+                            'time_to' => '<="'.Database::date($nToDate - $aShop['time_shift']*60).'"'))) $aErrors[] = 'Такой слот уже есть данного шоппера';
+                        if (!$aErrors) {
+                            $oShopSlot->aData = array(
+                              'shop_slot_id' => $aShopSlot['shop_slot_id'],
+                              'time_from' => Database::date($nStartDate - $aShop['time_shift']*60),
+                              'time_to' => Database::date($nToDate - $aShop['time_shift']*60),
+                              'seller_id' => $nSellerId,
+                              'status' => $sStatus,
+                              'udate' => Database::date()
+                            );
+                            if (!$oShopSlot->update())
+                                $aErrors = $oShopSlot->getErrors();
+                        }
+                    } else
+                        $aErrors[] = 'Слот не найден';
+                } else {
+                    if ($sStatus == 'booked') $aErrors[] = 'Статус не может быть booked';
+                    if (!$aErrors) {
+                        $oShopSlot->aData = array(
+                            'time_from' => Database::date($nStartDate - $aShop['time_shift']*60),
+                            'time_to' => Database::date($nToDate - $aShop['time_shift']*60),
+                            'seller_id' => $nSellerId,
+                            'status' => $sStatus,
+                            'shop_id' => $iShopId,
+                            'cdate' => Database::date(),
+                            'udate' => Database::date(),
+                        );
+                        if (!($iShopSlotId=$oShopSlot->insert()))
+                            $aErrors = $oShopSlot->getErrors();
+                    }
+                }
+            }
+
+        }
+        echo '{ "id":"'.$iShopSlotId.'", "error":'.json_encode($aErrors).'}';
+        exit;
+        break;
+
     case 'destroy':
         $iShopId = $oReq->getInt('id');
         if (!$oShop->delete($iShopId)){
             $aErrors = $oShop->getErrors();
         }
         echo '{ "id":"'.$iShopId.'", "error":'.json_encode($aErrors).'}';
+        break;
+
+   case 'destroyslot':
+       $iShopSlotId = $oReq->getInt('id');
+       if ($oShopSlot->loadBy(array('shop_slot_id'=>'='.$iShopSlotId))) {
+           if ($oShopSlot->aData['status'] == 'booked') $aErrors[] = 'Слот со статусом booked не может быть удален';
+           if (!$aErrors) {
+              if (!$oShopSlot->delete($iShopSlotId))
+                $aErrors = $oShop->getErrors();
+           }
+       }else
+           $aErrors[] = 'Слот не найден';
+        echo '{ "id":"'.$iShopId.'", "error":'.json_encode($aErrors).'}';
+        exit;
         break;
 
     case 'upload':

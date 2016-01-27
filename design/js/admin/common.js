@@ -101,10 +101,14 @@ function removeNode(node, grid, options){
                 var data = {id:id};
                 webix.ajax().post(options.urls.destroy, data, {
                     success: function(text, data){
+                        data = data.json()
+                        if (data.error)
+                            webix.message({type: "error", text: data.error});
+                        else
+                            webix.message("Объект успешно удален");
                         grid.clearSelection();
                         grid.clearAll();
                         grid.load(options.urls.get);
-                        webix.message("Объект успешно удален");
                     }
                 });
                 return false;
@@ -132,6 +136,33 @@ function saveItem(options) {
                     $$('gridItem').load(options.urls.get);
                     that.getTopParentView().hide(); //hide window
                 }
+            }
+        });
+    }
+}
+
+function saveItemForm(form, grid, options, cb) {
+    if (form.validate()){
+        var data = form.getValues();
+        if (options.images)
+            data.images = options.images;
+        var that = this;
+        webix.ajax().post(options.urls.create, data, {
+            success: function(text, data){
+                data = data.json()
+                if (data.error && data.error.length>0) {
+                    webix.message({ type:"error", text:Array.isArray(data.error)?data.error.join("<br>"):data.error });
+                } else {
+                    webix.message("Изменения сохранены");
+                    if ( that.getTopParentView() )
+                        that.getTopParentView().hide(); //hide window
+                    if (grid) {
+                        grid.clearSelection();
+                        grid.clearAll();
+                        grid.load(options.urls.get);
+                    }
+                }
+                if (cb) cb(data);
             }
         });
     }
