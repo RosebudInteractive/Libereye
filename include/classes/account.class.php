@@ -231,9 +231,10 @@ class Account extends DbItem
      */
     function load($nId)
     {
-        $sSql = 'SELECT '.join(',', $this->aFields).', t.code timezone'.
+        $sSql = 'SELECT '.join(',', $this->aFields).', t.code timezone, i.name image'.
             ' FROM '.$this->sTable.' AS '.$this->sAlias.
             ' LEFT JOIN timezone t ON '.$this->sAlias.'.timezone_id=t.timezone_id'.
+            ' LEFT JOIN image i ON i.image_id=acc.image_id'.
             ' WHERE '.$this->sId.'="'.$nId.'"';
         $this->aData = $this->oDb->getRow($sSql);
         return sizeof($this->aData);

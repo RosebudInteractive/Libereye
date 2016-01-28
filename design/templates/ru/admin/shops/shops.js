@@ -73,7 +73,7 @@ webix.ready(function(){
                 showForm("win1", this.$view);
             }},
             { view:"button", width:100, disabled:true, value:"Изменить", id:"editBtn", click:function(){
-                editNode($$('gridItem').getSelectedId(true)[0], $$("editBtn").$view, $$('gridItem'), options, function(item){
+                editNode($$('gridItem').getSelectedId(true)[0], $$('gridItem'), options, function(item){
                     $$('doclist').clearAll();
                     $$('promo_head').setValues({src:item.promo_head && item.promo_head!=""?('/images/shop/'+item.promo_head):null});
                     $$('open_time0').setValue(item.open_time && item.open_time[0] ? item.open_time[0] : '');
@@ -83,6 +83,7 @@ webix.ready(function(){
                     $$('open_time4').setValue(item.open_time && item.open_time[4] ? item.open_time[4] : '');
                     $$('open_time5').setValue(item.open_time && item.open_time[5] ? item.open_time[5] : '');
                     $$('open_time6').setValue(item.open_time && item.open_time[6] ? item.open_time[6] : '');
+                    showForm("win1", $$("editBtn").$view);
                 });
 
             }}, { view:"button", width:100, disabled:true, value:"Удалить", id:"delBtn",  click:function(){

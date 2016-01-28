@@ -31,6 +31,10 @@ webix.ready(function(){
             sellers.push({id:i, value:aSellersJson[i]});
         return sellers;
     }
+    function setSellers(data) {
+        aSellersJson = data;
+        return getSellers();
+    }
 
     var buttons = {
         view:"toolbar", elements:[
@@ -44,13 +48,14 @@ webix.ready(function(){
                 showForm("win1", this.$view);
             }},
             { view:"button", width:100, disabled:true, value:"Изменить", id:"editBtn", click:function(){
-                editNode(slotGrid.getSelectedId(true)[0], $$("editBtn").$view, slotGrid, options, function(item){
+                editNode(slotGrid.getSelectedId(true)[0], slotGrid, options, function(item){
                     $$('formSlot').setValues({shop_slot_id:getSelField(slotGrid, 'shop_slot_id')}, true);
                     $$('time_from_slot').setValue(item.time_from ? item.time_from : '');
                     $$('time_to_slot').setValue(item.time_to ? item.time_to : '');
                     $$('seller_id_slot').define("options", getSellers());
                     $$('seller_id_slot').setValue(item.seller_id);
                     $$('status_slot').setValue(item.status);
+                    showForm("win1", el);
                 });
 
             }}, { view:"button", width:100, disabled:true, value:"Удалить", id:"delBtn",  click:function(){
@@ -68,17 +73,39 @@ webix.ready(function(){
     var buttonsS = {
         view:"toolbar", elements:[
             { view:"button", width:100, value:"Добавить",  click:function(){
+                $$('formSeller').setValues({account_id:0}, true);
+                $$('formSeller').clearValidation();
+                $$('doclist').clearAll();
+                $$('image').setValues({src:null});
+                $$('doclist').clearAll();
+                $$('fname').setValue('');
+                $$('email').setValue('');
+                $$('pass').setValue(null);
+                $$('pass_confirm').setValue(null);
+                $$('pass').define("required", true);
+                $$('pass_confirm').define("required", true);
                 showForm("winSeller", this.$view);
             }},
             { view:"button", width:100, disabled:true, value:"Изменить", id:"editBtnS", click:function(){
-                editNode(slotGrid.getSelectedId(true)[0], $$("editBtn").$view, sellerGrid, optionsSeller, function(item){
-
+                editNode(sellerGrid.getSelectedId(true)[0], sellerGrid, optionsSeller, function(item){
+                    $$('formSeller').setValues({account_id:getSelField(sellerGrid, 'account_id')}, true);
+                    $$('formSeller').clearValidation();
+                    $$('doclist').clearAll();
+                    $$('image').setValues({src:item.image && item.image!=""?('/images/account/'+item.image):null});
+                    $$('fname').setValue(item.fname);
+                    $$('email').setValue(item.email);
+                    $$('pass').setValue(null);
+                    $$('pass_confirm').setValue(null);
+                    $$('pass').define("required", false);
+                    $$('pass_confirm').define("required", false);
+                    showForm("winSeller", $$("editBtnS").$view);
                 });
 
             }}, { view:"button", width:100, disabled:true, value:"Удалить", id:"delBtnS",  click:function(){
-                removeNode(slotGrid.getSelectedId(true)[0], slotGrid, options);
+                removeNode(sellerGrid.getSelectedId(true)[0], sellerGrid, optionsSeller);
             }}, { view:"button", width:150, /*disabled:true,*/ value:"Генерация слотов", id:"genBtnS",  click:function(){
                 var id  = getSelField(sellerGrid, 'account_id');
+                $$('seller_id_gen').define("options", getSellers());
                 $$('seller_id_gen').setValue(id);
                 showForm("winGen", this.$view);
             }},
@@ -247,7 +274,7 @@ webix.ready(function(){
             {view:"text", label:"Имя", name:"fname", id:"fname", required:true, invalidMessage: "Поле обязательное" },
             {view:"text", label:"Email", name:"email", id:"email", required:true, validate:webix.rules.isEmail, invalidMessage: "Проверьте email" },
             {view:"text", type:"password", label:"Пароль", name:"pass", id:"pass", required:true, invalidMessage: "Поле обязательное" },
-            {view:"text", type:"password", label:"Пароль еще раз", name:"pass_confirm", id:"spass_confirm", required:true, invalidMessage: "Поле обязательное" },
+            {view:"text", type:"password", label:"Пароль еще раз", name:"pass_confirm", id:"pass_confirm", required:true, invalidMessage: "Поле обязательное" },
             {cols:[
                 {template:'Иконка:', width:100,borderless:true},
                 {template:function (obj) {
@@ -256,7 +283,7 @@ webix.ready(function(){
                         return '<a href="'+obj.src+'" target="_blank"><img src="'+obj.src+'" height="30"/></a>';
                     else
                         return 'нет';
-                }, id:'promo_head', width:100,borderless:true},
+                }, id:'image', width:100,borderless:true},
                 { view:"list", scroll:false, id:"doclist", type:"uploader", borderless:true },{
                     view:"uploader", upload:"/admin/index.php/part_shops/act_upload/type_account",
                     id:"files", name:"files",
@@ -278,8 +305,10 @@ webix.ready(function(){
                                 images.push(obj.id);
                             }
                         });
-                        options.images = images.join(',');
-                        saveItemForm.apply(that, [$$('formSeller'), sellerGrid, optionsSeller]);
+                        optionsSeller.images = images.join(',');
+                        saveItemForm.apply(that, [$$('formSeller'), sellerGrid, optionsSeller, function(data){
+                            if (data.sellers) setSellers(data.sellers);
+                        }]);
                     });
                 }},
                 { view:"button", width:100,  value:"Отмена", click:function(){

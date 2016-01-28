@@ -51,7 +51,7 @@ function showForm(winId, node){
 }
 
 
-function editNode(node, el, grid, options, cb){
+function editNode(node, grid, options, cb){
     var id  = grid.getItem(node.row)[options.id], translated = options.translated;
     webix.ajax(options.urls.load+"?id="+id, function(text, data){
         data = data.json();
@@ -69,7 +69,6 @@ function editNode(node, el, grid, options, cb){
             }
         }
         if (cb) cb(data);
-        showForm("win1", el);
     });
 
     return false;

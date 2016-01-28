@@ -122,6 +122,18 @@ switch($oReq->getAction())
         exit;
         break;
 
+    case 'loadseller':
+        $iSellerId = $oReq->getInt('id');
+        if ($iSellerId && $oAccount->load($iSellerId)) {
+            $aItem = $oAccount->aData;
+            unset($aItem['pass']);
+            echo json_encode($aItem);
+            exit;
+        }
+        echo '{"error":"Слот не найден"}';
+        exit;
+        break;
+
     case 'getslots':
         // search
         $iShopId = $oReq->getInt('id');
@@ -290,27 +302,48 @@ switch($oReq->getAction())
             'fname'=>$oReq->get('fname'),
             'email'=>$oReq->get('email'),
         );
-        if ($aImages && intval($aImages[0]))
-            $oAccount->aData['image_id'] = intval($aImages[0]);
-        if ($iAccountId) {
-            if ($oReq->get('pass'))
-                $oAccount->aData['pass'] = md5($oReq->get('pass'));
-            if ($oAccount->isUniqueEmail($iAccountId)) {
-                $oAccount->aData['account_id'] = $iAccountId;
-                if (!$oAccount->update())
-                    $aErrors = $oAccount->getErrors();
-            } else
-                $aErrors[] = 'Такой емайл уже зарегистрирован в системе';
+
+        if (!$oAccount->aData['fname']) $aErrors[] = 'Заполните Имя';
+        if (!$oAccount->aData['email']) $aErrors[] = 'Заполните Email';
+        else  if (!filter_var($oAccount->aData['email'], FILTER_VALIDATE_EMAIL)) $aErrors[] = 'Проверьте емайл';
+
+        if (!$iAccountId){
+            if (!$oReq->get('pass')) $aErrors[] = 'Заполните Пароль';
+            if (!$oReq->get('pass_confirm')) $aErrors[] = 'Заполните Пароль повторно';
+            if ($oReq->get('pass') && $oReq->get('pass_confirm') && $oReq->get('pass_confirm')!=$oReq->get('pass')) $aErrors[] = 'Пароли не совпадают';
         } else {
-            if ($oAccount->isUniqueEmail()) {
-                $oAccount->aData['status'] = 'seller';
-                $oAccount->aData['shop_id'] = $iShopId;
-                if (!($iAccountId = $oAccount->insert()))
-                    $aErrors = $oAccount->getErrors();
-            } else
-                $aErrors[] = 'Такой емайл уже зарегистрирован в системе';
+            if ($oReq->get('pass')) {
+                if (!$oReq->get('pass_confirm')) $aErrors[] = 'Заполните Пароль повторно';
+                if ($oReq->get('pass') && $oReq->get('pass_confirm') && $oReq->get('pass_confirm')!=$oReq->get('pass')) $aErrors[] = 'Пароли не совпадают';
+            }
         }
-        echo '{ "id":"'.$iAccountId.'", "error":'.json_encode($aErrors).'}';
+
+        if (!$aErrors) {
+            if ($aImages && intval($aImages[0]))
+                $oAccount->aData['image_id'] = intval($aImages[0]);
+            if ($iAccountId) {
+                if ($oReq->get('pass'))
+                    $oAccount->aData['pass'] = md5($oReq->get('pass'));
+                if ($oAccount->isUniqueEmail($iAccountId)) {
+                    $oAccount->aData['account_id'] = $iAccountId;
+                    if (!$oAccount->update())
+                        $aErrors = $oAccount->getErrors();
+                } else
+                    $aErrors[] = 'Такой емайл уже зарегистрирован в системе';
+            } else {
+                if ($oAccount->isUniqueEmail()) {
+                    if ($oReq->get('pass'))
+                        $oAccount->aData['pass'] = md5($oReq->get('pass'));
+                    $oAccount->aData['status'] = 'seller';
+                    $oAccount->aData['shop_id'] = $iShopId;
+                    if (!($iAccountId = $oAccount->insert()))
+                        $aErrors = $oAccount->getErrors();
+                } else
+                    $aErrors[] = 'Такой емайл уже зарегистрирован в системе';
+            }
+        }
+        $aSellers = $oAccount->getHash('fname', array('shop_id'=>'='.$iShopId, 'status'=>'="seller"'), 'fname');
+        echo '{ "id":"'.$iAccountId.'", "error":'.json_encode($aErrors).', "sellers":'.json_encode($aSellers).'}';
         exit;
         break;
 
@@ -387,6 +420,13 @@ switch($oReq->getAction())
             $aErrors = $oShop->getErrors();
         }
         echo '{ "id":"'.$iShopId.'", "error":'.json_encode($aErrors).'}';
+        break;
+
+    case 'destroyseller':
+        $iShopperId = $oReq->getInt('id');
+        $aErrors[] = 'Шоппер не может быть удален';
+        echo '{ "id":"'.$iShopperId.'", "error":'.json_encode($aErrors).'}';
+        exit;
         break;
 
    case 'destroyslot':
