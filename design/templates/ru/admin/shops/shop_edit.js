@@ -8,7 +8,9 @@ webix.ready(function(){
             load: "/admin/index.php/part_shops/act_loadslot",
             destroy: "/admin/index.php/part_shops/act_destroyslot/id_"+aShopJson.shop_id,
             update: "/admin/index.php/part_shops/act_createslot/id_"+aShopJson.shop_id,
-            create: "/admin/index.php/part_shops/act_createslot/id_"+aShopJson.shop_id
+            create: "/admin/index.php/part_shops/act_createslot/id_"+aShopJson.shop_id,
+            todraft: "/admin/index.php/part_shops/act_todraft/id_"+aShopJson.shop_id,
+            tofree: "/admin/index.php/part_shops/act_tofree/id_"+aShopJson.shop_id
         },
         id: 'shop_slot_id'
     };
@@ -36,6 +38,33 @@ webix.ready(function(){
         return getSellers();
     }
 
+    function setStatus(grid, status) {
+        var sel = slotGrid.getSelectedId(true)
+        webix.confirm({
+            text:"Вы уверены что хотите сменить статус "+sel.length+" слотов в "+status+"?", ok:"Да", cancel:"Отмена",
+            callback:function(res){
+                if(res) {
+                    var slots = [];
+                    for (var i in sel)
+                        slots.push(getSelField(grid, 'shop_slot_id', i));
+                    webix.ajax().post(options.urls['to'+status], {slots:slots.join(',')}, {
+                        success: function(text, data){
+                            data = data.json()
+                            if (data.error && data.error!="")
+                                webix.message({type: "error", text: data.error});
+                            else
+                                webix.message("Слоты успешно изменили статус на "+status);
+                            grid.clearSelection();
+                            grid.clearAll();
+                            grid.load(options.urls.get);
+                        }
+                    });
+                    return false;
+                }
+            }
+        });
+    }
+
     var buttons = {
         view:"toolbar", elements:[
             { view:"button", width:100, value:"Добавить",  click:function(){
@@ -55,11 +84,15 @@ webix.ready(function(){
                     $$('seller_id_slot').define("options", getSellers());
                     $$('seller_id_slot').setValue(item.seller_id);
                     $$('status_slot').setValue(item.status);
-                    showForm("win1", el);
+                    showForm("win1", $$('editBtn').$view);
                 });
 
             }}, { view:"button", width:100, disabled:true, value:"Удалить", id:"delBtn",  click:function(){
                 removeNode(slotGrid.getSelectedId(true)[0], slotGrid, options);
+            }}, { view:"button", width:130, disabled:true, value:"Статус -> draft", id:"toDraftBtn",  click:function(){
+                setStatus(slotGrid, 'draft');
+            }}, { view:"button", width:130, disabled:true, value:"Статус -> free", id:"toFreeBtn",  click:function(){
+                setStatus(slotGrid, 'free');
             }},
             {},
             { view:"button", width:80, value:"Обновить", click:function(){
@@ -201,9 +234,13 @@ webix.ready(function(){
                             if (sel.length > 0) {
                                 $$('editBtn').enable();
                                 $$('delBtn').enable();
+                                $$('toDraftBtn').enable();
+                                $$('toFreeBtn').enable();
                             } else {
                                 $$('editBtn').disable();
                                 $$('delBtn').disable();
+                                $$('toDraftBtn').disable();
+                                $$('toFreeBtn').disable();
                             }
 
 

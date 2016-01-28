@@ -179,8 +179,9 @@ function hideProgress(id){
     $$(id).hideProgress();
 }
 
-function getSelField(grid, id) {
-    var item = grid.getItem(grid.getSelectedId(true)[0]);
+function getSelField(grid, id, index) {
+    index = index?index:0;
+    var item = grid.getItem(grid.getSelectedId(true)[index]);
     if (item) return item[id];
     return false;
 }

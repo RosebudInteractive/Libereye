@@ -460,6 +460,23 @@ switch($oReq->getAction())
         echo '{ "status":"'.($aErrors?'error':'server').'", "id":"'.$iImageId.'", "sname":"'.$sImageName.'"}';
         exit;
         break;
+
+    case 'todraft':
+    case 'tofree':
+        $aShopSlots = array_map('intval',explode(',', $oReq->get('slots')));
+        $sStatus = $oReq->getAction()=='todraft' ? 'draft' : 'free';
+        foreach($aShopSlots as $nShopSlotId) {
+            if ($oShopSlot->loadBy(array('shop_id'=>'='.$iShopId, 'shop_slot_id'=>'='.$nShopSlotId))) {
+                if ($oShopSlot->aData['status']!='booked') {
+                    $oShopSlot->aData = array('shop_slot_id'=> $oShopSlot->aData['shop_slot_id'], 'status'=>$sStatus);
+                    $oShopSlot->update();
+                } else
+                    $aErrors[] = 'Слот #'.$oShopSlot->aData['shop_slot_id'].' имеет статус booked и не может быть изменен';
+            }
+        }
+        echo '{"error":'.json_encode($aErrors).'}';
+        exit;
+        break;
 }
 
 
