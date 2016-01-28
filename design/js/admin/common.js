@@ -78,13 +78,13 @@ function loadItem(url, postData, cb){
     webix.ajax().post(url, postData, {
         success: function(text, data) {
             data = data.json();
-            if (data.error)
+            if (data.error && data.error!="")
                 webix.message({type: "error", text: data.error});
             if (cb) cb(data);
         },
         error: function(text, data) {
             data = data.json();
-            if (data.error)
+            if (data.error && data.error!="")
                 webix.message({type: "error", text: data.error});
             if (cb) cb(data);
         }
@@ -101,7 +101,7 @@ function removeNode(node, grid, options){
                 webix.ajax().post(options.urls.destroy, data, {
                     success: function(text, data){
                         data = data.json()
-                        if (data.error)
+                        if (data.error && data.error!="")
                             webix.message({type: "error", text: data.error});
                         else
                             webix.message("Объект успешно удален");

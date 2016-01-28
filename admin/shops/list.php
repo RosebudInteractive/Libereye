@@ -185,6 +185,8 @@ switch($oReq->getAction())
         if (!$nSellerId) $aErrors[] = 'Шоппер не указан';
         if ($nToDate && $nStartDate && $nStartDate>$nToDate) $aErrors[] = 'Дата начала больше даты конца';
         if ($nToDate && $nStartDate && $nToDate-$nStartDate>2678400) $aErrors[] = 'Разрешается генерировать слоты не более чем на 31 день';
+        if ($oShopSlot->loadBy(array('{#time_from}' => 'DATE(time_from)>=DATE("'.Database::date($nStartDate).'") AND DATE(time_from)<=DATE("'.Database::date($nToDate).'")', 'shop_id'=>'='.$iShopId)))
+            $aErrors[] = 'На этот период уже есть слоты';
 
         if (!$aErrors){
             if ($iShopId && $oShop->load($iShopId)) {
@@ -205,22 +207,16 @@ switch($oReq->getAction())
                     for($time=$aTime['time_from']; $time<=$aTime['time_to']-60; $time+=60) {
                         $sTimeFrom = strtotime(date('Y-m-d H:i:00', $nDateTime+$time*60));
                         $sTimeTo = strtotime(date('Y-m-d H:i:00', $nDateTime+$time*60+3600));
-                        if (!$oShopSlot->loadBy(array(
-                            'shop_id' => '='.$iShopId,
-                            'seller_id' => '='.$nSellerId,
-                            'time_from' => '>="'.Database::date($sTimeFrom).'"',
-                            'time_to' => '<="'.Database::date($sTimeTo).'"'))) {
-                            $oShopSlot->aData = array(
-                                'shop_id' => $iShopId,
-                                'time_from' => Database::date($sTimeFrom),
-                                'time_to' => Database::date($sTimeTo),
-                                'seller_id' => $nSellerId,
-                                'status' => $bPublish?'free':'draft',
-                                'cdate' => Database::date(),
-                                'udate' => Database::date(),
-                            );
-                            $nShopSlotId = $oShopSlot->insert();
-                        }
+                        $oShopSlot->aData = array(
+                            'shop_id' => $iShopId,
+                            'time_from' => Database::date($sTimeFrom),
+                            'time_to' => Database::date($sTimeTo),
+                            'seller_id' => $nSellerId,
+                            'status' => $bPublish?'free':'draft',
+                            'cdate' => Database::date(),
+                            'udate' => Database::date(),
+                        );
+                        $nShopSlotId = $oShopSlot->insert();
                     }
                 }
             }
