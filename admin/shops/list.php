@@ -415,7 +415,7 @@ switch($oReq->getAction())
         if (!$oShop->delete($iShopId)){
             $aErrors = $oShop->getErrors();
         }
-        echo '{ "id":"'.$iShopId.'", "error":'.json_encode($aErrors).'}';
+        echo '{ "id":"'.$iShopId.'", "error":'.json_encode($aErrors).'}';exit;
         break;
 
     case 'destroyseller':

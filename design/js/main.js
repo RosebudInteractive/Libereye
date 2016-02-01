@@ -758,7 +758,7 @@ $(function() {
     function showOverlay () {
         var overlay = $('body .overlay');
         if (overlay.length == 0)
-            $('body').append('<div class="overlay"><div class="overlay-fade"></div><div class="overlay-content"><a href="#" class="overlay-close"></a></div></div>');
+            $('body').append('<div class="overlay"><div class="overlay-fade"></div><div class="overlay-content form-standart"><a href="#" class="overlay-close"></a></div></div>');
         else
             $('body .overlay').find('.overlay-content').empty().append('<a href="#" class="overlay-close"></a>');
 
