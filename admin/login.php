@@ -30,7 +30,7 @@ switch ($oReq->getAction())
         if ($oValidator->isValid($oReq->getAll()))
         {
             if ($oAdmin->login($sLogin, $sPass, array('admin', 'manager')))
-                $oReq->forward('/admin/index.php');
+                $oReq->forward('/adminw/');
             $aErrors[] = conf::format('login.error');
         }
         else

@@ -82,7 +82,7 @@ switch($oReq->getAction())
    		if (!$oBrand->delete($iBrandId)){
             $aErrors = $oBrand->getErrors();
    		}
-        echo '{ "id":"'.$iBrandId.'", "error":'.json_encode($aErrors).'}';
+        echo '{ "id":"'.$iBrandId.'", "error":'.json_encode($aErrors).'}';exit;
    		break;
 }
 

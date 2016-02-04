@@ -120,7 +120,7 @@ switch($oReq->getAction())
        } else
            $aErrors += $oPhrase->getErrors();
 
-        echo '{ "id":"'.$iPhraseId.'", "error":'.json_encode($aErrors).'}';
+        echo '{ "id":"'.$iPhraseId.'", "error":'.json_encode($aErrors).', "message":"'.($aErrors?'':'Фраза успешно удалена').'"}';exit;
    		break;
 }
 
