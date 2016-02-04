@@ -30,6 +30,7 @@ $_TBL['ptype'] 	        = array('ptype',          'pt', 'ptype_id');
 $_TBL['ptype2group'] 	        = array('ptype2group',          'p2g', 'ptype2group_id');
 $_TBL['shop_slot'] 	        = array('shop_slot',          'ss', 'shop_slot_id');
 $_TBL['timezone'] 	        = array('timezone',          't', 'timezone_id');
+$_TBL['country'] 	        = array('country',          'c', 'country_id');
 
 
 ?>
