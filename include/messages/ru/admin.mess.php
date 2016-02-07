@@ -27,6 +27,7 @@ $_MSG['part.news']       = 'Новости';
 $_MSG['part.shops']       = 'Магазины';
 $_MSG['part.brands']       = 'Бренды';
 $_MSG['part.countrys']       = 'Страны';
+$_MSG['part.currencys']       = 'Валюты';
 
 $_MSG['settings.updated'] = 'Настройки обновлены.';
 
@@ -48,6 +49,7 @@ $_MSG['menu.news']       = 'Новости';
 $_MSG['menu.shops']       = 'Магазины';
 $_MSG['menu.brands']       = 'Бренды';
 $_MSG['menu.countrys']       = 'Страны';
+$_MSG['menu.currencys']       = 'Валюты';
 
 //admins
 $_MSG['admin.deleted'] = 'Администратор был успешно удален';

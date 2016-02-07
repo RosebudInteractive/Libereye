@@ -73,6 +73,13 @@ $aParts = array(
             'list'=>array('url' =>Conf::getUrl('admin.countrys.list')),
         ),
     ), //end part "brands"
+    'currencys' => array(
+        'title'   =>Conf::format('part.currencys'),
+        'url'     =>Conf::getUrl('admin.currencys'),
+        'sections'=>array(
+            'list'=>array('url' =>Conf::getUrl('admin.currencys.list')),
+        ),
+    ), //end part "brands"
     'subscribe' => array(
         'title'   =>Conf::format('part.subscribe'),
         'url'     =>Conf::getUrl('admin.subscribe'),
