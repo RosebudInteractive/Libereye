@@ -4,7 +4,7 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
 
     function _setData(item) {
         data = item;
-        $$('country-form').setValues({id:item.country_id, "aCountry[code2]":item.code2, "aCountry[code3]":item.code3}, true);
+        $$('country-form').setValues({id:item.country_id, "aCountry[code2]":item.code2?item.code2:'', "aCountry[code3]":item.code3?item.code3:''}, true);
         $$('country-win').getHead().setHTML(item.country_id==0?'Добавить страну':'Редактирование страны');
         $$('save-country-btn').setValue(item.country_id==0?'Добавить':'Сохранить');$$('save-country-btn').refresh();
         $$('country-form').clearValidation();
