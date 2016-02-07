@@ -59,19 +59,11 @@ class Country extends DbItem
         if ($nId) {
             $sSql = 'SELECT '.join(',', $this->aFields).
                 ' FROM '.$this->sTable.' AS '.$this->sAlias.
-                ' LEFT JOIN image i ON s.promo_head=i.image_id'.
-                ' LEFT JOIN phrase p ON p.phrase_id=t.title_id '.
+                ' LEFT JOIN phrase p ON p.phrase_id=c.title_id '.
                 ' WHERE '.$this->sId.'="'.$nId.'"';
             $this->aData = $this->oDb->getRow($sSql);
 
             if ($this->aData) {
-
-                $sShiftUTC = 0;
-                if (preg_match('@\(GMT(.*?)\)@i', $this->aData['timezone_title'], $aMatches)) {
-                    list($sHours, $sMinutes) = explode(':', $aMatches[1]);
-                    $sShiftUTC = $sHours*60 + $sMinutes;
-                }
-                $this->aData['timezone_shift'] = $sShiftUTC;
 
                 $sSql = 'SELECT p.object_field, pd.phrase, pd.language_id'.
                     ' FROM  phrase p '.
@@ -116,11 +108,9 @@ class Country extends DbItem
         $aRows = array();
         if ($iCnt)
         {
-            $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).', i.name image'.
+            $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).
                 ', pd1.phrase title'.
-                ', pd2.phrase description'.
                 ' FROM '.$this->sTable.' AS '.$this->sAlias.
-                ' LEFT JOIN image i ON i.image_id=s.promo_head'.
                 ' LEFT JOIN phrase p1 ON p1.object_id='.$this->sAlias.'.country_id AND p1.object_type_id='.$this->nObjectType.'   AND p1.object_field="title" '.
                 ' LEFT JOIN phrase_det pd1 ON pd1.phrase_id=p1.phrase_id AND pd1.language_id='.$nLangId.'  '.
                 ' WHERE  '.$sCond.

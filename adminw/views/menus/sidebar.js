@@ -35,7 +35,8 @@ define(function(){
 						{id: "main", value: "Объекты", open: true, data:[
 							{ id: "shops", value: "Магазины", icon: "home", $css: "dashboard", details:"Управление магазинами"},
 							{ id: "brands", value: "Бренды", icon: "cube", $css: "brands", details:"Управление брендами"},
-                            { id: "phrases", value: "Переводы", icon: "check-square-o", $css: "phrases", details:"Перевод фраз"}/*,
+                            { id: "phrases", value: "Переводы", icon: "check-square-o", $css: "phrases", details:"Перевод фраз"},
+                            { id: "countries", value: "Страны", icon: "list-alt", $css: "countries", details:"Управление странами"}/*,
 							{ id: "dashboard", value: "Dashboard", icon: "home", $css: "dashboard", details:"reports and statistics"},
 							{ id: "orders", value: "Orders", icon: "check-square-o", $css: "orders", details:"order reports and editing"},
 							{ id: "products", value: "Products", icon: "cube", $css: "products", details:"all products"},

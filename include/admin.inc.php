@@ -66,6 +66,13 @@ $aParts = array(
             'brand_edit'=>array('url' =>Conf::getUrl('admin.brands.brand_edit')),
         ),
     ), //end part "brands"
+    'countrys' => array(
+        'title'   =>Conf::format('part.countrys'),
+        'url'     =>Conf::getUrl('admin.countrys'),
+        'sections'=>array(
+            'list'=>array('url' =>Conf::getUrl('admin.countrys.list')),
+        ),
+    ), //end part "brands"
     'subscribe' => array(
         'title'   =>Conf::format('part.subscribe'),
         'url'     =>Conf::getUrl('admin.subscribe'),
