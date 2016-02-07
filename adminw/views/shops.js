@@ -31,6 +31,8 @@ define([
             }
         }},{ view: "button", id:'shop-manage-btn', disabled:true, type: "iconButton", icon: "cog", label: "Управлять", width: 120, click: function(){
             var grid = $$('grid-shop'), selId = grid.getSelectedId(), that=this;
+            document.location = "/adminw/#!/app/shopmanage/"+grid.getItem(selId)['shop_id'];
+           return;
             if (selId) {
                 var id = grid.getItem(selId)['shop_id'];
                 record.load('/admin/index.php/part_shops/act_load?id='+id, function(data){

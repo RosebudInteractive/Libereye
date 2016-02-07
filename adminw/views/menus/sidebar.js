@@ -34,6 +34,7 @@ define(function(){
 					data:[
 						{id: "main", value: "Объекты", open: true, data:[
 							{ id: "shops", value: "Магазины", icon: "home", $css: "dashboard", details:"Управление магазинами"},
+						//	{ id: "shopmanage/:id", value: "Управление магазинином", icon: "shopmanage", $css: "shopmanage", details:"Управление магазинами"},
 							{ id: "brands", value: "Бренды", icon: "cube", $css: "brands", details:"Управление брендами"},
                             { id: "phrases", value: "Переводы", icon: "check-square-o", $css: "phrases", details:"Перевод фраз"},
                             { id: "countries", value: "Страны", icon: "list-alt", $css: "countries", details:"Управление странами"},

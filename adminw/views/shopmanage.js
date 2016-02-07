@@ -299,18 +299,7 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
             }}
         ]
     };
-    var form = {
-        view:"window", modal:true, id:"shopmanage-win", position:"center",width:1000,move:true, resize: true,
-       // head:"Управление магазином",
-        head:{
-            view:"toolbar", cols:[
-                {view:"label", label: "Управление магазином" },
-                { view:"icon", icon:"times-circle", css:"alter", click:"$$('shopmanage-win').close();"}
-            ]
-        }
-        ,
-        body:{
-            paddingY:10, paddingX:10, elementsConfig:{labelWidth: 140},height:500, view:"form", id:"shop-form", elements:[
+    var form = { view:"form", id:"shop-form", elements:[
 
                 {
                     "id": "tabbar",
@@ -468,7 +457,7 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
 
         ]
         }
-    };
+    ;
 
     webix.ui({
         view:"popup",
@@ -497,9 +486,88 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
     });
 
 
-    return {
+    /*return {
         setData:_setData,
 		$ui:form
-	};
+	};*/
+
+        var layout = {
+            type: "space",
+            rows:[
+               /* {
+                    height:40,
+                    cols:controls
+                },*/
+                {
+                    rows:[
+                        form,
+                        {
+                            view: "toolbar",
+                            css: "highlighted_header header6",
+                            paddingX:5,
+                            paddingY:5,
+                            height:40,
+                            cols:[{
+                                view:"pager", id:"pagerA",
+                                template:"{common.first()}{common.prev()}&nbsp; {common.pages()}&nbsp; {common.next()}{common.last()}",
+                                autosize:true,
+                                height: 35,
+                                group:5
+                            }
+
+                            ]
+                        }
+                    ]
+                }
+
+
+
+            ]
+
+        };
+
+        return {
+            $ui: layout,
+            $oninit:function(app, config){
+                var id = window.location.hash.substr(1).match(/shopmanage\/([0-9]+)/)[1];
+                record.load('/admin/index.php/part_shops/act_load?id='+id, function(data) {
+                   // $$('shops').define('value', data.title[0]);
+                    $$('app:menu').unselectAll();
+                    $$('title').data = {title: data.title[1], details: "Управление магазином"};
+                    $$('title').refresh();
+                    _setData(data, true);
+                    var  parentFilterByAll = $$('slotsGrid').filterByAll;
+                    $$('slotsGrid').filterByAll=function(){
+                        //gets filter values
+                        var seller = this.getFilter("seller").value;
+                        var time_from = this.getFilter("time_from").getValue();
+                        var time_to = this.getFilter("time_to").getValue();
+                        var status = this.getFilter("status").value;
+
+                        //unfilter if values was not selected
+                        if (!seller && !status && !time_from && !time_to) return this.filter();
+
+                        //filter using or logic
+                        this.filter(function(obj){
+                            var state = true;
+                            if (seller && seller!=obj.seller) state=false;
+                            if (status && status!=obj.status) state=false;
+                            if (time_from && time_to) {
+                                if (obj.time_from.getFullYear()+''+obj.time_from.getMonth()+''+obj.time_from.getDate() != time_from.getFullYear()+''+time_from.getMonth()+''+time_from.getDate() ||
+                                    obj.time_to.getFullYear()+''+obj.time_to.getMonth()+''+obj.time_to.getDate() != time_to.getFullYear()+''+time_to.getMonth()+''+time_to.getDate()) state=false;
+                            } else if (time_from) {
+                                if (obj.time_from.getFullYear()+''+obj.time_from.getMonth()+''+obj.time_from.getDate() != time_from.getFullYear()+''+time_from.getMonth()+''+time_from.getDate()) state=false;
+                            } else if (time_to) {
+                                if (obj.time_to.getFullYear()+''+obj.time_to.getMonth()+''+obj.time_to.getDate() != time_to.getFullYear()+''+time_to.getMonth()+''+time_to.getDate()) state=false;
+                            }
+                            return state;
+                        });
+
+
+                    };
+
+                });
+            }
+        };
 
 });
