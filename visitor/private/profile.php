@@ -54,10 +54,12 @@ switch ($oReq->getAction())
         if ($oValidator->isValid($oReq->getAll())){
 	    	$oUserReg->aData = $aUserReg;       
 	    	$oUserReg->aData['account_id'] = $oAccount->isLoggedIn();       
-	    	if ($oUserReg->aData['pass']) 	        	
-	    	    $oUserReg->aData['pass'] = md5($oUserReg->aData['pass']);
-	    	else 
-	    	 	unset($oUserReg->aData['pass']);
+	    	if (isset($oUserReg->aData['pass'])) {
+                if ($oUserReg->aData['pass'])
+                    $oUserReg->aData['pass'] = md5($oUserReg->aData['pass']);
+                else
+                    unset($oUserReg->aData['pass']);
+            }
 	    	
 	        if ($oUserReg->isUniqueEmail($oAccount->isLoggedIn()))
 	        {
@@ -70,6 +72,9 @@ switch ($oReq->getAction())
                 // для продавцов возможна смена имени
                 if ($aAccount['status']=='seller' && $aUserReg['fname']!=$aAccount['fname'])
                     $oZoomUser = $oZoom->updateUser(array('id'=>$aAccount['zoom_id'], 'type'=>1, 'first_name'=>$aUserReg['fname']));
+
+                if (isset($oUserReg->aData['country_id']) && !$oUserReg->aData['country_id'])
+                    unset($oUserReg->aData['country_id']);
 
                 if ($oZoomUser) {
                     if ($oUserReg->update()) {

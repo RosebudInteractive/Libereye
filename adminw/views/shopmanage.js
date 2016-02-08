@@ -13,7 +13,9 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
             update: "/admin/index.php/part_shops/act_createslot/id_"+data.shop_id,
             create: "/admin/index.php/part_shops/act_createslot/id_"+data.shop_id,
             todraft: "/admin/index.php/part_shops/act_todraft/id_"+data.shop_id,
-            tofree: "/admin/index.php/part_shops/act_tofree/id_"+data.shop_id
+            tofree: "/admin/index.php/part_shops/act_tofree/id_"+data.shop_id,
+            brandsIn: "/admin/index.php/part_brands/act_get/suggest_1/count_1000/?sort[title]=asc&shopIn="+data.shop_id,
+            brandsOut: "/admin/index.php/part_brands/act_get/suggest_1/count_1000/?sort[title]=asc&shopOut="+data.shop_id
         },
         id: 'shop_slot_id'
     };
@@ -178,7 +180,9 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
                 update: "/admin/index.php/part_shops/act_createslot/id_"+data.shop_id,
                 create: "/admin/index.php/part_shops/act_createslot/id_"+data.shop_id,
                 todraft: "/admin/index.php/part_shops/act_todraft/id_"+data.shop_id,
-                tofree: "/admin/index.php/part_shops/act_tofree/id_"+data.shop_id
+                tofree: "/admin/index.php/part_shops/act_tofree/id_"+data.shop_id,
+                brandsIn: "/admin/index.php/part_brands/act_get/suggest_1/count_1000/?sort[title]=asc&shopIn="+data.shop_id,
+                brandsOut: "/admin/index.php/part_brands/act_get/suggest_1/count_1000/?sort[title]=asc&shopOut="+data.shop_id
             },
             id: 'shop_slot_id'
         };
@@ -205,6 +209,8 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
                 $$('open_time6').setValue(item.open_time && item.open_time[6] ? item.open_time[6] : '');
                 $$('sellerGrid').define('url', options.urls.getsellers);
                 $$('slotsGrid').define('url', options.urls.get);
+                $$('listAllBrands').define('url', options.urls.brandsOut);
+                $$('listShopBrands').define('url', options.urls.brandsIn);
         }
     }
 
@@ -299,6 +305,8 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
             }}
         ]
     };
+
+
     var form = { view:"form", id:"shop-form", elements:[
 
                 {
@@ -321,6 +329,10 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
                         {
                             "id": "tab3",
                             "value": "Слоты"
+                        },
+                        {
+                            "id": "tab4",
+                            "value": "Бренды"
                         }
                     ]
                 },
@@ -375,8 +387,8 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
                                                     // $$('genBtnS').disable();
                                                 }
                                             }
-                                        },
-                                        url:options.urls.getsellers
+                                        }//,
+                                       // url:options.urls.getsellers
                                     }]}
 
                                 ]}
@@ -444,9 +456,108 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
                                                     this.refresh(id.row);
                                                 }
                                             }
-                                        },
-                                        url:options.urls.get
+                                        }//,
+                                       // url:options.urls.get
                                     }]}
+
+                                ]}
+                            ],
+                            "show": false
+                        },
+                        {
+                            "id": "tab4",
+                            "rows": [
+                                {cols:[
+
+                                    {rows:[
+                                        {
+                                            height: 35,
+                                            view:"toolbar",
+                                            elements:[
+                                                {view:"text", id:"listAllBrandsFilter",label:"Нет в магазине",css:"fltr", labelWidth:130
+                                                    ,
+                                                    on: {
+                                                        onTimedKeyPress:function(){
+                                                            var value = this.getValue().toLowerCase();
+                                                            $$("listAllBrands").filter(function(obj){
+                                                                return obj.value.toLowerCase().indexOf(value)!=-1;
+                                                            });
+                                                        }
+                                                    }}
+                                            ]
+                                        },
+                                        {
+
+                                            view:"list",
+                                            id:"listAllBrands",
+                                            template:"#value#",
+                                            select:"multiselect",
+                                            multiselect:true,
+                                           // url: options.urls.brandsOut,
+                                            drag:true,
+                                            on: {
+                                                onBeforeDrop: function(context, ev){
+                                                    webix.ajax().post("/admin/index.php/part_brands/act_brand2shop/remove_1", {id:context.source.join(','), shop_id:data.shop_id}, {
+                                                        success: function(text, data){
+                                                            data = data.json()
+                                                            if (data.error && data.error!="")
+                                                                webix.message({type: "error", text: data.error});
+                                                            else
+                                                                webix.message("Бренды успешно удалены из магазина");
+                                                        }
+                                                    });
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    ]}
+
+                                    ,
+
+                                    {rows:[
+                                        {
+                                            height: 35,
+                                            view:"toolbar",
+                                            elements:[
+                                                {view:"text", id:"listShopBrandsFilter",label:"Бренды магазина",css:"fltr", labelWidth:130
+                                                    ,
+                                                    on: {
+                                                        onTimedKeyPress:function(){
+                                                            var value = this.getValue().toLowerCase();
+                                                            $$("listShopBrands").filter(function(obj){
+                                                                return obj.value.toLowerCase().indexOf(value)!=-1;
+                                                            });
+                                                        }
+                                                    }}
+                                            ]
+                                        },
+                                        {
+
+                                            view:"list",
+                                            id:"listShopBrands",
+                                            template:"#value#",
+                                            select:"multiselect",
+                                            multiselect:true,
+                                           // url: options.urls.brandsIn,
+                                            drag:true,
+                                            on: {
+                                                onBeforeDrop: function(context, ev){
+                                                    webix.ajax().post("/admin/index.php/part_brands/act_brand2shop/add_1", {id:context.source.join(','), shop_id:data.shop_id}, {
+                                                        success: function(text, data){
+                                                            data = data.json()
+                                                            if (data.error && data.error!="")
+                                                                webix.message({type: "error", text: data.error});
+                                                            else
+                                                                webix.message("Бренды успешно добавлены в магазин");
+                                                        }
+                                                    });
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    ]}
+
+
 
                                 ]}
                             ],
@@ -530,9 +641,9 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
             $ui: layout,
             $oninit:function(app, config){
                 var id = window.location.hash.substr(1).match(/shopmanage\/([0-9]+)/)[1];
+                $$('app:menu').unselectAll();
+
                 record.load('/admin/index.php/part_shops/act_load?id='+id, function(data) {
-                   // $$('shops').define('value', data.title[0]);
-                    $$('app:menu').unselectAll();
                     $$('title').data = {title: data.title[1], details: "Управление магазином"};
                     $$('title').refresh();
                     _setData(data, true);
@@ -562,10 +673,7 @@ define(['helpers/record', 'helpers/grid', 'views/forms/slotgen', 'views/forms/se
                             }
                             return state;
                         });
-
-
                     };
-
                 });
             }
         };

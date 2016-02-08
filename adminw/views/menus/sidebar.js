@@ -32,7 +32,7 @@ define(function(){
 						}
 					},
 					data:[
-						{id: "main", value: "Объекты", open: true, data:[
+						//{id: "main", value: "Объекты", open: true, data:[
 							{ id: "shops", value: "Магазины", icon: "home", $css: "dashboard", details:"Управление магазинами"},
 						//	{ id: "shopmanage/:id", value: "Управление магазинином", icon: "shopmanage", $css: "shopmanage", details:"Управление магазинами"},
 							{ id: "brands", value: "Бренды", icon: "cube", $css: "brands", details:"Управление брендами"},
@@ -44,7 +44,7 @@ define(function(){
 							{ id: "orders", value: "Orders", icon: "check-square-o", $css: "orders", details:"order reports and editing"},
 							{ id: "products", value: "Products", icon: "cube", $css: "products", details:"all products"},
 							{ id: "product_edit", value: "Product Edit", icon: "pencil-square-o", details: "changing product data"}*/
-						]}/*,
+                        /*]},
 						{id: "components", open: true, value:"Components", data:[
 							{ id: "datatables", value: "Datatables", icon: "table", details: "datatable examples" },
 							{ id: "charts", value: "Charts", icon: "bar-chart-o", details: "charts examples"},

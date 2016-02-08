@@ -33,6 +33,7 @@ $_TBL['timezone'] 	        = array('timezone',          't', 'timezone_id');
 $_TBL['country'] 	        = array('country',          'c', 'country_id');
 $_TBL['currency'] 	        = array('currency',          'c', 'currency_id');
 $_TBL['timezone'] 	        = array('timezone',          't', 'timezone_id');
+$_TBL['shop2brand'] 	        = array('shop2brand',          's2b', 'shop2brand_id');
 
 
 ?>

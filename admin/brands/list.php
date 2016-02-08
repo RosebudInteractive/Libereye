@@ -11,8 +11,10 @@ Conf::loadClass('utils/Validator');
 Conf::loadClass('utils/Sorter');
 Conf::loadClass('utils/Pager');
 Conf::loadClass('Brand');
+Conf::loadClass('Shop2brand');
 
 $oBrand = new Brand();
+$oShop2brand = new Shop2brand();
 
 
 // ========== processing actions ==========
@@ -40,6 +42,13 @@ switch($oReq->getAction())
             if (isset($_GET['filter']['description']) && $_GET['filter']['description'])
                 $aCond['{#description}'] = 'pd2.phrase LIKE "%'.Database::escapeLike($_GET['filter']['description']).'%"';
 		}
+
+        if ($oReq->getInt('shopOut')) { // не входящие в магазин
+            $aCond['{#not_shop_id}'] = 'brand_id NOT IN(select brand_id from shop2brand where shop_id = '.$oReq->getInt('shopOut').')';
+        }
+        if ($oReq->getInt('shopIn')) { // входящие в магазин
+            $aCond['{#shop_id}'] = 's2b.shop_id = '.$oReq->getInt('shopIn').' AND s2b.brand_id IS NOT NULL';
+        }
 
 		$iPos = $oReq->getInt('start');
 		$iPageSize = $oReq->getInt('count', 50);
@@ -83,6 +92,27 @@ switch($oReq->getAction())
             $aErrors = $oBrand->getErrors();
    		}
         echo '{ "id":"'.$iBrandId.'", "error":'.json_encode($aErrors).'}';exit;
+   		break;
+  case 'brand2shop':
+        $aBrands = array_map('intval', explode(',',$oReq->get('id')));
+        $iShopId = $oReq->getInt('shop_id');
+        if ($aBrands && $iShopId) {
+            if ($oReq->get('remove')) {
+                if (!$oShop2brand->deleteByCond(array('shop_id'=>'='.$iShopId, 'brand_id'=>'IN('.join(',',$aBrands).')'))) {
+                    $aErrors = $oBrand->getErrors();
+                }
+            }
+            else {
+                foreach($aBrands as $nBrandId) {
+                    if (!$oShop2brand->loadBy(array('shop_id'=>'='.$iShopId, 'brand_id'=>'='.$nBrandId))) {
+                        $oShop2brand->aData = array('shop_id'=>$iShopId, 'brand_id'=>$nBrandId);
+                        if (!$oShop2brand->insert())
+                            $aErrors+= $oShop2brand->getErrors();
+                    }
+                }
+            }
+        }
+        echo '{"error":'.json_encode($aErrors).'}';exit;
    		break;
 }
 
