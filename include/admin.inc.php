@@ -98,6 +98,7 @@ $aParts = array(
         'title'   =>Conf::format('part.settings'),
         'url'     =>Conf::getUrl('admin.settings'),
         'sections'=>array(
+            'list'=>array('url' =>Conf::getUrl('admin.settings.list')),
             'settings'=>array('url' =>Conf::getUrl('admin.settings.settings')),
         ),
     ), //end part "settings"
