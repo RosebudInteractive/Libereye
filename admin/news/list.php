@@ -18,37 +18,108 @@ $oNews = new News();
 // ========== processing actions ==========
 switch($oReq->getAction())
 {
-   case 'get':
-		// delete
-		if (isset($_GET['subact']) && $_GET['subact']=='del')
-		{
-			if ($oReq->get('ids'))
-				$oNews->deleteByCond(array('news_id'=>'IN('.$oReq->get('ids').')'));
-		}
-		// search
-		$aCond = array();
-		if (isset($_GET['subact']) && $_GET['subact']=='search' && trim($_GET['query']))
-		{
-			$aCond['{#field}'] = $oReq->get('field').' LIKE "%'.Database::escapeLike($oReq->get('query')).'%"';
-		}
-		
-		$iPage = $oReq->getInt('page', 1);
-		$iPageSize = intval($_REQUEST['limit']);
-		$iPageSize = $iPageSize > 1000 ? 1000 : $iPageSize;
-		$aSort = json_decode($_REQUEST['sort']);
-		$aSort = array(
-			'property'=>isset($aSort[0]) && in_array($aSort[0]->property, array('news_id','title'))?$aSort[0]->property:'news_id', 
-			'direction'=>isset($aSort[0]) && in_array($aSort[0]->direction, array('DESC','ASC'))?$aSort[0]->direction:'DESC', 
-		);
-		list($aItems, $iCnt) = $oNews->getList($aCond, $iPage, $iPageSize, $aSort['property'].' '.$aSort['direction']);
-		echo '{"total":"'.$iCnt.'","data":'.json_encode($aItems).'}';
-		exit;
-		break;
-   case 'del':
+    case 'load':
+        $iNewsId = $oReq->getInt('id');
+        if ($iNewsId && $oNews->load($iNewsId)) {
+            echo json_encode($oNews->aData);
+            exit;
+        }
+        echo '{"error":"Новость не найдена"}';
+        exit;
+        break;
+
+    case 'get':
+        // search
+        $aCond = array();
+        if (isset($_GET['filter']))
+        {
+            if (isset($_GET['filter']['value']) && $_GET['filter']['value'])
+                $aCond['{#title}'] = 'pd1.phrase LIKE "%'.Database::escapeLike($_GET['filter']['value']).'%"';
+            if (isset($_GET['filter']['title']) && $_GET['filter']['title'])
+                $aCond['{#title}'] = 'pd1.phrase LIKE "%'.Database::escapeLike($_GET['filter']['title']).'%"';
+            if (isset($_GET['filter']['annotation']) && $_GET['filter']['annotation'])
+                $aCond['{#annotation}'] = 'pd2.phrase LIKE "%'.Database::escapeLike($_GET['filter']['annotation']).'%"';
+            if (isset($_GET['filter']['full_news']) && $_GET['filter']['full_news'])
+                $aCond['{#full_news}'] = 'pd3.phrase LIKE "%'.Database::escapeLike($_GET['filter']['full_news']).'%"';
+            if (isset($_GET['filter']['cdate']) && $_GET['filter']['cdate'] && $_GET['filter']['cdate']!='null')
+                $aCond['cdate'] = '="'.Database::date(strtotime($_GET['filter']['cdate'])).'"';
+        }
+
+        $iPos = $oReq->getInt('start');
+        $iPageSize = $oReq->getInt('count', 50);
+        $aSort = $oReq->getArray('sort' , array('news_id'=>'desc'));
+        list($aItems, $iCnt) = $oNews->getListOffset($aCond, $iPos, $iPageSize, str_replace('=', ' ', http_build_query($aSort, ' ', ', ')));
+
+        if (!$oReq->get('suggest')) {
+            echo '{"pos":' . $iPos . ', "total_count":"' . $iCnt . '","data":' . json_encode($aItems) . '}';
+        } else {
+            $aNewssSuggest = array();
+            foreach($aItems as $aItem){
+                $aNewssSuggest[] = array("id"=>$aItem['news_id'],"value"=>$aItem['title']);
+            }
+            echo json_encode($aNewssSuggest);
+        }
+
+        exit;
+        break;
+
+    case 'del':
    		if ($oNews->delete($oReq->getInt('id'))){
    			$oReq->forward(conf::getUrl('admin.accounts.list'), 'Новость была успешно удалена');
    		}
    		break;
+
+    case 'upload':
+        $iImageId = 0;
+        $sImageName = '';
+        $sType = $oReq->get('type', 'news');
+        if (isset($_FILES['upload']) && isset($_FILES['upload']['tmp_name'])) {
+            $sExt = strtolower(substr($_FILES['upload']['name'], strrpos($_FILES['upload']['name'], '.')+1));
+            if ($iImageId = $oImage->upload($_FILES['upload']['tmp_name'], $sType, 0, $sExt) ) {
+                $sImageName = $oImage->aData['name'];
+            }
+            else
+                $aErrors = $oImage->getErrors();
+        } else {
+            $aErrors[] = 'File not upload';
+        }
+        echo '{ "status":"'.($aErrors?'error':'server').'", "id":"'.$iImageId.'", "sname":"'.$sImageName.'"}';
+        exit;
+        break;
+
+    case 'update':
+    case 'create':
+        $iNewsId = $oReq->getInt('id');
+        $aNewsPost = $oReq->getArray('aNews');
+        $aImages = $oReq->get('images') ? explode(',', $oReq->get('images')) : array();
+        $oNews->aData = $aNewsPost;
+        if ($aNewsPost) {
+            if ($iNewsId) {
+                $oNews->aData['shop_id'] = $iNewsId;
+                if (!$oNews->update(array(), true, array('title', 'annotation', 'full_news'))) {
+                    $aErrors = $oNews->getErrors();
+                }
+            } else {
+                $oNews->aData['account_id'] = $oAdmin->isLoggedIn();
+                $oNews->aData['cdate'] = $oNews->aData['udate'] = Database::date();
+                if (!($iNewsId = $oNews->insert(true, array('title', 'annotation', 'full_news')))) {
+                    $aErrors = $oNews->getErrors();
+                }
+            }
+        }
+
+
+
+        echo '{ "id":"'.$iNewsId.'", "error":'.json_encode($aErrors).'}';
+        exit;
+        break;
+    case 'destroy':
+        $iNewsId = $oReq->getInt('id');
+        if (!$oNews->delete($iNewsId)){
+            $aErrors = $oNews->getErrors();
+        }
+        echo '{ "id":"'.$iNewsId.'", "error":'.json_encode($aErrors).'}';exit;
+        break;
 }
 
 
