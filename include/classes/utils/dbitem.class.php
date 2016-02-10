@@ -135,11 +135,11 @@ class DbItem extends Common
     /** Performs update of current item ( You should fill in $this->aData ...)
      * @param array $aFields fields to update: all other fields will be omitted
      *                       or empty array for no filtration
-     * @param bool  $bEscape true (default) - escape all data, false - do not escape
+     * @param bool  $mEscape true (default) - escape all data, false - do not escape, array('noescapefields')
      * @param bool  $aPhraseFields array
      * @return bool
      */
-    function update($aFields=array(), $bEscape=true, $aPhraseFields=array())
+    function update($aFields=array(), $mEscape=true, $aPhraseFields=array())
     {
 
         if (isset($this->aData[$this->sId]))
@@ -171,7 +171,7 @@ class DbItem extends Common
                 foreach($aData[$sField] as $nLangId=>$sTitle) {
                     $nPhraseDetId = $this->oDb->getField('SELECT phrase_det_id FROM phrase_det WHERE phrase_id=' . $nPhraseId . ' AND language_id=' . $nLangId);
                     if ($nPhraseDetId) {
-                        if (!$this->oDb->update('phrase_det', array('phrase' => $sTitle), 'phrase_det_id=' . $nPhraseDetId, $bEscape))
+                        if (!$this->oDb->update('phrase_det', array('phrase' => $sTitle), 'phrase_det_id=' . $nPhraseDetId, $mEscape))
                             return $this->_addError('dbitem.update');
                     } else {
                         $aValues = array(
@@ -192,7 +192,7 @@ class DbItem extends Common
         if (!$aData)
             return true;
 
-        if ($this->oDb->update($this->sTable, $aData, $this->sId.' = '.$nId, $bEscape))
+        if ($this->oDb->update($this->sTable, $aData, $this->sId.' = '.$nId, $mEscape))
             return true;
         else
             return $this->_addError('dbitem.update');

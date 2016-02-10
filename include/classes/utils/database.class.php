@@ -295,10 +295,10 @@ class Database extends Common
      * @param string $sTable  table name
      * @param array  $aValues array of column=>new_value
      * @param string $sCond   condition (without WHERE)
-     * @param boolean $bEscape true - method escapes values (with "), false - not escapes
+     * @param boolean $bEscape true - method escapes values (with "), false - not escapes | array('noescepe')
      * @return boolean true - update successfule, false - error
      */
-    function update($sTable, $aValues, $sCond, $bEscape=true)
+    function update($sTable, $aValues, $sCond, $mEscape=true)
     {
         if (!is_array($aValues))
             return false;
@@ -306,10 +306,17 @@ class Database extends Common
         $sSets = '';
         foreach ($aValues as $sCol=>$sValue)
         {
-            if ($bEscape)
-                $sSets .= $sCol.'="'.$this->escape($sValue).'",';
-            else
-                $sSets .= $sCol.'='.$sValue.',';
+            if (is_array($mEscape)) {
+                if (!in_array($sCol, $mEscape))
+                    $sSets .= $sCol . '="' . $this->escape($sValue) . '",';
+                else
+                    $sSets .= $sCol . '=' . $sValue . ',';
+            } else {
+                if ($mEscape)
+                    $sSets .= $sCol . '="' . $this->escape($sValue) . '",';
+                else
+                    $sSets .= $sCol . '=' . $sValue . ',';
+            }
         }
         $sSets[strlen($sSets)-1]=' '; //replace trailing ','
         $sSql = 'UPDATE `'.$sTable.'` SET '.$sSets.' WHERE '.$sCond;

@@ -127,7 +127,7 @@ class News extends DbItem
                 ', pd1.phrase title'.
                 ', pd2.phrase annotation'.
                 ', pd3.phrase full_news'.
-                ', (SELECT name FROM image i WHERE i.object_id='.$this->sAlias.'.news_id AND i.object_type="news" LIMIT 1) image'.
+                ', (SELECT name FROM image i WHERE i.object_id='.$this->sAlias.'.news_id AND i.object_type="news" ORDER BY image_id DESC LIMIT 1) image'.
                 ' FROM '.$this->sTable.' AS '.$this->sAlias.
                 ' LEFT JOIN phrase p1 ON p1.object_id='.$this->sAlias.'.news_id AND p1.object_type_id='.$this->nObjectType.'   AND p1.object_field="title" '.
                 ' LEFT JOIN phrase_det pd1 ON pd1.phrase_id=p1.phrase_id AND pd1.language_id='.$nLangId.'  '.

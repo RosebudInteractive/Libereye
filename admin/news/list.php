@@ -11,7 +11,9 @@ Conf::loadClass('utils/Validator');
 Conf::loadClass('utils/Sorter');
 Conf::loadClass('utils/Pager');
 Conf::loadClass('News');
+Conf::loadClass('Image');
 
+$oImage = new Image();
 $oNews = new News();
 
 
@@ -95,7 +97,8 @@ switch($oReq->getAction())
         $oNews->aData = $aNewsPost;
         if ($aNewsPost) {
             if ($iNewsId) {
-                $oNews->aData['shop_id'] = $iNewsId;
+                $oNews->aData['news_id'] = $iNewsId;
+                $oNews->aData['udate'] = Database::date();
                 if (!$oNews->update(array(), true, array('title', 'annotation', 'full_news'))) {
                     $aErrors = $oNews->getErrors();
                 }
