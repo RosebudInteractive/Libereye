@@ -4,9 +4,8 @@ define(['helpers/progress', 'helpers/record'], function(p, r){
         setData: function(d){data = d;},
 		$ui:{
             id: "formGen",
-            view:"form",
-            width:600, borderless:true,
-            //borderless:true,
+            view:"window", modal:true, id:"account-win", position:"center", width:800,
+
             elements: [ {rows : [
                 {view:"select", label:"Шоппер", name:"seller_id", id:"seller_id_gen", placeholder:"Шоппер", value:0, options:[] },
                 {cols:[

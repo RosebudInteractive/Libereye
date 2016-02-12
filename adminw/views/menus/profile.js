@@ -12,7 +12,7 @@ return {
 			{id: 3, icon: "calendar", value: "My Calendar"},
 			{id: 5, icon: "tasks", value: "My Tasks"},
 			{ $template:"Separator" },*/
-			{id: 4, icon: "sign-out", value: "Logout", click:function(){alert(1);document.location = '/admin/logout.php';}}
+			{id: 4, icon: "sign-out", value: "Logout", click:function(){document.location = '/admin/logout.php';}}
 		],
 		type:{
 			template: function(obj){

@@ -290,9 +290,10 @@ class Account extends DbItem
         $aRows = array();
         if ($iCnt)
         {
-            $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).
+           $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).
                 ', (SELECT name FROM image i WHERE i.object_id='.$this->sAlias.'.account_id AND i.object_type="account" ORDER BY image_id DESC LIMIT 1) image'.
                 ' FROM '.$this->sTable.' AS '.$this->sAlias.
+               ' WHERE '.$sCond.
                 ($sSort?(' ORDER BY '.$sSort):'').
                 ($iPageSize?(' LIMIT '.$iOffset.','.$iPageSize):'');
             $aRows = $this->oDb->getRows($sSql);

@@ -49,6 +49,11 @@ switch($oReq->getAction())
                 $aCond['cdate'] = '="'.Database::date(strtotime($_GET['filter']['cdate'])).'"';
         }
 
+        if ($oReq->getInt('shop_id')) {
+            $aCond['shop_id'] = '='.$oReq->getInt('shop_id');
+            $aCond['status'] = '="seller"';
+        }
+
         $iPos = $oReq->getInt('start');
         $iPageSize = $oReq->getInt('count', 50);
         $aSort = $oReq->getArray('sort' , array('account_id'=>'desc'));
@@ -59,7 +64,7 @@ switch($oReq->getAction())
         } else {
             $aAccountsSuggest = array();
             foreach($aItems as $aItem){
-                $aAccountsSuggest[] = array("id"=>$aItem['account_id'],"value"=>$aItem['title']);
+                $aAccountsSuggest[] = array("id"=>$aItem['account_id'],"value"=>$aItem['fname']);
             }
             echo json_encode($aAccountsSuggest);
         }
@@ -104,8 +109,10 @@ switch($oReq->getAction())
                 else unset($oAccount->aData['pass']);
                 if (!$oAccount->aData['country_id']) $oAccount->aData['country_id'] = 'NULL';
                 else $oAccount->aData['country_id'] = intval($oAccount->aData['country_id']);
-                if (!$oAccount->aData['shop_id']) $oAccount->aData['shop_id'] = 'NULL';
-                else $oAccount->aData['shop_id'] = intval($oAccount->aData['shop_id']);
+                if (isset($oAccount->aData['shop_id'])) {
+                    if (!$oAccount->aData['shop_id']) $oAccount->aData['shop_id'] = 'NULL';
+                    else $oAccount->aData['shop_id'] = intval($oAccount->aData['shop_id']);
+                }
                 if ($oAccount->isUniqueEmail($iAccountId)) {
                     if (!$oAccount->update(array(), array('country_id', 'shop_id'))) {
                         $aErrors = $oAccount->getErrors();

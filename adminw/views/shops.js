@@ -31,7 +31,15 @@ define([
             }
         }},{ view: "button", id:'shop-manage-btn', disabled:true, type: "iconButton", icon: "cog", label: "Управлять", width: 120, click: function(){
             var grid = $$('grid-shop'), selId = grid.getSelectedId(), that=this;
-            document.location = "/adminw/#!/app/shopmanage/"+grid.getItem(selId)['shop_id'];
+            //document.location = "/adminw/#!/app/shopmanage/"+grid.getItem(selId)['shop_id'];
+           // SHOPID = grid.getItem(selId)['shop_id'];
+           // $$("app:menu").getItem('schedule');
+            var shopId = grid.getItem(selId)['shop_id'];
+            $$('app:menu').getItem('schedule').params = shopId;
+            $$('app:menu').getItem('sellers').params = shopId;
+            $$('app:menu').getItem('slots').params = shopId;
+            $$('app:menu').getItem('shopbrands').params = shopId;
+            document.location = "/adminw/#!/app/schedule/"+shopId;
            return;
             if (selId) {
                 var id = grid.getItem(selId)['shop_id'];
