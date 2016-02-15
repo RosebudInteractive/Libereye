@@ -107,6 +107,8 @@ switch($oReq->getAction())
                 $oAccount->aData['account_id'] = $iAccountId;
                 if ($oAccount->aData['pass']) $oAccount->aData['pass'] = md5($oAccount->aData['pass']);
                 else unset($oAccount->aData['pass']);
+                if ($aImages) $oAccount->aData['image_id'] = 'NULL';
+                    $oAccount->aData['image_id'] = intval($aImages[0]);
                 if (!$oAccount->aData['country_id']) $oAccount->aData['country_id'] = 'NULL';
                 else $oAccount->aData['country_id'] = intval($oAccount->aData['country_id']);
                 if (isset($oAccount->aData['shop_id'])) {
@@ -114,19 +116,21 @@ switch($oReq->getAction())
                     else $oAccount->aData['shop_id'] = intval($oAccount->aData['shop_id']);
                 }
                 if ($oAccount->isUniqueEmail($iAccountId)) {
-                    if (!$oAccount->update(array(), array('country_id', 'shop_id'))) {
+                    if (!$oAccount->update(array(), array('country_id', 'shop_id', 'image_id'))) {
                         $aErrors = $oAccount->getErrors();
                     }
                 } else $aErrors[] = 'Пользователь с таким email уже зарегистрирован';
             } else {
                 $oAccount->aData['pass'] = md5($oAccount->aData['pass']);
                 $oAccount->aData['cdate'] = Database::date();
+                if (!$aImages) $oAccount->aData['image_id'] = 'NULL';
+                else $oAccount->aData['image_id'] = intval($aImages[0]);
                 if (!$oAccount->aData['country_id']) $oAccount->aData['country_id'] = 'NULL';
                 else $oAccount->aData['country_id'] = intval($oAccount->aData['country_id']);
                 if (!$oAccount->aData['shop_id']) $oAccount->aData['shop_id'] = 'NULL';
                 else $oAccount->aData['shop_id'] = intval($oAccount->aData['shop_id']);
                 if ($oAccount->isUniqueEmail()) {
-                    if (!($iAccountId = $oAccount->insert(array('country_id', 'shop_id')))) {
+                    if (!($iAccountId = $oAccount->insert(array('country_id', 'shop_id', 'image_id')))) {
                         $aErrors = $oAccount->getErrors();
                     }
                 } else $aErrors[] = 'Пользователь с таким email уже зарегистрирован';
