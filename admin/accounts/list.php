@@ -107,7 +107,7 @@ switch($oReq->getAction())
                 $oAccount->aData['account_id'] = $iAccountId;
                 if ($oAccount->aData['pass']) $oAccount->aData['pass'] = md5($oAccount->aData['pass']);
                 else unset($oAccount->aData['pass']);
-                if ($aImages) $oAccount->aData['image_id'] = 'NULL';
+                if ($aImages && intval($aImages[0]))
                     $oAccount->aData['image_id'] = intval($aImages[0]);
                 if (!$oAccount->aData['country_id']) $oAccount->aData['country_id'] = 'NULL';
                 else $oAccount->aData['country_id'] = intval($oAccount->aData['country_id']);
@@ -123,8 +123,8 @@ switch($oReq->getAction())
             } else {
                 $oAccount->aData['pass'] = md5($oAccount->aData['pass']);
                 $oAccount->aData['cdate'] = Database::date();
-                if (!$aImages) $oAccount->aData['image_id'] = 'NULL';
-                else $oAccount->aData['image_id'] = intval($aImages[0]);
+                if ($aImages && intval($aImages[0]))
+                    $oAccount->aData['image_id'] = intval($aImages[0]);
                 if (!$oAccount->aData['country_id']) $oAccount->aData['country_id'] = 'NULL';
                 else $oAccount->aData['country_id'] = intval($oAccount->aData['country_id']);
                 if (!$oAccount->aData['shop_id']) $oAccount->aData['shop_id'] = 'NULL';
