@@ -23,6 +23,7 @@ if (!$iAdminId)
 else {
 	$oAdmin->load($oAdmin->isLoggedIn());
 	$aLoginUserData = $oAdmin->aData;
+    //$oReq->forward('/adminw/');
 }
 //END initialisation
 

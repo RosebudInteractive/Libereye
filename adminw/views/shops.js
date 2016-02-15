@@ -35,11 +35,11 @@ define([
            // SHOPID = grid.getItem(selId)['shop_id'];
            // $$("app:menu").getItem('schedule');
             var shopId = grid.getItem(selId)['shop_id'];
-            $$('app:menu').getItem('schedule').params = shopId;
+           /* $$('app:menu').getItem('schedule').params = shopId;
             $$('app:menu').getItem('sellers').params = shopId;
             $$('app:menu').getItem('slots').params = shopId;
-            $$('app:menu').getItem('shopbrands').params = shopId;
-            document.location = "/adminw/#!/app/schedule/"+shopId;
+            $$('app:menu').getItem('shopbrands').params = shopId;*/
+            document.location = "/adminw/shop#!/appshop/schedule/"+shopId;
            return;
             if (selId) {
                 var id = grid.getItem(selId)['shop_id'];

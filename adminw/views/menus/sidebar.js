@@ -28,7 +28,7 @@ define(function(){
 						},
 						onAfterSelect:function(id){
                             var item = this.getItem(id), params='';
-                            if (item.params) {
+                           /* if (item.params) {
                                 params = '/'+item.params.replace(/^[\/]+/g, '');
                             } else {
                                   var re = new RegExp('\!\/app\/'+id+'(.*)'), match = window.location.hash.substr(1).match(re);
@@ -39,7 +39,7 @@ define(function(){
                                 $$('app:menu').getItem('sellers').params = params;
                                 $$('app:menu').getItem('slots').params = params;
                                 $$('app:menu').getItem('shopbrands').params = params;
-                            }
+                            }*/
 
 							this.$scope.show("./"+id+params);
                             if (params == '')
@@ -56,17 +56,17 @@ define(function(){
                             { id: "currencies", value: "Валюты", icon: "bar-chart-o",  $css: "countries", details:"Управление валютами"},
                             { id: "timezones", value: "Временные зоны", icon: "calendar",  $css: "timezones", details:"Управление временными зонами"},
                             { id: "news", value: "Новости", icon: "pencil-square-o",  $css: "news", details:"Управление новостями"},
-                            { id: "settings", value: "Настройки", icon: "tasks",  $css: "settings", details:"Управление настройками"},/*,
+                            { id: "settings", value: "Настройки", icon: "tasks",  $css: "settings", details:"Управление настройками"}/*,
 							{ id: "dashboard", value: "Dashboard", icon: "home",  $css: "dashboard", details:"reports and statistics"},
 							{ id: "orders", value: "Orders", icon: "check-square-o",  $css: "orders", details:"order reports and editing"},
 							{ id: "products", value: "Products", icon: "cube",  $css: "products", details:"all products"},
 							{ id: "product_edit", value: "Product Edit", icon: "pencil-square-o", details: "changing product data"}*/
                       //  ]},
 						//{id: "shopmenu", value: "Управление магазином", open: true, data:[
-							{ id: "schedule", hidden:true, value: "Расписание", icon: "calendar",  $css: "calendar", details:"Управление расписанием", shop:true},
+							/*{ id: "schedule", hidden:true, value: "Расписание", icon: "calendar",  $css: "calendar", details:"Управление расписанием", shop:true},
 							{ id: "sellers", value: "Шопперы", icon: "male",  $css: "male", details:"Управление шопперами", shop:true},
 							{ id: "slots", value: "Слоты", icon: "list-alt",  $css: "list-alt", details:"Управление слотами", shop:true},
-							{ id: "shopbrands", value: "Бренды", icon: "cube",  $css: "cube", details:"Управление брендами", shop:true}
+							{ id: "shopbrands", value: "Бренды", icon: "cube",  $css: "cube", details:"Управление брендами", shop:true}*/
                             /*]},
 						{id: "components", open: true, value:"Components", data:[
 							{ id: "datatables", value: "Datatables", icon: "table", details: "datatable examples" },

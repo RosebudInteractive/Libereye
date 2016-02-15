@@ -24,24 +24,24 @@ define([], function(){
 			}
 
             // меню магазина
-            if ($$('app:menu')) {
-                var m = $$('app:menu');
-                if (name.page=='schedule' || name.page=='sellers' || name.page=='slots' || name.page=='shopbrands') {
+            /*if ($$('app:menu')) {
+             var m = $$('app:menu');
+             if (name.page=='schedule' || name.page=='sellers' || name.page=='slots' || name.page=='shopbrands') {
 
-//                    $$('app:menu').getItem('schedule').p
+             //                    $$('app:menu').getItem('schedule').p
 
-                    m.data.each(function(obj){
-                        if(obj.id && m.getItemNode(obj.id))
-                            m.getItemNode(obj.id).parentNode.style.display =  obj.shop?'':'none';
-                    });
-                } else {
-                    m.data.each(function(obj){
-                        if(obj.id && m.getItemNode(obj.id))
-                            m.getItemNode(obj.id).parentNode.style.display =  obj.shop?'none':'';
-                    });
-                }
+             m.data.each(function(obj){
+             if(obj.id && m.getItemNode(obj.id))
+             m.getItemNode(obj.id).parentNode.style.display =  obj.shop?'':'none';
+             });
+             } else {
+             m.data.each(function(obj){
+             if(obj.id && m.getItemNode(obj.id))
+             m.getItemNode(obj.id).parentNode.style.display =  obj.shop?'none':'';
+             });
+             }
 
-            }
+             }*/
 
 		},
 
