@@ -159,6 +159,7 @@ switch($oReq->getAction())
                 foreach ($aItems as $nKey => $aItem) {
                     $aItems[$nKey]['time_from'] = Database::date(strtotime($aItem['time_from'])+$aShop['time_shift']*60);
                     $aItems[$nKey]['time_to'] = Database::date(strtotime($aItem['time_to'])+$aShop['time_shift']*60);
+                    $aItems[$nKey]['fname'] = $aItem['fname']?$aItem['fname']:'';
                 }
                 echo '{"pos":' . $iPos . ', "total_count":"' . $iCnt . '","data":' . json_encode($aItems) . '}';
             } else {

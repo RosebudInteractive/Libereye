@@ -99,8 +99,7 @@ define([
                     $init:function(obj){
                         obj.time_from = new Date(obj.time_from);
                         obj.time_to = new Date(obj.time_to);
-
-
+                        obj.udate = new Date(obj.udate);
                     }
                 },
                 columns:[
@@ -109,7 +108,14 @@ define([
                     { id:"seller",	sort:"text", header:["Шоппер", {content:"selectFilter"}], width:250},
                     { id:"time_from", sort:"int",	header:["Дата начала", {content:"datepickerFilter"}] , width:150, format:webix.Date.dateToStr("%d.%m.%y %H:%i")},
                     { id:"time_to", sort:"int",	header:["Дата конца", {content:"datepickerFilter"}], 	width:150, format:webix.Date.dateToStr("%d.%m.%y %H:%i")},
-                    { id:"status",	sort:"text",	header:["Статус", {content:"selectFilter"}], 	width:100}
+                    { id:"status",	sort:"text",	header:["Статус", {content:"selectFilter"}], 	width:100},
+                    { id:"fname",	sort:"text", header:["Покупатель", {content:"selectFilter"}], width:250},
+                    { id:"udate",	sort:"text", header:["Дата брони", {content:"datepickerFilter"}], 	width:150, format:webix.Date.dateToStr("%d.%m.%y %H:%i"),template:function(obj){
+                        if (obj.status == 'booked')
+                            return (webix.Date.dateToStr("%d.%m.%y %H:%i"))(obj.udate);
+                        else
+                            return "-";
+                    }}
                 ],
                 select:"row",
                 multiselect:true,

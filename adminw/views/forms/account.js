@@ -174,10 +174,10 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                         }
                     ]
                 }
-            ],
+            ]/*,
             scheme:{
                 $init:function(obj){console.log(obj);_setFields(obj);}
-            }
+            }*/
         }
     }
 
