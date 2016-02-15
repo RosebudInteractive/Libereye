@@ -4,7 +4,13 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
 
     function _setData(item) {
         data = item;
-        $$('account-form').setValues({
+        _setFields($$('account-form'));
+    }
+
+    function _setFields(obj) {
+        var item = data;
+        obj.clearValidation();
+        obj.setValues({
             id:item.account_id,
             "aAccount[fname]":item.fname?item.fname:'',
             "aAccount[email]":item.email?item.email:'',
@@ -21,12 +27,9 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
         }, true);
         $$('account-win').getHead().setHTML(item.account_id==0?'Добавить пользователя':'Редактирование пользователя');
         $$('save-account-btn').setValue(item.account_id==0?'Добавить':'Сохранить');$$('save-account-btn').refresh();
-        $$('account-form').clearValidation();
-        $$('doclist').clearAll();
-        $$('image').setValues({src:item.image && item.image!=""?('/images/account/'+item.image):null});
+        $$('account-doclist').clearAll();
+        $$('account-image').setValues({src:item.image && item.image!=""?('/images/account/'+item.image):null});
     }
-
-   // var shopValues = new webix.DataCollection({ url: '/admin/index.php/part_shops/act_get/suggest_1'});
 
     var form = {
         view:"window", modal:true, id:"account-win", position:"center", width:800,
@@ -43,12 +46,12 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                                     return '<a href="'+obj.src+'" target="_blank"><img src="'+obj.src+'" height="30"/></a>';
                                 else
                                     return 'нет';
-                            }, id:'image', width:100,borderless:true},
-                            { view:"list", scroll:false, id:"doclist", type:"uploader", borderless:true },{
+                            }, id:'account-image', width:100,borderless:true},
+                            { view:"list", scroll:false, id:"account-doclist", type:"uploader", borderless:true },{
                                 view:"uploader", upload:"/admin/index.php/part_shops/act_upload/type_account/",
-                                id:"files", name:"files",
+                                id:"account-files", name:"files",
                                 value:"Выбрать",
-                                link:"doclist",
+                                link:"account-doclist",
                                 autosend:false, //!important
                                 sync: false, width:100, multiple:false,borderless:true
                             }]},
@@ -79,15 +82,12 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                             "id": "pass"
                         },
                         {view:"select", label:"Статус", name:"aAccount[status]", id:"status", value:'seller', options:[{id:'client', value:'Клиент'},{id:'seller', value:'Шоппер'},{id:'admin', value:'Админ'}] },
-
-
                         {label:"Магазин шоппера", name:"aAccount[shop_id]", id:"shop_id", value:0,  view:"richselect", options:{
                                 body:{
                                     url: '/admin/index.php/part_shops/act_get/suggest_1/?sort[title]=asc&count=1000'
                                 }
                             }
                         },
-
                         {cols:[
                             {
                                 "view": "text",
@@ -102,8 +102,6 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                             }
                             }
                         ]},
-
-
                         {cols:[
                             {
                                 "view": "text",
@@ -143,18 +141,15 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
 
                             }
                         ]},
-
-
-
                         {
                             "margin": 5,
                             "cols": [
                                 {},
                                 { view:"button", id:"save-account-btn", type:"form", value: "Сохранить", click:function(){
                                     var that = this;
-                                    $$("files").send(function(){ //sending files
+                                    $$("account-files").send(function(){ //sending files
                                         var images = [];
-                                        $$("files").files.data.each(function(obj){
+                                        $$("account-files").files.data.each(function(obj){
                                             var status = obj.status;
                                             if(status=='server' && obj.id!="0") {
                                                 images.push(obj.id);
@@ -179,8 +174,10 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                         }
                     ]
                 }
-
-            ]
+            ],
+            scheme:{
+                $init:function(obj){console.log(obj);_setFields(obj);}
+            }
         }
     }
 

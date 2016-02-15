@@ -1,9 +1,10 @@
 define([
     "views/forms/shop",
-    "views/forms/shopmanage",
+   // "views/forms/shopmanage",
     "helpers/grid",
     "helpers/record"
-], function(shopform, shopmanage, grid, record){
+//], function(shopform, shopmanage, grid, record){
+], function(shopform, grid, record){
 
     var controls = [
         { view: "button", id:'addBtn', type: "iconButton", icon: "plus", label: "Добавить", width: 120, click: function(){
@@ -41,7 +42,7 @@ define([
             $$('app:menu').getItem('shopbrands').params = shopId;*/
             document.location = "/adminw/shop#!/appshop/schedule/"+shopId;
            return;
-            if (selId) {
+            /*if (selId) {
                 var id = grid.getItem(selId)['shop_id'];
                 record.load('/admin/index.php/part_shops/act_load?id='+id, function(data){
                     shopmanage.setData(data, false);
@@ -82,7 +83,7 @@ define([
                     ui.show();
 
                 });
-            }
+            }*/
         }},
         {},
         { view: "icon", icon: "refresh",width: 40 , click: function(){

@@ -5,7 +5,7 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
     function _setData(item, setfields) {
         data = item;
         if (setfields) {
-            $$('account-form').setValues({
+            $$('account-form2').setValues({
                 id:item.account_id,
                 "aAccount[fname]":item.fname?item.fname:'',
                 "aAccount[email]":item.email?item.email:'',
@@ -18,9 +18,9 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                 "aAccount[phone]":item.phone?item.phone:'',
                 "aAccount[pass]":''
             }, true);
-            $$('account-win').getHead().setHTML(item.account_id==0?'Добавить шоппера':'Редактирование шоппера');
+            $$('account-win2').getHead().setHTML(item.account_id==0?'Добавить шоппера':'Редактирование шоппера');
             $$('save-account-btn').setValue(item.account_id==0?'Добавить':'Сохранить');$$('save-account-btn').refresh();
-            $$('account-form').clearValidation();
+            $$('account-form2').clearValidation();
             $$('doclist').clearAll();
             $$('image').setValues({src:item.image && item.image!=""?('/images/account/'+item.image):null});
         }
@@ -29,10 +29,10 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
    // var shopValues = new webix.DataCollection({ url: '/admin/index.php/part_shops/act_get/suggest_1'});
 
     var form = {
-        view:"window", modal:true, id:"account-win", position:"center", width:800,
+        view:"window", modal:true, id:"account-win2", position:"center", width:800,
         head:"Добавить шоппера",
         body:{
-            paddingY:20, paddingX:30, elementsConfig:{labelWidth: 140}, view:"form", id:"account-form", elements:[
+            paddingY:20, paddingX:30, elementsConfig:{labelWidth: 140}, view:"form", id:"account-form2", elements:[
                 {
                     "rows": [
                         {cols:[
@@ -151,9 +151,9 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                                                 images.push(obj.id);
                                             }
                                         });
-                                        var data = $$('account-form').getValues();
+                                        var data = $$('account-form2').getValues();
                                         data.images = images.join(',');
-                                        if ($$("account-form").validate()) {
+                                        if ($$("account-form2").validate()) {
                                             record.save("/admin/index.php/part_accounts/act_create", data, function(data){
                                                 if (!data.error || data.error.length == 0) {
                                                     that.getTopParentView().hide();
