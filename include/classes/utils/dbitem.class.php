@@ -95,11 +95,11 @@ class DbItem extends Common
     /** Performs insert.
     * @return int new item ID or false on error
     */
-    function insert($bEscape=true, $aPhraseFields=array())
+    function insert($mEscape=true, $aPhraseFields=array())
     {
         $aData = $this->aData;
         $this->_filterData();
-        $nId = $this->oDb->insert($this->sTable, $this->aData, $bEscape);
+        $nId = $this->oDb->insert($this->sTable, $this->aData, $mEscape);
         if (!$nId)
             return $this->_addError('dbitem.insert');
 

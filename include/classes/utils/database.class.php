@@ -268,19 +268,29 @@ class Database extends Common
      * @param boolean $bEscape true - method escapes values (with "), false - not escapes
      * @return int last ID (or 0 on error)
      */
-    function insert($sTable, $aValues, $bEscape=true)
+    function insert($sTable, $aValues, $mEscape=true)
     {
-            
         $sCols = implode(',',array_keys($aValues));
-        if ($bEscape)
-        {
-            $aValues = $this->escape($aValues);
-            $sVals = '';
-            if ($aValues)
-                $sVals = '"'.implode('","',array_values($aValues)).'"';
+        if (is_array($mEscape)) {
+            $aVals = array();
+            foreach ($aValues as $sCol=>$sValue) {
+                if (!in_array($sCol, $mEscape))
+                    $aVals[] = '"'.$this->escape($sValue).'"';
+                else
+                    $aVals[] = $this->escape($sValue);
+            }
+            $sVals = join(',', $aVals);
+        } else {
+            if ($mEscape)
+            {
+                $aValues = $this->escape($aValues);
+                $sVals = '';
+                if ($aValues)
+                    $sVals = '"'.implode('","',array_values($aValues)).'"';
+            }
+            else
+                $sVals = implode(',',array_values($aValues));
         }
-        else
-            $sVals = implode(',',array_values($aValues));
 
         $sSql = 'INSERT INTO `'.$sTable.'` '.
                 '        ('.$sCols.')'.

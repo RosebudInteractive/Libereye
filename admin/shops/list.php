@@ -67,7 +67,7 @@ switch($oReq->getAction())
         if (!$oReq->get('suggest'))
             echo '{"pos":'.$iPos.', "total_count":"'.$iCnt.'","data":'.json_encode($aItems).'}';
         else {
-            $aShopsSuggest = array(array('id'=>'', 'value'=>''));
+            $aShopsSuggest = array(array('id'=>'0', 'value'=>'нет'));
             foreach($aItems as $aItem){
                 $aShopsSuggest[] = array("id"=>$aItem['shop_id'],"value"=>$aItem['title']);
             }
