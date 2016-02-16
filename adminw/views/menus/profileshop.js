@@ -8,18 +8,16 @@ return {
 		padding:0,
         click:function(id){
             switch(id) {
+                case "1":
+                    document.location = '/adminw/#!/app/shops';
+                    break;
                 case "2":
                     document.location = '/admin/logout.php';
                     break;
             }
-            console.log(arguments);
         },
 		data: [
-			/*{id: 1, icon: "user", value: "My Profile"},
-			{id: 2, icon: "cog", value: "My Account"},
-			{id: 3, icon: "calendar", value: "My Calendar"},*/
-			//{id: 1, icon: "tasks", value: "Админка", hidden:USER.status != 'admin'},
-            //{ $template:"Separator" },
+			{id: 1, icon: "tasks", value: "Админка", hidden:USER.status == 'admin'},
 			{id: 2, icon: "sign-out", value: "Выход"}
 		],
 		type:{
@@ -29,7 +27,6 @@ return {
 				return "<span class='webix_icon alerts fa-"+obj.icon+"'></span><span>"+obj.value+"</span>";
 			}
 		}
-
 	}
 };
 

@@ -2,7 +2,7 @@ define([
 	"views/menus/search",
 	"views/menus/mail",
 	"views/menus/message",
-	"views/menus/profile",
+	"views/menus/profileshop",
 	"views/menus/sidebarshop",
 	"views/webix/icon",
 	"views/webix/menutree"
@@ -17,7 +17,7 @@ define([
 
 			{ height:46, id: "person_template", css: "header_person", borderless:true, width: 180, data: USER,
 				template: function(obj){
-					var html = 	"<div style='height:100%;width:100%;' onclick='webix.$$(\"profilePopup\").show(this)'>";
+					var html = 	"<div style='height:100%;width:100%;' onclick='if (USER.status != \"admin\") webix.$$(\"profilePopup\").hideItem(\"1\");webix.$$(\"profilePopup\").show(this);'>";
 					html += (obj.image?"<img class='photo' src='/images/account/"+obj.image+"' />":'')+"<span class='name'>"+obj.fname+"</span>";
 					html += "<span class='webix_icon fa-angle-down'></span></div>";
 					return html;

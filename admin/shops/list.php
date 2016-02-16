@@ -151,7 +151,7 @@ switch($oReq->getAction())
             }
 
             $iPos = $oReq->getInt('start');
-            $iPageSize = $oReq->getInt('count', 10000);
+            $iPageSize = $oReq->getInt('count', 10000.2);
             $aSort = $oReq->getArray('sort' , array('time_from'=>'asc'));
             list($aItems, $iCnt) = $oShopSlot->getListOffset($aCond, $iPos, $iPageSize, str_replace('=', ' ', http_build_query($aSort, ' ', ', ')));
 

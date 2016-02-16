@@ -34,6 +34,11 @@ $_TBL['country'] 	        = array('country',          'c', 'country_id');
 $_TBL['currency'] 	        = array('currency',          'c', 'currency_id');
 $_TBL['timezone'] 	        = array('timezone',          't', 'timezone_id');
 $_TBL['shop2brand'] 	        = array('shop2brand',          's2b', 'shop2brand_id');
+$_TBL['box'] 	        = array('box',          'b', 'box_id');
+$_TBL['region'] 	        = array('region',          'r', 'region_id');
+$_TBL['carrier'] 	        = array('carrier',          'c', 'carrier_id');
+$_TBL['region_rate'] 	        = array('region_rate',          'rr', 'region_rate_id');
+
 
 
 ?>

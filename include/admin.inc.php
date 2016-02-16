@@ -66,6 +66,27 @@ $aParts = array(
             'brand_edit'=>array('url' =>Conf::getUrl('admin.brands.brand_edit')),
         ),
     ), //end part "brands"
+    'boxes' => array(
+        'title'   =>Conf::format('part.boxes'),
+        'url'     =>Conf::getUrl('admin.boxes'),
+        'sections'=>array(
+            'list'=>array('url' =>Conf::getUrl('admin.boxes.list')),
+        ),
+    ), //end part "brands"
+    'carriers' => array(
+        'title'   =>Conf::format('part.carriers'),
+        'url'     =>Conf::getUrl('admin.carriers'),
+        'sections'=>array(
+            'list'=>array('url' =>Conf::getUrl('admin.carriers.list')),
+        ),
+    ), //end part "brands"
+    'regions' => array(
+        'title'   =>Conf::format('part.regions'),
+        'url'     =>Conf::getUrl('admin.regions'),
+        'sections'=>array(
+            'list'=>array('url' =>Conf::getUrl('admin.regions.list')),
+        ),
+    ), //end part "brands"
     'countrys' => array(
         'title'   =>Conf::format('part.countrys'),
         'url'     =>Conf::getUrl('admin.countrys'),
