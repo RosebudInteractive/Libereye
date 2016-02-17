@@ -233,6 +233,10 @@ class Conf
             return true;      //поправка на час вперед
         return false;
     }
+
+    static  function getFloat($sStr) {
+
+    }
 }
 
 ?>

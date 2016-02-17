@@ -151,7 +151,7 @@ class Region extends DbItem
             ' LEFT JOIN phrase_det pd1 ON pd1.phrase_id=p1.phrase_id AND pd1.language_id='.$nLangId.'  '.
             ($sCond?'  WHERE '.$sCond:'').
             '  ORDER BY '.($sSort?$sSort:$sValue).
-            ' LIMIT '.$nLimit;
+            ($nLimit?' LIMIT '.$nLimit:'');
         $aRows = $this->oDb->getRows($sSql);
         $aRes = array();
         foreach($aRows as $aRow)

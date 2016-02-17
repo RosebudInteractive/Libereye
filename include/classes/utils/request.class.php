@@ -309,5 +309,9 @@ class Request
     {
         return $this->_aSubMenu;
     }
+
+    function getStrFloat($sStr) {
+        return floatval(str_replace(',', '.', trim($sStr)));
+    }
 }
 ?>

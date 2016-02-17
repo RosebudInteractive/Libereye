@@ -6,9 +6,15 @@ define([
 
     var controls = [
         { view: "button", id:'addBtn', type: "iconButton", icon: "plus", label: "Добавить", width: 120, click: function(){
-            var ui = this.$scope.ui(carrierform.$ui);
+           /* var ui = this.$scope.ui(carrierform.$ui);
             carrierform.setData({carrier_id:0});
-            ui.show();
+            ui.show();*/
+            record.load('/admin/index.php/part_carriers/act_loadrates', function(data){
+                var ui = that.$scope.ui(carrierform.$ui);
+                data.carrier_id = 0;
+                carrierform.setData(data);
+                ui.show();
+            });
         }},
         { view: "button", id:'carrier-edit-btn', disabled:true, type: "iconButton", icon: "pencil", label: "Редактировать", width: 150, click: function(){
             var grid = $$('grid-carrier'), selId = grid.getSelectedId(), that=this;

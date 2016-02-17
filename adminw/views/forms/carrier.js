@@ -22,6 +22,41 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                 $$(translated[j]+LANGUAGES[i].language_id).setValue(value);
             }
         }
+
+        if ($$('carrier-form').getValues()['aRegion[1][first_kg_price]'] == undefined) {
+            var rates = { rows:[
+                { template:"Стоимость доставки по регионам", type:"section"},
+                {cols:[{ view:"label", label:"", height:20 }, { view:"label", label:"Цена первого кг", height:20 }, { view:"label", label:"Шаг стоимости", height:20 }]},
+                {view:"scrollview",
+                    id:"verses",
+                    scroll:"y", //vertical scrolling
+                    height:150,
+                    borderless:true,
+                    body:{rows:[
+                        /*{cols:[{ view:"label", label:"Москва" }, { view:"text", name:'aRegion[1][first_kg_price]',  value:'' }, { view:"text", name:'aRegion[1][kg_step_price]', value:'' }]},
+                        */
+                    ]
+                    }
+                }]
+            }
+            for(var i in item.rates) {
+                rates.rows[2].body.rows.push({
+                    cols:[
+                        { view:"label", label:item.rates[i].title},
+                        { view:"text", id:'region'+item.rates[i].region_id, name:'aRegion['+item.rates[i].region_id+'][first_kg_price]',  value:item.rates[i].first_kg_price },
+                        { view:"text", name:'aRegion['+item.rates[i].region_id+'][kg_step_price]', value:item.rates[i].kg_step_price }
+                    ]
+                });
+            }
+            $$("carrier-form").addView(rates, 4);
+        } else {
+            for(var i in item.rates) {
+                var values = {};
+                values['aRegion['+item.rates[i].region_id+'][first_kg_price]'] = item.rates[i].first_kg_price;
+                values['aRegion['+item.rates[i].region_id+'][kg_step_price]'] = item.rates[i].kg_step_price;
+                $$('carrier-form').setValues(values, true);
+            }
+        }
     }
 
     var form = {
@@ -29,8 +64,8 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
         head:"Добавить перевозчика",
         body:{
             paddingY:20, paddingX:30, elementsConfig:{labelWidth: 200}, view:"form", id:"carrier-form", elements:[
-                {
-                    "rows": [
+
+
                         {
                             "view": "text",
                             "label": "Коэффициент",
@@ -52,28 +87,6 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                             "name": "aCarrier[insurance]",
                             "id": "insurance"
                         },
-                        { rows:[
-                                { template:"Стоимость доставки по регионам", type:"section"},
-                            {cols:[{ view:"label", label:"", height:20 }, { view:"label", label:"Цена первого кг", height:20 }, { view:"label", label:"Шаг стоимости", height:20 }]},
-                            {view:"scrollview",
-                                id:"verses",
-                                scroll:"y", //vertical scrolling
-                                height:200,
-                                borderless:true,
-                                body:{rows:[
-                                        {cols:[{ view:"label", label:"Москва" }, { view:"text", name:'aRegion[1][first_kg_price]',  value:'' }, { view:"text", name:'aRegion[1][kg_step_price]', value:'' }]},
-                                        {cols:[{ view:"label", label:"Москва" }, { view:"text", name:'aRegion[1][first_kg_price]',  value:'' }, { view:"text", name:'aRegion[1][kg_step_price]', value:'' }]},
-                                        {cols:[{ view:"label", label:"Москва" }, { view:"text", name:'aRegion[1][first_kg_price]',  value:'' }, { view:"text", name:'aRegion[1][kg_step_price]', value:'' }]},
-                                        {cols:[{ view:"label", label:"Москва" }, { view:"text", name:'aRegion[1][first_kg_price]',  value:'' }, { view:"text", name:'aRegion[1][kg_step_price]', value:'' }]},
-                                        {cols:[{ view:"label", label:"Москва" }, { view:"text", name:'aRegion[1][first_kg_price]',  value:'' }, { view:"text", name:'aRegion[1][kg_step_price]', value:'' }]},
-                                        {cols:[{ view:"label", label:"Москва" }, { view:"text", name:'aRegion[1][first_kg_price]',  value:'' }, { view:"text", name:'aRegion[1][kg_step_price]', value:'' }]},
-                                        {cols:[{ view:"label", label:"Москва" }, { view:"text", name:'aRegion[1][first_kg_price]',  value:'' }, { view:"text", name:'aRegion[1][kg_step_price]', value:'' }]},
-                                        {cols:[{ view:"label", label:"Питер" }, { view:"text", name:'aRegion[2][first_kg_price]',  value:'' }, { view:"text", name:'aRegion[2][kg_step_price]', value:'' }]}
-                                    ]
-                                }
-                            }]
-                        }
-                        ,
 
                         {
                             "id": "tabbar",
@@ -86,7 +99,6 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                             "options": [
                             ]
                         },
-                        {},
                         {
                             "cells": [
                             ]
@@ -109,19 +121,19 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                                 }}
                             ]
                         }
-                    ]
-                }
+
+
 
             ]
         }
     }
 
     for(var i in LANGUAGES) {
-        form.body.elements[0].rows[5].options.push({
+        form.body.elements[4].options.push({
             "id": "tab"+LANGUAGES[i].language_id,
             "value": LANGUAGES[i].title
         });
-        form.body.elements[0].rows[7].cells.push({
+        form.body.elements[5].cells.push({
             "id": "tab"+LANGUAGES[i].language_id,
             "rows": [
                 {
