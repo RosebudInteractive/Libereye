@@ -22,6 +22,9 @@ $oRegionRate = new RegionRate();
 // ========== processing actions ==========
 switch($oReq->getAction())
 {
+    case 'calc':
+        echo '{"result":'.$oCarrier->calcDelivery($oReq->getArray('aCalc')).'}';exit;
+        break;
    case 'loadrates':
        $aRegions = $oRegion->getHash('title', array(), 'region_id asc');
        foreach($aRegions as $nRegionId=>$sRegion)

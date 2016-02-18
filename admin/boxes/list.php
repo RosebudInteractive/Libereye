@@ -49,9 +49,12 @@ switch($oReq->getAction())
 		$aSort = $oReq->getArray('sort' , array('box_id'=>'desc'));
 		list($aItems, $iCnt) = $oBox->getListOffset($aCond, $iPos, $iPageSize, str_replace('=', ' ', http_build_query($aSort, ' ', ', ')));
 
-        if (!$oReq->get('suggest'))
-            echo '{"pos":'.$iPos.', "total_count":"'.$iCnt.'","data":'.json_encode($aItems).'}';
-        else {
+        if (!$oReq->get('suggest')) {
+            foreach ($aItems as $nKey=>$aItem) {
+                $aItems[$nKey]['weight'] = round($aItem['length']*$aItem['width']*$aItem['height'] / Conf::getSetting('FACT_WEIGHT'), 2);
+            }
+            echo '{"pos":' . $iPos . ', "total_count":"' . $iCnt . '","data":' . json_encode($aItems) . '}';
+        } else {
             $aBoxsSuggest = array();
             foreach($aItems as $aItem){
                 $aBoxsSuggest[] = array("id"=>$aItem['box_id'],"value"=>$aItem['title']);

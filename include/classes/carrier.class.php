@@ -143,6 +143,72 @@ class Carrier extends DbItem
             $aRes[$aRow[$this->sId]] = $aRow[$sValue];
         return $aRes;
     }
+
+    /**
+     * Расчитать доставку
+     * @param $aParams (price, box_id, weight, region_id)
+     * @return float
+     */
+    function calcDelivery($aParams) {
+
+        $aParams['price'] = isset($aParams['price'])?floatval($aParams['price']):0;
+        $aParams['box_id'] = isset($aParams['box_id'])?intval($aParams['box_id']):0;
+        $aParams['region_id'] = isset($aParams['region_id'])?intval($aParams['region_id']):0;
+        $aParams['carrier_id'] = isset($aParams['carrier_id'])?intval($aParams['carrier_id']):0;
+        $aParams['weight'] = isset($aParams['weight'])?floatval($aParams['weight']):0;
+
+        if (!$aParams['price']) $this->_addError('Price not set');
+        if (!$aParams['box_id']) $this->_addError('Box not set');
+        if (!$aParams['region_id']) $this->_addError('Region not set');
+        if (!$aParams['carrier_id']) $this->_addError('Carrier not set');
+        // Фактический вес (кг)
+        if (!$aParams['weight']) $this->_addError('Weight not set');
+        if ($this->getErrors()) return false;
+
+        // "Оплачиваемый вес (кг)"
+        // данные коробки
+        $aBox = $this->oDb->getRow('SELECT * FROM box WHERE box_id='.$aParams['box_id']);
+        if (!$aBox) { $this->_addError('Box not found'); return false; }
+        // данные по доставке в регион перевозчиком
+        $aCarrier = $this->oDb->getRow('SELECT * FROM carrier WHERE carrier_id='.$aParams['carrier_id']);
+        if (!$aCarrier) { $this->_addError('Carrier rates not found'); return false; }
+        // данные по доставке в регион перевозчиком
+        $aRegionRate = $this->oDb->getRow('SELECT * FROM region_rate WHERE carrier_id='.$aParams['carrier_id'].' AND region_id='.$aParams['region_id']);
+        if (!$aRegionRate) { $this->_addError('Region rates not found'); return false; }
+
+        // =ЕСЛИ(B4>(C3*D3*E3/5000);B4;(C3*D3*E3/5000))
+        $aParams['weightPay'] = $aBox['length']*$aBox['width']*$aBox['height'] / Conf::getSetting('FACT_WEIGHT');
+        if ($aParams['weight'] > $aParams['weightPay'])
+            $aParams['weightPay'] = $aParams['weight'];
+
+        // "Комиссия (€)"
+        // =ЕСЛИ(B2>9999;B2*G6;ЕСЛИ(B2>999;B2*G4;B2*G8))
+        if ($aParams['price'] > 9999)
+            $aParams['vat'] = $aParams['price'] * Conf::getSetting('VAT_FROM_10000');
+        else if ($aParams['price'] > 999)
+            $aParams['vat'] = $aParams['price'] * Conf::getSetting('VAT_1000_9999');
+        else
+            $aParams['vat'] = $aParams['price'] * Conf::getSetting('VAT_LESS_1000');
+
+        // До Vantaa
+        //='Ставки - Paris-Vantaa SVH (Lafa'!$D$25+($B$5-0,5)/0,5*'Ставки - Paris-Vantaa SVH (Lafa'!$B$25
+        $aParams['tovantaa'] = Conf::getSetting('PARIS_VANTAA_FIRST_HALFKG') + ($aParams['weightPay'] - 0.5) / 0.5 * Conf::getSetting('PARIS_VANTAA_STEP');
+        // До СПБ
+        //=$B$4*'Ставки - Vantaa-СПБ (TFL)'!$B$3
+        $aParams['tospb'] = $aParams['weight'] * Conf::getSetting('VANTAA_SPB_KG');
+        // До клиента
+        //=($B$5-1)*'Ставки - СПСР'!F4+'Ставки - СПСР'!C4
+        $aParams['toclient'] = ($aParams['weightPay']-1) * $aRegionRate['kg_step_price'] / Conf::getSetting('RUR_EURO') + $aRegionRate['first_kg_price'] / Conf::getSetting('RUR_EURO');
+        // Итого с/с, €
+        //=$B$8+J2+K2+L2
+        $aParams['total'] = (Conf::getSetting('USE_EXPORT_DOC')&&$aParams['price']>2999?Conf::getSetting('EXPORT_DOC_PRICE'):0) +
+            $aParams['tovantaa'] + $aParams['tospb'] + $aParams['toclient'];
+        // Итого счет GL, €
+        //=(M2*$B$11)+$B$6
+        $aParams['togl'] = ($aParams['total'] * $aCarrier['customs']) + $aParams['vat'];
+
+        return round($aParams['togl'], 2);
+    }
     
 }
 ?>

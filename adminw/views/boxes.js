@@ -44,9 +44,10 @@ define([
                 columns:[
                     {id:"box_id", header:"ID", width:60, sort:"server" },
                     {id:"title", header:["Название", {content:"serverFilter"}], width:300, sort:"server"},
-                    {id:"width",	header:["Ширина", {content:"serverFilter"}], width:200, sort:"server"},
-                    {id:"length",	header:["Длина", {content:"serverFilter"}], width:200, sort:"server"},
-                    {id:"height",	header:["Высота", {content:"serverFilter"}], width:200, sort:"server"}
+                    {id:"width",	header:["Ширина", {content:"serverFilter"}], width:150, sort:"server"},
+                    {id:"length",	header:["Длина", {content:"serverFilter"}], width:150, sort:"server"},
+                    {id:"height",	header:["Высота", {content:"serverFilter"}], width:150, sort:"server"},
+                    {id:"weight",	header:["Объемный вес", {content:"serverFilter"}], width:200, sort:"server"}
                 ],
                 select:"row",
                 pager:"pagerA",

@@ -1,8 +1,9 @@
 define([
     "views/forms/carrier",
+    "views/forms/calc",
     "helpers/grid",
     "helpers/record"
-], function(carrierform, grid, record){
+], function(carrierform, calcform, grid, record){
 
     var controls = [
         { view: "button", id:'addBtn', type: "iconButton", icon: "plus", label: "Добавить", width: 120, click: function(){
@@ -34,6 +35,10 @@ define([
                     grid.refresh($$('grid-carrier'), '/admin/index.php/part_carriers/act_get');
                 });
             }
+        }},{ view: "button", id:'carrier-calc-btn',  type: "iconButton",  label: "Расчет доставки", width: 180, click: function(){
+            var ui = this.$scope.ui(calcform.$ui);
+            calcform.setData({});
+            ui.show();
         }},
         {},
         { view: "icon", icon: "refresh",width: 40 , click: function(){
