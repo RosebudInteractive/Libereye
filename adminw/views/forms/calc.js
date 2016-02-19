@@ -1,4 +1,4 @@
-define(['helpers/record', 'helpers/grid'], function(record, grid){
+define(['helpers/record', 'helpers/grid', 'helpers/progress'], function(record, grid, p){
 
     var data = "";
 
@@ -38,7 +38,9 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                                 { view:"button", id:"save-calc-btn", type:"form", value: "Рассчитать", click:function(){
                                     var that = this;
                                     if ($$("calc-form").validate()) {
+                                        p.show('calc-form');
                                         record.post("/admin/index.php/part_carriers/act_calc", $$('calc-form').getValues(), function(data){
+                                            p.hide('calc-form');
                                             $$('calc-form').setValues({togl:data.result}, true);
                                         });
                                     }
