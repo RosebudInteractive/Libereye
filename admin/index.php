@@ -6,7 +6,8 @@
  * @package admin
  * ============================================================ */
 date_default_timezone_set('Europe/Moscow');
-setlocale(LC_ALL, 'ru_RU');
+//setlocale(LC_ALL, 'ru_RU');
+setlocale(LC_ALL, "en_US.UTF-8");
 
 require_once '../include/admin.inc.php';
 	
