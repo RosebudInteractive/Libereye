@@ -9,6 +9,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', true);
 /* Установка внутренней кодировки в UTF-8 */
 mb_internal_encoding("UTF-8");
+setlocale(LC_ALL, "en_US.UTF-8");
 require_once '../include/visitor.inc.php';
 
 Conf::loadClass('Account');
