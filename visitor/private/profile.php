@@ -8,6 +8,7 @@
  * ============================================================ */
 Conf::loadClass('Account');
 Conf::loadClass('Country');
+Conf::loadClass('Region');
 Conf::loadClass('utils/Zoom');
 Conf::loadClass('utils/Validator');
 Conf::loadClass('utils/file/Image');
@@ -15,6 +16,7 @@ Conf::loadClass('utils/mail/Mailer');
 
 $oUserReg  	= new Account();
 $oCountry  	= new Country();
+$oRegion  	= new Region();
 $oZoom  	= new Zoom();
 $bSuccess 	= $oReq->get('success');
 $aUserReg 	= $aAccount;//$oReq->getArray('aUser');
@@ -136,7 +138,8 @@ $oTpl->assignSrc(array(
     'aDays' => range(1, 31),
     'aMonths' => $aMonths,
     'aYears' => range(date('Y'), date('Y')-100),
-    'aCountries' => $oCountry->getHash('title',array(),'',$aLanguage['language_id'])
+    'aCountries' => $oCountry->getHash('title',array(),'',$aLanguage['language_id']),
+    'aRegions' => $oRegion->getHash('title',array(),'',$aLanguage['language_id']),
 ));
 
 ?>

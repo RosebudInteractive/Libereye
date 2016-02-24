@@ -776,4 +776,113 @@ $(function() {
         elem.css({'margin-top': -ocHeight/2 + 'px'});
     }
 
+    // basket functions ------------------------
+
+    if (typeof jQuery.fn.select2 == 'function') {
+        var $selects = $('.form-standart .select select');
+        $selects.select2({minimumResultsForSearch: Infinity});
+
+        /*$selects.on("select2:open", function (e) { console.log("select2:open", e);
+         setTimeout(function(){
+         var pane = $('ul.select2-results__options');
+         pane.jScrollPane();
+         },10);
+
+         });
+         $selects.on("select2:closing", function (e) {
+         var pane = $('ul.select2-results__options');
+         pane.data('jsp').destroy();
+         });*/
+
+        $(window).bind('resize',function(){
+            $('.form-standart .select select').select2({minimumResultsForSearch: Infinity});
+        });
+    }
+
+    $('.cart .hide-btn a').parents('.cart').click(function(e){
+        e.preventDefault();
+        if ($(e.target).hasClass('btn'))
+            return;
+        var cart = $(this)/*.parents('.cart')*/;
+        var cartContent = cart.next('.cart-content');
+
+        if (cart.hasClass('active')) {
+            cartContent.slideUp(function(){
+                cart.removeClass('active');
+            });
+        } else {
+            cart.addClass('active');
+            cartContent.slideDown();
+        }
+    });
+
+    $('.cart-item-delete-link').click(function(e){
+        e.preventDefault();
+        var item = $(this).parents('.cart-item');
+        item.html('').addClass('deleted');
+        $('#cart-item-deleted').tmpl({"name": item.data('name')}).appendTo(item);
+    });
+
+    $('.payment-type-select input').click(function(e){
+        $('.payment-type-pages').hide();
+        var page = $(this).data('page');
+        $('#payment-type-page-' + page).show();
+    });
+
+
+    var widthToSet = $('.cart-list .cart').eq(0).width();
+    $('.cart-content').width(widthToSet-30*2);
+    $(window).bind('resize',function(){
+        var widthToSet = $('.cart-list .cart').eq(0).width();
+        $('.cart-content').width(widthToSet-30*2);
+    });
+
+    $('.cart-content').hover(function(){$(this).prev().addClass('hovered');},function(){$(this).prev().removeClass('hovered');})
+
+    var $bpp = $('.basket-payment-page');
+    var basketCheckoutPage = 1;
+    if ($bpp.length) {
+        $bpp.not(':eq(0)').hide();
+
+        // links handlers
+        $('.basket-payment-goto').click(function(e){
+            e.preventDefault();
+            var toPage = $(this).data('page');
+            var $stages = $('.payment-navigation');
+            if (toPage.toString().length) {
+                $bpp.hide();
+                $('#basket-payment-page-' + toPage).show();
+                $stages.find('.stage').removeClass('active');
+                $stages.find('.stage-'+toPage).addClass('active');
+                basketCheckoutPageChanged(toPage);
+            }
+        });
+
+        function basketCheckoutPageChanged(toPage) {
+            var $c = $('.content');
+            console.log(parseInt(toPage));
+            if (isNaN(parseInt(toPage)))
+                return false;
+
+            $c.find('.co-stage-' + (toPage-1)).hide();
+            $c.find('.co-stage-'+(toPage)).show();
+        }
+
+        $('.basket-payment-checkout').click(function(e){
+            e.preventDefault();
+          /*  alert('And here goes pleasant moment of client payment.' +
+            'Page will be changed to the next just for test - insert here your code to provide payment.');*/
+            var toPage = 3;
+            var $stages = $('.payment-navigation');
+            if (toPage.toString().length) {
+                $bpp.hide();
+                $('#basket-payment-page-' + toPage).show();
+                $stages.find('.stage').removeClass('active');
+                $stages.find('.stage-'+toPage).addClass('active');
+                basketCheckoutPageChanged(toPage);
+            }
+        });
+    }
+    // basket functions ------------------------
+
 });

@@ -52,12 +52,20 @@ class Purchase extends DbItem
      * @param array $aCond condition
      * @return array data
      */
-    function loadBy($aCond)
+    function loadBy($aCond, $nLangId=0)
     {
-        $sSql = 'SELECT '.$this->_joinFields($this->aFields).', a.fname, a.email, a2.fname seller, a2.email seller_email'.
+        $nLangId = $nLangId? $nLangId: LANGUAGEID;
+        $sSql = 'SELECT '.$this->_joinFields($this->aFields).', a.fname, a.email, a2.fname seller'.
+            ', a2.email seller_email, c.sign, i.name seller_image, pd1.phrase shop_title, ss.'.
             ' FROM '.$this->sTable.' AS '.$this->sAlias.
             ' LEFT JOIN account a USING(account_id)'.
             ' LEFT JOIN account a2 ON a2.account_id=p.seller_id'.
+            ' LEFT JOIN image i ON i.image_id=a2.image_id'.
+            ' LEFT JOIN currency c ON c.currency_id='.$this->sAlias.'.currency_id '.
+            ' LEFT JOIN shop_slot ss ON ss.shop_slot_id=p.shop_slot_id'.
+            ' LEFT JOIN shop s ON s.shop_id=ss.shop_id'.
+            ' LEFT JOIN phrase p1 ON p1.object_id=s.shop_id AND p1.object_type_id=4   AND p1.object_field="title" '.
+            ' LEFT JOIN phrase_det pd1 ON pd1.phrase_id=p1.phrase_id AND pd1.language_id='.$nLangId.'  '.
             '  WHERE '.$this->_parseCond($aCond, $this->aFields);
         $this->aData = $this->oDb->getRow($sSql);
         return sizeof($this->aData);

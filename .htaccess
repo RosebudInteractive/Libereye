@@ -46,6 +46,7 @@ RewriteRule ^([a-z]{2})/account/purchases/$ /visitor/index.php/part_private/sect
 RewriteRule ^([a-z]{2})/account/mypurchases/$ /visitor/index.php/part_private/sect_mypurchases?lang=$1 [L,QSA]
 RewriteRule ^([a-z]{2})/account/purchase/add/$ /visitor/index.php/part_private/sect_purchase?lang=$1 [L,QSA]
 RewriteRule ^([a-z]{2})/account/purchase/edit/$ /visitor/index.php/part_private/sect_purchase?lang=$1 [L,QSA]
+RewriteRule ^([a-z]{2})/account/cart/([0-9]+)/$ /visitor/index.php/part_private/sect_cart?lang=$1&id=$2 [L,QSA]
 RewriteRule ^([a-z]{2})/confirm/$ /visitor/index.php/part_public/sect_confirm?lang=$1 [L,QSA]
 RewriteRule ^([a-z]{2})/shop/([0-9]+)/$ /visitor/index.php/part_public/sect_shop?lang=$1&id=$2 [L,QSA]
 RewriteRule ^adminw/shop$ /adminw/shop.php [L,QSA]

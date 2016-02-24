@@ -1,0 +1,364 @@
+<div class="container content">
+<div class="row payment-navigation">
+    <div class="col-sm-6 col-md-9 col-lg-12">
+        <div class="stage active stage-1">Адрес доставки</div>
+        <div class="stage stage-2">Оплата</div>
+        <div class="stage stage-3 stage-4 stage-5">Расчет доставки</div>
+    </div>
+</div>
+<div class="row row-no-margin">
+<div class="col-lg-8 col-md-9 col-sm-6 basket-lg-vertical">
+<form action="" method="post" class="form-standart basket-payment" style="margin-bottom: 50px;">
+    <div id="basket-payment-page-1" class="basket-payment-page" data-name="Address form">
+        <div class="page-title" style="margin-top: 40px;">Адрес доставки</div>
+        <div class="inputs">
+            <div>
+                <div class="cols-1-2">
+                    <div class="input">
+                        <label for="inCity">Город</label>
+                        <input id="inCity" name="aUser[city]" value="{$aUserReg.city}">
+                        <!--<div class="select">
+                            <select id="inCity" name="dcity">
+                                <option>Санкт-Петербург</option>
+                                <option>Екатеринбург</option>
+                                <option>Тверь</option>
+                                <option>Владивосток</option>
+                                <option>Самара</option>
+                            </select>
+                        </div>-->
+                    </div>
+                </div>
+                <div class="cols-1-2">
+                    <div class="input">
+                        <label for="inCountry">Страна</label>
+                        <div class="select">
+                            <!--<select id="inCountry" name="dcountry">
+                                <option>Россия</option>
+                                <option>Польша</option>
+                            </select>-->
+                            <select id="inCountry" name="aUser[country_id]">
+                                <option value="0"></option>
+                                {html_options options=$aCountries selected=$aUserReg.country_id}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="cols-1-2">
+                    <div class="input">
+                        <label for="inStreet">Улица</label>
+                        <input id="inStreet" type="text" name="aUser[street]" value="{$aUserReg.street}"  />
+                    </div>
+                </div>
+                <div class="cols-2">
+                    <div class="input">
+                        <label for="inBuilding">Дом</label>
+                        <input id="inBuilding" type="text" name="aUser[building]" value="{$aUserReg.building}"  />
+                    </div>
+                </div>
+                <div class="cols-2">
+                    <div class="input">
+                        <label for="inBuildingPart">Корпус</label>
+                        <input id="inBuildingPart" type="text" name="aUser[housing]" value="{$aUserReg.housing}"  />
+                    </div>
+                </div>
+                <div class="cols-2">
+                    <div class="input">
+                        <label for="inFlat">Квартира</label>
+                        <input id="inFlat" type="text"  name="aUser[apartment]" value="{$aUserReg.apartment}"  />
+                    </div>
+                </div>
+                <div class="cols-2">
+                    <div class="input">
+                        <label for="inPhone">Телефон</label>
+                        <input id="inPhone" type="text"  name="aUser[phone]" value="{$aUserReg.phone}"  />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="delivery-count-info">
+            К сожалению на этом этапе мы не можем назвать точную стоимость доставки. После оплаты товара нам потребуетсяся 24 часа на расчет.
+        </div>
+    </div>
+    <div id="basket-payment-page-2" class="basket-payment-page" data-name="Pay for goods">
+        <div class="page-title" style="margin-top: 40px;">Выберите способ оплаты</div>
+        <div class="payment-type-select">
+            <input type="radio" name="payment-type" value="card" data-page="1" id="payment-type-select-1" checked="checked"><label for="payment-type-select-1"><img src="/design/pic/payment_icon_1.png" /></label>
+            <input type="radio" name="payment-type" value="paypal" data-page="2" id="payment-type-select-2"><label for="payment-type-select-2"><img src="/design/pic/payment_icon_2.png" /></label>
+        </div>
+        <div id="payment-type-page-1" class="payment-type-pages">
+            <div class="card-emulation">
+                <div class="card-side-1">
+                    <div class="error-text"></div>
+                    <div class="input-container card-number">
+                        <label for="card-number">Номер карты</label>
+                        <input id="card-number" type="text" name="card-number" value="" />
+                    </div>
+                    <div class="input-container card-expiration">
+                        <div class="card-expiration-explain">Срок действия</div>
+                        <div class="card-expiration-input">
+                            <input id="card-expiration-year" type="text" name="card-exp-year" value="" maxlength="2" />
+                            <label for="card-expiration-year">Год</label>
+                        </div>
+                        <div class="card-expiration-input separator">
+                            /
+                        </div>
+                        <div class="card-expiration-input">
+                            <input id="card-expiration-month" type="text" name="card-exp-month" value="" maxlength="2" />
+                            <label for="card-expiration-month">Месяц</label>
+                        </div>
+                    </div>
+                    <div class="input-container card-holder-name">
+                        <label for="card-holder-name">Имя</label>
+                        <input id="card-holder-name" type="text" name="card-holder-name" value="" placeholder="NO NAME" />
+                    </div>
+                    <div class="card-system-logos">
+                        <img src="/design/pic/payment_icon_1.png" />
+                    </div>
+                </div>
+                <div class="card-side-2">
+                    <div class="card-magnet-stripe"></div>
+                    <div class="input-container cvv">
+                        <input id="card-cvv" type="text" name="card-cvv" value="" maxlength="3" />
+                        <label for="card-cvv">CVC/CVV</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="options">
+                <div class="save-data-checkbox">
+                    <input type="checkbox" name="save-card-data" checked="checked" value="Y" id="save-card-data" />
+                    <label for="save-card-data">Сохранить данные карты для следующих платежей.</label>
+                </div>
+            </div>
+        </div>
+        <div id="payment-type-page-2" class="payment-type-pages" style="display: none;">
+            <div class="paypal-info">
+                Транзакция успешна!
+                <div class="sum">
+                    10$
+                </div>
+                Наверно нужно заверстать здесь еще что-то, но я не знаю что.
+            </div>
+        </div>
+    </div>
+</form>
+<form action="" method="post" class="form-standart delivery-payment">
+    <div class="co-stage-3 co-stage-4" style="display: none">
+        <h2>Адрес доставки</h2>
+        <div class="address">
+            <div class="address-string">Албания, Тирана, ул. Асим Вакши д. 18, кв. 6</div>
+            <div class="address-postindex">606480</div>
+        </div>
+        <div class="phone">+7 938 673-43-80</div>
+        <a href="#" class="change-address">Изменить адрес</a>
+    </div>
+    <div id="basket-payment-page-3" class="basket-payment-page delivery-countdown-wrap" data-name="Delivery countdown">
+        <div class="row row-no-margin">
+            <div class="col-sm-2 col-md-3 col-lg-4 delivery-sum">
+                Примерный расчет: 30$<br/>
+                Всего: 850$
+            </div>
+            <div class="col-sm-4 col-md-6 col-lg-8 delivery-timer">
+                <div>Точная стоимость доставки будет готова через</div>
+                <div class="delivery-payment-countdown">
+                    23ч. 31мин.
+                </div>
+            </div>
+        </div>
+        <div class="buttons">
+            <a href="#" class="btn btn-green basket-payment-goto" style="width: auto;" data-page="4">Отправить сейчас</a>
+        </div>
+    </div>
+
+    <div id="basket-payment-page-5" class="basket-payment-page" data-name="Delivery payment">
+        <div class="page-title" style="margin-top: 40px;">Выберите способ оплаты</div>
+        <div class="payment-type-select">
+            <input type="radio" name="payment-type" value="card" data-page="1" id="payment-type-select-1" checked="checked"><label for="payment-type-select-1"><img src="/design/pic/payment_icon_1.png" /></label>
+            <input type="radio" name="payment-type" value="paypal" data-page="2" id="payment-type-select-2"><label for="payment-type-select-2"><img src="/design/pic/payment_icon_2.png" /></label>
+        </div>
+        <div id="payment-type-page-1" class="payment-type-pages">
+            <div class="card-emulation">
+                <div class="card-side-1">
+                    <div class="error-text"></div>
+                    <div class="input-container card-number">
+                        <label for="card-number">Номер карты</label>
+                        <input id="card-number" type="text" name="card-number" value="" />
+                    </div>
+                    <div class="input-container card-expiration">
+                        <div class="card-expiration-explain">Срок действия</div>
+                        <div class="card-expiration-input">
+                            <input id="card-expiration-year" type="text" name="card-exp-year" value="" maxlength="2" />
+                            <label for="card-expiration-year">Год</label>
+                        </div>
+                        <div class="card-expiration-input separator">
+                            /
+                        </div>
+                        <div class="card-expiration-input">
+                            <input id="card-expiration-month" type="text" name="card-exp-month" value="" maxlength="2" />
+                            <label for="card-expiration-month">Месяц</label>
+                        </div>
+                    </div>
+                    <div class="input-container card-holder-name">
+                        <label for="card-holder-name">Имя</label>
+                        <input id="card-holder-name" type="text" name="card-holder-name" value="" placeholder="NO NAME" />
+                    </div>
+                    <div class="card-system-logos">
+                        <img src="/design/pic/payment_icon_1.png" />
+                    </div>
+                </div>
+                <div class="card-side-2">
+                    <div class="card-magnet-stripe"></div>
+                    <div class="input-container cvv">
+                        <input id="card-cvv" type="text" name="card-cvv" value="" maxlength="3" />
+                        <label for="card-cvv">CVC/CVV</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="options">
+                <div class="save-data-checkbox">
+                    <input type="checkbox" name="save-card-data" checked="checked" value="Y" id="save-card-data" />
+                    <label for="save-card-data">Сохранить данные карты для следующих платежей.</label>
+                </div>
+            </div>
+        </div>
+        <div id="payment-type-page-2" class="payment-type-pages" style="display: none;">
+            <div class="paypal-info">
+                Транзакция успешна!
+                <div class="sum">
+                    10$
+                </div>
+                Наверно нужно заверстать здесь еще что-то, но я не знаю что.
+            </div>
+        </div>
+        <div class="delivery-overall">
+            <div class="row row-no-margin">
+                <div class="col-sm-2 col-md-3 col-lg-4 delivery-sum">
+                    <div>Доставка: 30$</div>
+                    <a href="#" class="btn btn-green">Оплатить</a>
+                </div>
+                <div class="col-sm-4 col-md-6 col-lg-8 delivery-sum-info">
+                    <div>Прибытие товара: 24 сентября</div>
+                    Ранее оплачено: 820$<br/>
+                    С доставкой: 850$
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="basket-payment-page-4" class="basket-payment-page delivery-overall" data-name="Delivery countdown finished">
+        <div class="row row-no-margin">
+            <div class="col-sm-2 col-md-3 col-lg-4 delivery-sum">
+                <div>Доставка: 30$</div>
+                <a href="#" class="btn btn-green basket-payment-goto co-stage-4" data-page="5">Отправить товар</a>
+            </div>
+            <div class="col-sm-4 col-md-6 col-lg-8 delivery-sum-info">
+                <div>Прибытие товара: 24 сентября</div>
+                Ранее оплачено: 820$<br/>
+                С доставкой: 850$
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<div class="col-lg-4 col-md-9 col-sm-6 cart-list-wrapper cart-checkout-page">
+    <div class="cart-list">
+        <div class="cart">
+            <div>
+                <div class="shopper-photo-td">
+                    <div class="shopper-photo">
+                        <img src="//design/pic/content/shopper_2.jpg" />
+                    </div>
+                </div>
+                <div class="shopper-name">
+                    Маша Шелобуткина
+                </div>
+                <div class="shop-n-time">
+                    <div class="shop">{$aPurchase.shop_title}</div>
+                    <div class="time">Четверг в <strong>16:20</strong></div>
+                </div>
+                <div class="price">1 060 $</div>
+                <div class="buttons">
+                    <a href="#" class="btn btn-green basket-payment-goto co-stage-1" data-page="2">Продолжить</a>
+                    <a href="#" class="btn btn-green basket-payment-checkout co-stage-2" style="display: none;">Оплатить</a>
+                    <span class="co-stage-3 co-stage-4 co-stage-5 already-paid" style="display: none;">Оплачено</span>
+                </div>
+                <div class="hide-btn">
+                    <a class="drop-activate" href="#"></a>
+                </div>
+            </div>
+        </div>
+        <div class="cart-content" style="display: none">
+            {foreach from=$aProducts item=aItem}
+            <div class="cart-item" data-id="itemid1" data-name="{$aItem.product}">
+                {if $aItem.image}
+                <div class="cart-item-image">
+                    <img src="/product/{$aItem.image}" />
+                </div>
+                {/if}
+                <div class="cart-item-info">
+                    <div>{$aItem.product}</div>
+                    {if $aItem.description}<div>{$aItem.description}</div>{/if}
+                    <div class="cart-item-price">
+                        <span>{$aItem.amount|intval} шт.</span>
+                        {$aItem.price} {$aItem.sign}
+                    </div>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+    <div class="cart-list-wide">
+        <div class="shopper-info-block">
+            {if $aPurchase.seller_image}
+            <div class="shopper-photo">
+                <img src="/images/account/{$aPurchase.seller_image}" />
+            </div>
+            {/if}
+            <div class="shopper-name">
+                {$aPurchase.seller}
+            </div>
+            <div class="shop-n-time">
+                <div class="shop">Galeries Lafayettе</div>
+                <div class="time">Четверг в <strong>16:20</strong></div>
+            </div>
+        </div>
+        <div class="cart-content">
+            {foreach from=$aProducts item=aItem}
+            <div class="cart-item" data-id="itemid1" data-name="{$aItem.product}">
+                {if $aItem.image}
+                <div class="cart-item-image">
+                    <img src="/product/{$aItem.image}" />
+                </div>
+                {/if}
+                <div class="cart-item-info">
+                    <div>{$aItem.product}</div>
+                    {if $aItem.description}<div>{$aItem.description}</div>{/if}
+                    <div class="cart-item-price">
+                        <span>{$aItem.amount|intval} шт.</span>
+                        {$aItem.price|money_format} {$aItem.sign}
+                    </div>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+        <div class="total">
+            <div class="co-stage-2">Всего:</div>
+            <div class="co-stage-3 co-stage-4 co-stage-5" style="display: none">Оплачено:</div>
+            {$aPurchase.price|money_format} {$aPurchase.sign}
+        </div>
+        <div class="buttons">
+            <a href="#" class="btn btn-green basket-payment-goto co-stage-1" data-page="2">Продолжить</a>
+            <a href="#" class="btn btn-green basket-payment-checkout co-stage-2" style="display: none;">Оплатить</a>
+        </div>
+    </div>
+    <div class="delivery-count co-stage-1 co-stage-2">
+        <div>
+            Стоимость доставки: {$aPurchase.delivery}{$aPurchase.sign}<br/>
+            Всего с доставкой {$aPurchase.delivery+$aPurchase.price|money_format}{$aPurchase.sign}
+        </div>
+    </div>
+</div>
+</div>
+</div>

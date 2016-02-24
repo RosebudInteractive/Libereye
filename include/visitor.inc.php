@@ -35,13 +35,14 @@ $aParts = array(
         'title'   =>Conf::format('part.private'),
         'url'     =>Conf::getUrl('visitor.private'),
         'sections'=>array(
-            'profile' => array('url'  =>Conf::getUrl('visitor.public.profile')),
-            'logout' => array('url'  =>Conf::getUrl('visitor.public.logout')),
-            'booking' => array('url'  =>Conf::getUrl('visitor.public.booking')),
-            'meetings' => array('url'  =>Conf::getUrl('visitor.public.meetings')),
-            'purchases' => array('url'  =>Conf::getUrl('visitor.public.purchases')),
-            'mypurchases' => array('url'  =>Conf::getUrl('visitor.public.mypurchases')),
-            'purchase' => array('url'  =>Conf::getUrl('visitor.public.purchase')),
+            'profile' => array('url'  =>Conf::getUrl('visitor.private.profile')),
+            'logout' => array('url'  =>Conf::getUrl('visitor.private.logout')),
+            'booking' => array('url'  =>Conf::getUrl('visitor.private.booking')),
+            'meetings' => array('url'  =>Conf::getUrl('visitor.private.meetings')),
+            'purchases' => array('url'  =>Conf::getUrl('visitor.private.purchases')),
+            'mypurchases' => array('url'  =>Conf::getUrl('visitor.private.mypurchases')),
+            'purchase' => array('url'  =>Conf::getUrl('visitor.private.purchase')),
+            'cart' => array('url'  =>Conf::getUrl('visitor.private.cart')),
         ),
     ), // end part "private"
 );
