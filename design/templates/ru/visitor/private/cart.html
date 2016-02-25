@@ -6,9 +6,16 @@
         <div class="stage stage-3 stage-4 stage-5">Расчет доставки</div>
     </div>
 </div>
+
+
+
 <div class="row row-no-margin">
 <div class="col-lg-8 col-md-9 col-sm-6 basket-lg-vertical">
 <form action="" method="post" class="form-standart basket-payment" style="margin-bottom: 50px;">
+    {if $aErrors}<span class="info"><ul class="errorlist">{foreach from=$aErrors item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
+    {if $aSessErr}{literal}{/literal}<span class="info"><ul class="help-text">{foreach from=$aSessErr item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
+    <div class="ajax error-block" style="display: none;padding-top: 30px;">dsfdsdf</div>
+
     <div id="basket-payment-page-1" class="basket-payment-page" data-name="Address form">
         <div class="page-title" style="margin-top: 40px;">Адрес доставки</div>
         <div class="inputs">
@@ -16,7 +23,7 @@
                 <div class="cols-1-2">
                     <div class="input">
                         <label for="inCity">Город</label>
-                        <input id="inCity" name="aUser[city]" value="{$aUserReg.city}">
+                        <input id="inCity" name="city" value="{$aUserReg.city}">
                         <!--<div class="select">
                             <select id="inCity" name="dcity">
                                 <option>Санкт-Петербург</option>
@@ -36,7 +43,7 @@
                                 <option>Россия</option>
                                 <option>Польша</option>
                             </select>-->
-                            <select id="inCountry" name="aUser[country_id]">
+                            <select id="inCountry" name="country_id">
                                 <option value="0"></option>
                                 {html_options options=$aCountries selected=$aUserReg.country_id}
                             </select>
@@ -48,38 +55,38 @@
                 <div class="cols-1-2">
                     <div class="input">
                         <label for="inStreet">Улица</label>
-                        <input id="inStreet" type="text" name="aUser[street]" value="{$aUserReg.street}"  />
+                        <input id="inStreet" type="text" name="street" value="{$aUserReg.street}"  />
                     </div>
                 </div>
                 <div class="cols-2">
                     <div class="input">
                         <label for="inBuilding">Дом</label>
-                        <input id="inBuilding" type="text" name="aUser[building]" value="{$aUserReg.building}"  />
+                        <input id="inBuilding" type="text" name="building" value="{$aUserReg.building}"  />
                     </div>
                 </div>
                 <div class="cols-2">
                     <div class="input">
                         <label for="inBuildingPart">Корпус</label>
-                        <input id="inBuildingPart" type="text" name="aUser[housing]" value="{$aUserReg.housing}"  />
+                        <input id="inBuildingPart" type="text" name="housing" value="{$aUserReg.housing}"  />
                     </div>
                 </div>
                 <div class="cols-2">
                     <div class="input">
                         <label for="inFlat">Квартира</label>
-                        <input id="inFlat" type="text"  name="aUser[apartment]" value="{$aUserReg.apartment}"  />
+                        <input id="inFlat" type="text"  name="apartment" value="{$aUserReg.apartment}"  />
                     </div>
                 </div>
                 <div class="cols-2">
                     <div class="input">
                         <label for="inPhone">Телефон</label>
-                        <input id="inPhone" type="text"  name="aUser[phone]" value="{$aUserReg.phone}"  />
+                        <input id="inPhone" type="text"  name="phone" value="{$aUserReg.phone}"  />
                     </div>
                 </div>
             </div>
         </div>
-        <div class="delivery-count-info">
+        <!--<div class="delivery-count-info">
             К сожалению на этом этапе мы не можем назвать точную стоимость доставки. После оплаты товара нам потребуетсяся 24 часа на расчет.
-        </div>
+        </div>-->
     </div>
     <div id="basket-payment-page-2" class="basket-payment-page" data-name="Pay for goods">
         <div class="page-title" style="margin-top: 40px;">Выберите способ оплаты</div>
@@ -135,11 +142,11 @@
         </div>
         <div id="payment-type-page-2" class="payment-type-pages" style="display: none;">
             <div class="paypal-info">
-                Транзакция успешна!
+               <!-- Транзакция успешна!
                 <div class="sum">
                     10$
-                </div>
-                Наверно нужно заверстать здесь еще что-то, но я не знаю что.
+                </div>-->
+                Нажмите "Оплатить" и Вы будете перенаправлены на сервис онлайн-оплаты PayPal
             </div>
         </div>
     </div>
@@ -236,13 +243,13 @@
         <div class="delivery-overall">
             <div class="row row-no-margin">
                 <div class="col-sm-2 col-md-3 col-lg-4 delivery-sum">
-                    <div>Доставка: 30$</div>
+                    <div>Доставка: {$aPurchase.delivery}{$aPurchase.sign}</div>
                     <a href="#" class="btn btn-green">Оплатить</a>
                 </div>
                 <div class="col-sm-4 col-md-6 col-lg-8 delivery-sum-info">
                     <div>Прибытие товара: 24 сентября</div>
                     Ранее оплачено: 820$<br/>
-                    С доставкой: 850$
+                    С доставкой: {$aPurchase.price|money_format}{$aPurchase.sign}
                 </div>
             </div>
         </div>
@@ -267,16 +274,18 @@
         <div class="cart">
             <div>
                 <div class="shopper-photo-td">
+                    {if $aPurchase.seller_image}
                     <div class="shopper-photo">
-                        <img src="//design/pic/content/shopper_2.jpg" />
+                        <img src="/images/account/{$aPurchase.seller_image}" />
                     </div>
+                    {/if}
                 </div>
                 <div class="shopper-name">
-                    Маша Шелобуткина
+                    {$aPurchase.seller}
                 </div>
                 <div class="shop-n-time">
                     <div class="shop">{$aPurchase.shop_title}</div>
-                    <div class="time">Четверг в <strong>16:20</strong></div>
+                    <div class="time">{$aPurchase.time_from|date_format:"%d.%m.%Y"} в <strong>{$aPurchase.time_from|date_format:"%H:%M"}</strong></div>
                 </div>
                 <div class="price">1 060 $</div>
                 <div class="buttons">
@@ -321,7 +330,7 @@
             </div>
             <div class="shop-n-time">
                 <div class="shop">Galeries Lafayettе</div>
-                <div class="time">Четверг в <strong>16:20</strong></div>
+                <div class="time">{$aPurchase.time_from|date_format:"%d.%m.%Y"} в <strong>{$aPurchase.time_from|date_format:"%H:%M"}</strong></div>
             </div>
         </div>
         <div class="cart-content">
@@ -354,8 +363,9 @@
         </div>
     </div>
     <div class="delivery-count co-stage-1 co-stage-2">
+        Предварительная стоимость доставки
         <div>
-            Стоимость доставки: {$aPurchase.delivery}{$aPurchase.sign}<br/>
+            Примерный расчет: {$aPurchase.delivery}{$aPurchase.sign}<br/>
             Всего с доставкой {$aPurchase.delivery+$aPurchase.price|money_format}{$aPurchase.sign}
         </div>
     </div>

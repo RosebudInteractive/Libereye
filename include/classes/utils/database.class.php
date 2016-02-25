@@ -292,7 +292,7 @@ class Database extends Common
                 $sVals = implode(',',array_values($aValues));
         }
 
-        $sSql = 'INSERT INTO `'.$sTable.'` '.
+        echo $sSql = 'INSERT INTO `'.$sTable.'` '.
                 '        ('.$sCols.')'.
                 ' VALUES ('.$sVals.')';
         if ($this->query($sSql))

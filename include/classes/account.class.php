@@ -50,7 +50,7 @@ class Account extends DbItem
     {
         parent::DbItem();
         $this->_initTable('account');
-        $this->sUserType = 'admin';
+        $this->sUserType = 'account';
     }
 
 

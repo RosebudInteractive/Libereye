@@ -170,7 +170,9 @@ class Conf
             $aDateOffset = explode(':', $sDateOffset);
             $aOffsets[$aDateOffset[0]] = intval($aDateOffset[1])*60;
         }
-        if (isset($aOffsets[date('Y-m-d', $nTime)])) {
+
+        $aOffsets[date('Y-m-d', $nTime)] = isset($aOffsets[date('Y-m-d', $nTime)]) ? $aOffsets[date('Y-m-d', $nTime)]: reset($aOffsets);
+        if (isset($aOffsets[date('Y-m-d', $nTime)]) && $aOffsets[date('Y-m-d', $nTime)]) {
             if ($shiftSummer) {
                 $this_year = gmdate("Y", $nTime);//Получаем номер года
                 //Последнее воскресенье в марте указанного года в час ночи по UTC

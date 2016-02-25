@@ -32,7 +32,7 @@ class Paypal extends DbItem {
     function Paypal()
     {
         parent::DbItem();
-        $this->_initTable('paypal_api');
+        $this->_initTable('payment_log');
         $this->_credentials = array(
             'USER' => Conf::getSetting('PAYPAL_USER'),
             'PWD' => Conf::getSetting('PAYPAL_PWD'),
@@ -93,11 +93,11 @@ class Paypal extends DbItem {
                     'VERSION' => $this -> _version
                 ) + $params),
             'response' => $response?$response:(curl_errno($ch)?('Error:'.curl_error($ch)):'unknown'),
-            'account_id' => isset($_SESSION['account'])?$_SESSION['account']['id']:0,
-            'purchase_id' => isset($params['PAYMENTREQUEST_0_INVNUM'])?$params['PAYMENTREQUEST_0_INVNUM']:0,
+            'account_id' => isset($_SESSION['account'])?$_SESSION['account']['id']:'NULL',
+            'purchase_id' => isset($params['PAYMENTREQUEST_0_INVNUM'])?intval($params['PAYMENTREQUEST_0_INVNUM']):'NULL',
             'cdate' => Database::date()
         );
-        $this->insert();
+        $this->insert(array('PAYMENTREQUEST_0_INVNUM', 'account_id'));
 
         // ѕровер€ем, нету ли ошибок в инициализации cURL
         if (curl_errno($ch)) {

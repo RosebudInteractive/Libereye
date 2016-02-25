@@ -40,6 +40,7 @@ $_TBL['carrier'] 	        = array('carrier',          'c', 'carrier_id');
 $_TBL['region_rate'] 	        = array('region_rate',          'rr', 'region_rate_id');
 $_TBL['product'] 	        = array('product',          'p', 'product_id');
 $_TBL['product2purchase'] 	        = array('product2purchase',          'p2p', 'product2purchase_id');
+$_TBL['payment_log'] 	        = array('payment_log',          'pl', 'id');
 
 
 

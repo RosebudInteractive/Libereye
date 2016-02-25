@@ -872,7 +872,23 @@ $(function() {
             e.preventDefault();
           /*  alert('And here goes pleasant moment of client payment.' +
             'Page will be changed to the next just for test - insert here your code to provide payment.');*/
-            var toPage = 3;
+
+            // Сохраняем данные по доставке и переходим на оплату
+            $.ajax({
+                method: "POST",
+                url: document.location.href+'?act=pay',
+                data: $('.basket-payment').serialize()
+            })
+                .done(function( msg ) {
+                    var results = JSON.parse(msg);
+                    if (results.errors && results.errors.length != 0) {
+                        $('.ajax.error-block').empty().html(results.errors.join('<br>')).show();
+                    } else {
+                        location.href = results.paypalUrl;
+                    }
+                });
+
+            /*var toPage = 3;
             var $stages = $('.payment-navigation');
             if (toPage.toString().length) {
                 $bpp.hide();
@@ -880,7 +896,7 @@ $(function() {
                 $stages.find('.stage').removeClass('active');
                 $stages.find('.stage-'+toPage).addClass('active');
                 basketCheckoutPageChanged(toPage);
-            }
+            }*/
         });
     }
     // basket functions ------------------------
