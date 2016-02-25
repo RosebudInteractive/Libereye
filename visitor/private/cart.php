@@ -59,7 +59,7 @@ switch ($oReq->getAction())
             );
 
             // данные о заказе
-            $fAmount = $oPurchase->getAmount($aPurchase);
+            $fAmount = $aPurchase['price'];//$oPurchase->getAmount($aPurchase);
             $orderParams = array(
                 'PAYMENTREQUEST_0_AMT' => $fAmount,
                 //'PAYMENTREQUEST_0_SHIPPINGAMT' => 100,
@@ -67,6 +67,7 @@ switch ($oReq->getAction())
                 'PAYMENTREQUEST_0_ITEMAMT' => $fAmount,
                 'PAYMENTREQUEST_0_INVNUM' => uniqid($aPurchase['purchase_id'].'-'),
             );
+           // d($orderParams,1);
 
             // Описание
             $item = array(
@@ -124,7 +125,7 @@ switch ($oReq->getAction())
                 if( is_array($response) && $response['ACK'] == 'Success') { // Оплата успешно проведена
                     // Здесь мы сохраняем ID транзакции, может пригодиться во внутреннем учете
                     $transactionId = $response['PAYMENTINFO_0_TRANSACTIONID'];
-                    $oPurchase->aData = array('purchase_id'=>$iPurchaseId, 'status'=>'paid', 'track_id'=>$transactionId, 'udate'=>Database::date(), 'pay_system'=>'paypal');
+                    $oPurchase->aData = array('purchase_id'=>$iPurchaseId, 'status'=>'paid', 'track_id'=>$transactionId, 'udate'=>Database::date(), 'pay_system_id'=>'1');
                     $oPurchase->update();
                     $oReq->forward('/'.($aLanguage['alias']).'/account/cart/'.$iPurchaseId.'/', Conf::format('Purchase successfully paid', array($iPurchaseId)));
                 } else

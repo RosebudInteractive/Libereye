@@ -97,7 +97,7 @@ class Paypal extends DbItem {
             'purchase_id' => isset($params['PAYMENTREQUEST_0_INVNUM'])?intval($params['PAYMENTREQUEST_0_INVNUM']):'NULL',
             'cdate' => Database::date()
         );
-        $this->insert(array('PAYMENTREQUEST_0_INVNUM', 'account_id'));
+        $this->insert(array('purchase_id', 'account_id'));
 
         // ѕровер€ем, нету ли ошибок в инициализации cURL
         if (curl_errno($ch)) {
