@@ -1,9 +1,9 @@
 <div class="container content">
 <div class="row payment-navigation">
     <div class="col-sm-6 col-md-9 col-lg-12">
-        <div class="stage active stage-1">Адрес доставки</div>
+        <div class="stage {if $aPurchase.status!='paid'}active{/if} stage-1">Адрес доставки</div>
         <div class="stage stage-2">Оплата</div>
-        <div class="stage stage-3 stage-4 stage-5">Расчет доставки</div>
+        <div class="stage {if $aPurchase.status=='paid'}active{/if} stage-3 stage-4 stage-5">Расчет доставки</div>
     </div>
 </div>
 
@@ -12,11 +12,11 @@
 <div class="row row-no-margin">
 <div class="col-lg-8 col-md-9 col-sm-6 basket-lg-vertical">
 <form action="" method="post" class="form-standart basket-payment" style="margin-bottom: 50px;">
-    {if $aErrors}<span class="info"><ul class="errorlist">{foreach from=$aErrors item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
-    {if $aSessErr}{literal}{/literal}<span class="info"><ul class="help-text">{foreach from=$aSessErr item=sError}<li>{$sError}</li>{/foreach}</ul></span>{/if}
-    <div class="ajax error-block" style="display: none;padding-top: 30px;">dsfdsdf</div>
+    {if $aErrors}<div class="error-block"  style="padding-top: 30px;">{foreach from=$aErrors item=sError}{$sError}<br/>{/foreach}</div>{/if}
+    {if $aSessErr}{literal}{/literal}<div class="success-block"   style="padding-top: 30px;">{foreach from=$aSessErr item=sError}{$sError}<br/>{/foreach}</div>{/if}
+    <div class="ajax error-block" style="display: none;padding-top: 30px;"></div>
 
-    <div id="basket-payment-page-1" class="basket-payment-page" data-name="Address form">
+    <div id="basket-payment-page-1" class="basket-payment-page" data-name="Address form" {if $aPurchase.status=='paid'}style="display: none;"{/if}>
         <div class="page-title" style="margin-top: 40px;">Адрес доставки</div>
         <div class="inputs">
             <div>
@@ -88,7 +88,7 @@
             К сожалению на этом этапе мы не можем назвать точную стоимость доставки. После оплаты товара нам потребуетсяся 24 часа на расчет.
         </div>-->
     </div>
-    <div id="basket-payment-page-2" class="basket-payment-page" data-name="Pay for goods">
+    <div id="basket-payment-page-2" class="basket-payment-page" data-name="Pay for goods"  {if $aPurchase.status=='paid'}style="display: none;"{/if}>
         <div class="page-title" style="margin-top: 40px;">Выберите способ оплаты</div>
         <div class="payment-type-select">
             <input type="radio" name="payment-type" value="card" data-page="1" id="payment-type-select-1" checked="checked"><label for="payment-type-select-1"><img src="/design/pic/payment_icon_1.png" /></label>
@@ -151,21 +151,21 @@
         </div>
     </div>
 </form>
-<form action="" method="post" class="form-standart delivery-payment">
-    <div class="co-stage-3 co-stage-4" style="display: none">
+<form action="" method="post" class="form-standart delivery-payment"   style="margin-bottom: 50px;{if $aPurchase.status=='paid'}display: block;{else}display: none;{/if}">
+    <div class="co-stage-3 co-stage-4" >
         <h2>Адрес доставки</h2>
         <div class="address">
-            <div class="address-string">Албания, Тирана, ул. Асим Вакши д. 18, кв. 6</div>
-            <div class="address-postindex">606480</div>
+            <div class="address-string">{$aPurchase.delivery_address}</div>
+           <!-- <div class="address-postindex">606480</div>-->
         </div>
-        <div class="phone">+7 938 673-43-80</div>
+        <div class="phone">{$aPurchase.delivery_phone}</div>
         <a href="#" class="change-address">Изменить адрес</a>
     </div>
-    <div id="basket-payment-page-3" class="basket-payment-page delivery-countdown-wrap" data-name="Delivery countdown">
+    <div id="basket-payment-page-3" class="basket-payment-page delivery-countdown-wrap" data-name="Delivery countdown" {if $aPurchase.status!='paid'}style="display: none;"{/if}>
         <div class="row row-no-margin">
             <div class="col-sm-2 col-md-3 col-lg-4 delivery-sum">
-                Примерный расчет: 30$<br/>
-                Всего: 850$
+                Примерный расчет: {$aPurchase.delivery}{$aPurchase.sign}<br/>
+                Всего: {$aPurchase.delivery+$aPurchase.price|money_format}{$aPurchase.sign}
             </div>
             <div class="col-sm-4 col-md-6 col-lg-8 delivery-timer">
                 <div>Точная стоимость доставки будет готова через</div>
@@ -179,7 +179,7 @@
         </div>
     </div>
 
-    <div id="basket-payment-page-5" class="basket-payment-page" data-name="Delivery payment">
+    <div id="basket-payment-page-5" class="basket-payment-page" data-name="Delivery payment" {if $aPurchase.status=='paid'}style="display: none;"{/if}>
         <div class="page-title" style="margin-top: 40px;">Выберите способ оплаты</div>
         <div class="payment-type-select">
             <input type="radio" name="payment-type" value="card" data-page="1" id="payment-type-select-1" checked="checked"><label for="payment-type-select-1"><img src="/design/pic/payment_icon_1.png" /></label>
@@ -254,23 +254,23 @@
             </div>
         </div>
     </div>
-    <div id="basket-payment-page-4" class="basket-payment-page delivery-overall" data-name="Delivery countdown finished">
+    <div id="basket-payment-page-4" class="basket-payment-page delivery-overall" data-name="Delivery countdown finished"  {if $aPurchase.status=='paid'}style="display: none;"{/if}>
         <div class="row row-no-margin">
             <div class="col-sm-2 col-md-3 col-lg-4 delivery-sum">
-                <div>Доставка: 30$</div>
+                <div>Доставка: {$aPurchase.delivery}{$aPurchase.sign}</div>
                 <a href="#" class="btn btn-green basket-payment-goto co-stage-4" data-page="5">Отправить товар</a>
             </div>
             <div class="col-sm-4 col-md-6 col-lg-8 delivery-sum-info">
                 <div>Прибытие товара: 24 сентября</div>
-                Ранее оплачено: 820$<br/>
-                С доставкой: 850$
+                Ранее оплачено: {$aPurchase.price}{$aPurchase.sign}<br/>
+                С доставкой: {$aPurchase.delivery+$aPurchase.price|money_format}{$aPurchase.sign}
             </div>
         </div>
     </div>
 </form>
 </div>
 <div class="col-lg-4 col-md-9 col-sm-6 cart-list-wrapper cart-checkout-page">
-    <div class="cart-list">
+    <div class="cart-list" >
         <div class="cart">
             <div>
                 <div class="shopper-photo-td">
@@ -318,7 +318,7 @@
             {/foreach}
         </div>
     </div>
-    <div class="cart-list-wide">
+    <div class="cart-list-wide" >
         <div class="shopper-info-block">
             {if $aPurchase.seller_image}
             <div class="shopper-photo">
@@ -353,16 +353,16 @@
             {/foreach}
         </div>
         <div class="total">
-            <div class="co-stage-2">Всего:</div>
-            <div class="co-stage-3 co-stage-4 co-stage-5" style="display: none">Оплачено:</div>
+            <div class="co-stage-2"  {if $aPurchase.status=='paid'}style="display: none;"{else}style="display: block;"{/if}>Всего:</div>
+            <div class="co-stage-3 co-stage-4 co-stage-5"  {if $aPurchase.status!='paid'}style="display: none;"{else}style="display: block;"{/if}>Оплачено:</div>
             {$aPurchase.price|money_format} {$aPurchase.sign}
         </div>
-        <div class="buttons">
+        <div class="buttons"  {if $aPurchase.status=='paid'}style="display: none;"{/if}>
             <a href="#" class="btn btn-green basket-payment-goto co-stage-1" data-page="2">Продолжить</a>
             <a href="#" class="btn btn-green basket-payment-checkout co-stage-2" style="display: none;">Оплатить</a>
         </div>
     </div>
-    <div class="delivery-count co-stage-1 co-stage-2">
+    <div class="delivery-count co-stage-1 co-stage-2" {if $aPurchase.status=='paid'}style="display: none;"{/if}>
         Предварительная стоимость доставки
         <div>
             Примерный расчет: {$aPurchase.delivery}{$aPurchase.sign}<br/>

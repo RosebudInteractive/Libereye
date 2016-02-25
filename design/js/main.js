@@ -89,7 +89,7 @@ $(function() {
                 i++;
             }
         }
-        console.log(links);
+        //console.log(links);
     };
 
     $('a.close-menu').click(function(e) {
@@ -842,7 +842,7 @@ $(function() {
     var $bpp = $('.basket-payment-page');
     var basketCheckoutPage = 1;
     if ($bpp.length) {
-        $bpp.not(':eq(0)').hide();
+       // $bpp.not(':eq(0)').hide();
 
         // links handlers
         $('.basket-payment-goto').click(function(e){
@@ -860,7 +860,7 @@ $(function() {
 
         function basketCheckoutPageChanged(toPage) {
             var $c = $('.content');
-            console.log(parseInt(toPage));
+            //console.log(parseInt(toPage));
             if (isNaN(parseInt(toPage)))
                 return false;
 

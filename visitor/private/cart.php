@@ -127,7 +127,7 @@ switch ($oReq->getAction())
                     $transactionId = $response['PAYMENTINFO_0_TRANSACTIONID'];
                     $oPurchase->aData = array('purchase_id'=>$iPurchaseId, 'status'=>'paid', 'track_id'=>$transactionId, 'udate'=>Database::date(), 'pay_system_id'=>'1');
                     $oPurchase->update();
-                    $oReq->forward('/'.($aLanguage['alias']).'/account/cart/'.$iPurchaseId.'/', Conf::format('Purchase successfully paid', array($iPurchaseId)));
+                    $oReq->forward('/'.($aLanguage['alias']).'/account/cart/'.$iPurchaseId.'/', Conf::format('Purchase was successfully paid'));
                 } else
                     $aErrors[] = Conf::format('Error payment');
             } else
