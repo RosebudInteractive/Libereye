@@ -9,6 +9,7 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
         $$('shop-form').clearValidation();
         $$('doclist').clearAll();
         $$('promo_head').setValues({src:item.promo_head && item.promo_head!=""?('/images/shop/'+item.promo_head):null});
+        $$('shop-form').setValues({id:item.shop_id}, true);
 
         var translated = ['title', 'description', 'brand_desc'];
         for(var i in LANGUAGES) {
