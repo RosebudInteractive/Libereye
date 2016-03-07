@@ -43,9 +43,10 @@ class ShopSlot extends DbItem
         if ($iCnt)
         {
             $iOffset = $this->_getOffset($iPage, $iPageSize, $iCnt);
-            $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).', a.fname, a.email, a2.fname seller, a2.email seller_email'.
+            $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).', a.fname, a.email, a2.fname seller, a2.email seller_email, i.name image'.
                 ' FROM '.$this->sTable.' AS '.$this->sAlias.
                 ' LEFT JOIN account a USING(account_id)'.
+                ' LEFT JOIN image i ON a.image_id=i.image_id'.
                 ' LEFT JOIN account a2 ON a2.account_id=ss.seller_id'.
                 ' WHERE '.$sCond.
                 ($sSort?(' ORDER BY '.$sSort):'').

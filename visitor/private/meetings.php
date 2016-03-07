@@ -7,37 +7,23 @@
  * @package visitor
  * ============================================================ */
 Conf::loadClass('Account');
-Conf::loadClass('Booking');
-Conf::loadClass('utils/Zoom');
+Conf::loadClass('ShopSlot');
+Conf::loadClass('Shop');
 Conf::loadClass('utils/Validator');
 Conf::loadClass('utils/file/Image');
 Conf::loadClass('utils/mail/Mailer'); 
 
 $oAccount  	= new Account();
-$oZoom  	= new Zoom();
-$oBooking  	= new Booking();
+$oShopSlot  	= new ShopSlot();
+$oShop  	= new Shop();
 $aErrors 	= array();
+$sTimezoneOffset = isset($_COOKIE['timezone'])?$_COOKIE['timezone']:0;
 
 // доступна только продавцам
 if ($aAccount['status'] != 'seller') {
     $oReq->forward('/');
 }
 
-$iSellerId = $aAccount['account_id'];
-$aSeller = array();
-
-if ($iSellerId) {
-    if (!$oAccount->loadBy(array('status'=>'="seller"', 'account_id'=>'='.$iSellerId)))
-        $oReq->forward('/account/booking/', Conf::format('Seller is not found'), true);
-    else
-        $aSeller = $oAccount->aData;
-}
-
-// время работы
-$aTimes = array();
-for($j=9*60; $j<18*60; $j+=30) {
-    $aTimes[$j*60] = array('dinner'=> $j>=13*60 && $j<14*60?true:false, 'time'=>floor($j/60).':'.sprintf('%02d', $j-floor($j/60)*60));
-}
 
 switch ($oReq->getAction())
 {
@@ -129,43 +115,85 @@ switch ($oReq->getAction())
         echo json_encode(array('errors'=>$aErrors));
         exit;
         break;
+
+    case 'canceled':
+    case 'missed':
+    case 'restore':
+        $iSlotId = $oReq->getInt('id');
+        if (!$oShopSlot->loadBy(array('shop_slot_id'=>'="'.$iSlotId.'"', 'seller_id'=>'='.$oAccount->isLoggedIn(), 'status'=>'IN('.($oReq->getAction()=='restore'?'"canceled","missed"':'"booked"').')')))
+            $aErrors[] =  Conf::format('Slot is not found');
+        else
+            $aSlot = $oShopSlot->aData;
+
+        if (!$aErrors) {
+            $oShopSlot->aData = array(
+                'shop_slot_id' => $iSlotId,
+                'status' => $oReq->getAction()=='restore'?'booked':$oReq->getAction(),
+                'udate' => Database::date(),
+            );
+            if (!$oShopSlot->update())
+                $aErrors = $oShopSlot->getErrors();
+        }
+        echo json_encode(array('errors'=>$aErrors));
+        exit;
+        break;
 }
 
 
+// Время со смещением временной зоны на сегодня
+$nTime = time();
+$nUtcTime = $nTime + date("Z", $nTime);
+$nTimeOffset = $nUtcTime - Conf::getTimezoneOffset(time(), $sTimezoneOffset);
 
-// неделя
-$sDateTime = join('-', array_reverse(explode('/', substr($oReq->get('date'), 0, 10) , 3)));
-$sDateTime = strtotime($sDateTime)===false?mktime(0,0,0,date("m"),date("d"),date("Y")):strtotime($sDateTime);
-$aWeekTimes = array();
-for ($i=0;$i<7;$i++)
-{
-    // date('N') ISO-8601 numeric representation of the day of the week (added in PHP 5.1.0)
-    // 1 (for Monday) through 7 (for Sunday)
-    $aWeekTimes[] = mktime(0,0,0,date('m', $sDateTime),date('d', $sDateTime)+$i-date('N', $sDateTime)+1,date('Y', $sDateTime));
+
+list($aSlots, $iSlotsCnt) = $oShopSlot->getList(array('seller_id'=>'='.$aAccount['account_id'], 'status'=>'="booked"'), 0, 0, 'ss.time_from');
+$aShops = array();
+$aSlotsNormal = array();
+foreach ($aSlots as $nKey=>$aSlot) {
+    if (!isset($aShops[$aSlot['shop_id']])) {
+        $oShop->load($aSlot['shop_id'], LANGUAGEID);
+        $aShops[$aSlot['shop_id']] = $oShop->aData;
+    }
+
+    $aSlots[$nKey]['time_from'] = strtotime($aSlot['time_from']) - Conf::getTimezoneOffset(strtotime($aSlot['time_from']), $sTimezoneOffset, $aShops[$aSlot['shop_id']]['time_shift']);
+    $aSlots[$nKey]['time_to'] = strtotime($aSlot['time_to']) - Conf::getTimezoneOffset(strtotime($aSlot['time_to']), $sTimezoneOffset, $aShops[$aSlot['shop_id']]['time_shift']);
+    $aSlots[$nKey]['shop'] =  $aShops[$aSlot['shop_id']]['title'];
+
+    $aSlots[$nKey]['cancel_time'] =  $aSlots[$nKey]['time_from']-$nTimeOffset-86400; // отменять можно за сутки
+    if ($aSlots[$nKey]['cancel_time']>0) {
+        $nDays = floor($aSlots[$nKey]['cancel_time']/86400);
+        $nHours = floor(($aSlots[$nKey]['cancel_time']-86400*$nDays)/3600);
+        $nMinutes = floor(($aSlots[$nKey]['cancel_time']-86400*$nDays-3600*$nHours)/60);
+        $aSlots[$nKey]['cancel_time'] =  ($nDays>0?$nDays.Conf::format('d.').' ':'').($nHours>0?$nHours.Conf::format('h.').' ':'').($nMinutes>0?$nMinutes.Conf::format('m.'):'');
+    }
+
+
+    $aSlotsNormal[date('Y-m-d', $aSlots[$nKey]['time_from'])][] = $aSlots[$nKey];
 }
 
-$aSellers = $oAccount->getHash('fname', array('status'=>'="seller"'));
-list($aBookings,) = $oBooking->getList(array('fromdate'=>'>="'.Database::date($aWeekTimes[0]).'"', 'todate'=>'<"'.Database::date($aWeekTimes[6]+24*60*60).'"', 'seller_id'=>'='.$iSellerId));
 
-$aBookingsItems = array();
-foreach ($aBookings as $aBooking) {
-    $sTime = strtotime($aBooking['fromdate']);
-    $aBookingsItems[$sTime] = $aBooking;
-}
+$aMonths = array(
+    '01' => Conf::format('January'),
+    '02' => Conf::format('February'),
+    '03' => Conf::format('March'),
+    '04' => Conf::format('April'),
+    '05' => Conf::format('May'),
+    '06' => Conf::format('June'),
+    '07' => Conf::format('July'),
+    '08' => Conf::format('August'),
+    '09' => Conf::format('September'),
+    '10' => Conf::format('October'),
+    '11' => Conf::format('November'),
+    '12' => Conf::format('December')
+);
+
 
 // Title
-$sTitle = Conf::format('Booking time');
+$sTitle = Conf::format('Meetings');
 $oTpl->assign(array(
-    'iSellerId'		=> $iSellerId,
-    'aErrors'		=> $aErrors,
-    'aSellers'		=> $aSellers,
-    'aSeller'		=> $aSeller,
-    'aTimes'	=> $aTimes,
-    'aWeekTimes'	=> $aWeekTimes,
-    'aBookingsItems'	=> $aBookingsItems,
-    'aWeekDays' => array(Conf::format('Mo'),Conf::format('Tu'),Conf::format('We'),Conf::format('Th'),Conf::format('Fr'),Conf::format('Sa'),Conf::format('Su'),),
-    'sNextWeek' => date('d/m/Y', $aWeekTimes[6]+24*60*60),
-    'sPrevWeek' => date('d/m/Y', $aWeekTimes[0]-7*24*60*60),
+    'aSlotsNormal' => $aSlotsNormal,
+    'iSlotsCnt' => $iSlotsCnt,
+    'aMonths' => $aMonths,
 ));
 
 ?>

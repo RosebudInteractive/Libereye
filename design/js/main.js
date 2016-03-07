@@ -901,4 +901,232 @@ $(function() {
     }
     // basket functions ------------------------
 
+
+    var $cLinks = $('.meeting a.cancel-meeting');
+    if ($cLinks.length) {
+        $cLinks.hover(function(){
+            if(!$(this).parent().find('.meeting-cancel-hint').length) {
+                $('#meeting-cancel-hint').tmpl({"time": $(this).data('cancel-time')}).appendTo($(this).parent());
+            }
+            var $hint = $(this).parent().find('.meeting-cancel-hint');
+            $hint.css({'top':($(this).position().top + 35) + 'px'}).stop().fadeIn(200)
+
+        }, function(){
+            var $hint = $(this).parent().find('.meeting-cancel-hint');
+            setTimeout(function(){
+                $hint.stop().fadeOut(200);
+            }, 800);
+
+        }).click(function(e){
+            e.preventDefault();
+            var that = this;
+            if ($(this).data('cancel-time') != '0') {
+                $.ajax({
+                    method: "POST",
+                    url: '/'+LANGUAGE+'/shopper/meetings/',
+                    data: {id:$(this).data('slot-id'), act:'canceled'}
+                })
+                    .done(function( msg ) {
+                        var results = JSON.parse(msg);
+                        if (results.errors && results.errors.length != 0) {
+                            alert(results.errors.join("\n"));
+                        } else {
+                            var $meeting = $(that).closest('.meeting');
+                            $meeting.addClass('deleted');
+                        }
+                    });
+
+            }
+        });
+
+        $('.meeting a.missed-meeting').click(function(e){
+            e.preventDefault();
+            var that = this;
+            $.ajax({
+                method: "POST",
+                url: '/'+LANGUAGE+'/shopper/meetings/',
+                data: {id:$(this).data('slot-id'), act:'missed'}
+            })
+                .done(function( msg ) {
+                    var results = JSON.parse(msg);
+                    if (results.errors && results.errors.length != 0) {
+                        alert(results.errors.join("\n"));
+                    } else {
+                        var $meeting = $(that).closest('.meeting');
+                        $meeting.addClass('deleted');
+                    }
+                });
+        });
+
+        $('.action-description-missed a, .action-description-deleted a').click(function(e){
+            e.preventDefault();
+            var that = this;
+            $.ajax({
+                method: "POST",
+                url: '/'+LANGUAGE+'/shopper/meetings/',
+                data: {id:$(this).data('slot-id'), act:'restore'}
+            })
+                .done(function( msg ) {
+                    var results = JSON.parse(msg);
+                    if (results.errors && results.errors.length != 0) {
+                        alert(results.errors.join("\n"));
+                    } else {
+                        $(that).closest('.meeting').removeClass('deleted missed');
+                    }
+                });
+        });
+        $('.meeting').on('mouseenter', '.meeting-cancel-hint', function(){
+            $(this).stop().addClass('visible');
+        });
+        $('.meeting').on('mouseleave', '.meeting-cancel-hint', function(){
+            var $hint = $(this);
+            setTimeout(function(){
+                $hint.stop().css('display','block').removeClass('visible').fadeOut(200);
+            }, 800);
+        })
+    }
+
+    $('a.btn-disabled').click(function(e){e.preventDefault();});
+
+    $('.basket-new-good').click(function(e){
+        e.preventDefault();
+        $("html, body").animate({ scrollTop: 0 }, 300);
+
+        var $basketContent = $('#basket-content-wrapper');
+        var $formContent = $('#new-good-form');
+        var searchVal = $basketContent.find('.search-input input').val();
+
+        if (searchVal.length > 0) {
+            $formContent.find('input[name="name"]').val(searchVal)
+        }
+
+        $basketContent.animate({opacity: 0},{step: function(now){
+            $formContent.css({'opacity': (1-now), 'display':'block'});
+        },
+            complete: function(){
+                $formContent.find('select').select2({minimumResultsForSearch: Infinity});
+            },
+            duration: 300
+        })
+    });
+
+    $('#new-good-form').find('form').submit(function(e){
+        e.preventDefault();
+
+        var $basketContent = $('#basket-content-wrapper');
+        var $formContent = $('#new-good-form');
+        $basketContent.find('.basket-empty').remove();
+        $('#submit-basket').removeClass('btn-disabled').unbind('click').bind('click', sendNewBasket);
+
+        // get image path after upload and save data to server
+        var formRes = getValues($(this));
+        $('#cart-item').tmpl({
+            "name": formRes.name,
+            "img": "http://placehold.it/171x114",
+            "brand": formRes.brand,
+            "color": formRes.color,
+            "price": formRes.price
+        }).appendTo($basketContent.find('.cart-content-main'));
+
+
+        $basketContent.animate({opacity: 1},{step: function(now){
+            $formContent.css({'opacity': (1-now), 'display':'block'});
+        },
+            complete: function(){
+                $formContent.css({'display':'none'})
+            },
+            duration: 300
+        });
+
+    });
+
+    function getValues($form) {
+        var result = {};
+        var fields = $form.serializeArray();
+        jQuery.each( fields, function( i, field ) {
+            result[field.name] = field.value;
+        });
+        return result;
+    }
+
+    function sendNewBasket(e) {
+        e.preventDefault();
+        alert ('Sending basket');
+    }
+
+    $('#basket-content-wrapper').find('.search-input input').keyup(function(){
+        var value = $(this).val();
+        $('.basket-new-good strong').html(value);
+
+        if (value.length >= 2) {
+            $.post(
+                '/ajax-test/basket-edit.php',
+                { q: value },
+                function(res) {
+                    var elems = $.parseJSON(res);
+                    var $searchResult = $('#search-result');
+                    var $basketContent = $('#basket-content-wrapper').find('.cart-content-main');
+
+                    $searchResult.find('> div').css({'opacity': 0});
+
+                    $searchResult.html('');
+                    if (!isNaN(parseInt(elems.length)) && parseInt(elems.length) != 0) {
+                        for (var x in elems) {
+                            $('#cart-item-search').tmpl({
+                                "name": elems[x].name,
+                                "img": "http://placehold.it/171x114",
+                                "brand": elems[x].brand,
+                                "color": elems[x].color,
+                                "price": elems[x].price
+                            }).appendTo($searchResult);
+                        }
+                    } else {
+                        $('#cart-item-search-empty').tmpl().appendTo($searchResult)
+                    }
+
+                    $basketContent.animate({opacity: 0}, {
+                        complete: function(){
+                            $basketContent.css({'display':'none'});
+                            $searchResult.css({'display':'block'}).animate({'opacity': 1}, {complete: function() {
+
+                                var i = 0;
+                                $searchResult.find('> div').stop().each(function(){
+                                    var item = $(this);
+                                    item.animate({'opacity': 1}, 300 + i);
+                                    i += 200;
+                                })
+                            }}, 250);
+                        },
+                        duration: 250
+                    })
+                }
+            )
+        }
+    }).blur(function(){
+        var $searchResult = $('#search-result');
+        var $basketContent = $('#basket-content-wrapper').find('.cart-content-main');
+
+        $searchResult.animate({opacity: 0}, {
+            complete: function(){
+                $searchResult.css({'display':'none'});
+                $basketContent.css({'display':'block'}).animate({'opacity': 1}, 250);
+            },
+            duration: 250
+        })
+    });
+
+    $('#search-result').on('click', '.cart-item-add-link', function(e){
+        e.preventDefault();
+        var $basketContent = $('#basket-content-wrapper');
+        var formRes = $(this).data('item-info').split(';;');
+        $('#cart-item').tmpl({
+            "name": formRes[1],
+            "img": "http://placehold.it/171x114",
+            "brand": formRes[0],
+            "color": formRes[3],
+            "price": formRes[4]
+        }).appendTo($basketContent.find('.cart-content-main'));
+    });
+
+
 });

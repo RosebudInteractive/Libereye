@@ -157,6 +157,7 @@ $nUtcTime = $nTime + date("Z", $nTime);
 $nTimeOffset = $nUtcTime - Conf::getTimezoneOffset(time(), $sTimezoneOffset);
 $aPurchase['time_from'] = Database::date(strtotime($aPurchase['time_from']) - Conf::getTimezoneOffset($nTimeOffset, $sTimezoneOffset, $aPurchase['shop_time_shift']));
 
+$sTitle = Conf::format('Shopping cart');
 
 $oTpl->assignSrc(array(
     'aUserReg' 			=> $aUserReg,
