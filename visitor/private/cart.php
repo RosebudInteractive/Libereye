@@ -143,7 +143,7 @@ if ($oPurchase->loadBy(array('account_id'=>'='.$oAccount->isLoggedIn(), 'purchas
 else
     $oReq->forward('/');
 
-list($aProducts,) = $oProduct2purchase->getList(array('purchase_id'=>'='.$iPurchaseId));
+list($aProducts,) = $oProduct2purchase->getList(array('purchase_id'=>'='.$iPurchaseId, 'status'=>'!="deleted"'));
 
 $oUserReg  	= new Account();
 $oCountry  	= new Country();

@@ -56,11 +56,12 @@ class Purchase extends DbItem
     {
         $nLangId = $nLangId? $nLangId: LANGUAGEID;
         $sSql = 'SELECT '.$this->_joinFields($this->aFields).', a.fname, a.email, a2.fname seller'.
-            ', a2.email seller_email, c.code currency, c.sign, i.name seller_image, pd1.phrase shop_title, ss.time_from, s.time_shift shop_time_shift'.
+            ', a2.email seller_email, c.code currency, c.sign, i2.name image, i.name seller_image, pd1.phrase shop_title, ss.time_from, ss.time_to, s.time_shift shop_time_shift'.
             ' FROM '.$this->sTable.' AS '.$this->sAlias.
             ' LEFT JOIN account a USING(account_id)'.
             ' LEFT JOIN account a2 ON a2.account_id=p.seller_id'.
             ' LEFT JOIN image i ON i.image_id=a2.image_id'.
+            ' LEFT JOIN image i2 ON i2.image_id=a.image_id'.
             ' LEFT JOIN currency c ON c.currency_id='.$this->sAlias.'.currency_id '.
             ' LEFT JOIN shop_slot ss ON ss.shop_slot_id=p.shop_slot_id'.
             ' LEFT JOIN shop s ON s.shop_id=ss.shop_id'.

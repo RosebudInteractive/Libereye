@@ -151,11 +151,11 @@ class Brand extends DbItem
      * @param array  $aCond  condition array
      * @return array hash ($id=>$value)
      */
-    function getHash($sValue='name', $aCond=array(), $sSort='', $nLimit=0, $nLangId=0)
+    function getHash($sValue='title', $aCond=array(), $sSort='', $nLimit=0, $nLangId=0)
     {
         $nLangId = $nLangId? $nLangId: LANGUAGEID;
         $sCond = $this->_parseCond($aCond, $this->aFields);
-        $sSql = 'SELECT '.$this->sId.', pd1.phrase title'.
+        $sSql = 'SELECT '.$this->sAlias.'.'.$this->sId.', pd1.phrase title'.
             ' FROM '.$this->sTable.' AS '.$this->sAlias.
             ' LEFT JOIN phrase p1 ON p1.object_id='.$this->sAlias.'.brand_id AND p1.object_type_id='.$this->nObjectType.'   AND p1.object_field="title" '.
             ' LEFT JOIN phrase_det pd1 ON pd1.phrase_id=p1.phrase_id AND pd1.language_id='.$nLangId.'  '.

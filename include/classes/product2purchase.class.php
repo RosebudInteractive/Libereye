@@ -36,7 +36,7 @@ class Product2purchase extends DbItem
         {
             $iOffset = $this->_getOffset($iPage, $iPageSize, $iCnt);
             $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).
-                ', pd1.phrase product, c.sign'.
+                ', pd1.phrase product, c.sign, pd3.phrase brand, p.color'.
                 ', (SELECT name FROM image i WHERE i.object_id='.$this->sAlias.'.product_id AND i.object_type="product" ORDER BY image_id DESC LIMIT 1) image'.
                 ' FROM '.$this->sTable.' AS '.$this->sAlias.
                 ' LEFT JOIN product p ON p.product_id='.$this->sAlias.'.product_id '.
@@ -44,6 +44,9 @@ class Product2purchase extends DbItem
                 ' LEFT JOIN phrase_det pd1 ON pd1.phrase_id=p1.phrase_id AND pd1.language_id='.$nLangId.'  '.
                 ' LEFT JOIN purchase pr ON pr.purchase_id='.$this->sAlias.'.purchase_id '.
                 ' LEFT JOIN currency c ON c.currency_id=pr.currency_id '.
+                ' LEFT JOIN brand b ON b.brand_id=p.brand_id '.
+                ' LEFT JOIN phrase p3 ON p3.object_id=b.brand_id AND p3.object_type_id=6   AND p3.object_field="title" '.
+                ' LEFT JOIN phrase_det pd3 ON pd3.phrase_id=p3.phrase_id AND pd3.language_id='.$nLangId.'  '.
                 ' WHERE  '.$sCond.
                 ($sSort?(' ORDER BY '.$sSort):'').
                 ($iPageSize?(' LIMIT '.$iOffset.','.$iPageSize):'');

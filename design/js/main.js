@@ -818,9 +818,39 @@ $(function() {
 
     $('.cart-item-delete-link').click(function(e){
         e.preventDefault();
-        var item = $(this).parents('.cart-item');
-        item.html('').addClass('deleted');
-        $('#cart-item-deleted').tmpl({"name": item.data('name')}).appendTo(item);
+        var that = this, productId = $(this).data('product');
+        $.ajax({
+            method: "POST",
+            data: {act:'delproduct', product:productId}
+        })
+            .done(function( msg ) {
+                var results = JSON.parse(msg);
+                if (results.errors && results.errors.length != 0) {
+                    alert(results.errors.join("\n"));
+                } else {
+                    var item = $(that).parents('.cart-item');
+                    var itemClone = item.clone(true);
+                    item.html('').addClass('deleted');
+                    $('#cart-item-deleted').tmpl({"name": item.data('name')}).appendTo(item);
+                    item.find('.cart-item-restore').click(function(e){
+                        e.preventDefault();
+                        var that = this;
+                        $.ajax({
+                            method: "POST",
+                            data: {act:'restoreproduct', product:productId}
+                        })
+                            .done(function( msg ) {
+                                var results = JSON.parse(msg);
+                                if (results.errors && results.errors.length != 0) {
+                                    alert(results.errors.join("\n"));
+                                } else {
+                                    item.after(itemClone).remove();
+                                }
+                            });
+                    })
+                }
+            });
+
     });
 
     $('.payment-type-select input').click(function(e){
@@ -830,12 +860,12 @@ $(function() {
     });
 
 
-    var widthToSet = $('.cart-list .cart').eq(0).width();
+    /*var widthToSet = $('.cart-list .cart').eq(0).width();
     $('.cart-content').width(widthToSet-30*2);
     $(window).bind('resize',function(){
         var widthToSet = $('.cart-list .cart').eq(0).width();
         $('.cart-content').width(widthToSet-30*2);
-    });
+    });*/
 
     $('.cart-content').hover(function(){$(this).prev().addClass('hovered');},function(){$(this).prev().removeClass('hovered');})
 
@@ -1010,7 +1040,7 @@ $(function() {
         })
     });
 
-    $('#new-good-form').find('form').submit(function(e){
+    $('#new-good-form').find('.basket-new-good-save').click(function(e){
         e.preventDefault();
 
         var $basketContent = $('#basket-content-wrapper');
@@ -1018,25 +1048,38 @@ $(function() {
         $basketContent.find('.basket-empty').remove();
         $('#submit-basket').removeClass('btn-disabled').unbind('click').bind('click', sendNewBasket);
 
-        // get image path after upload and save data to server
         var formRes = getValues($(this));
-        $('#cart-item').tmpl({
-            "name": formRes.name,
-            "img": "http://placehold.it/171x114",
-            "brand": formRes.brand,
-            "color": formRes.color,
-            "price": formRes.price
-        }).appendTo($basketContent.find('.cart-content-main'));
 
+        // отправляем через iframe
+        $('#productform').submit();
 
-        $basketContent.animate({opacity: 1},{step: function(now){
-            $formContent.css({'opacity': (1-now), 'display':'block'});
-        },
-            complete: function(){
-                $formContent.css({'display':'none'})
+        $("#postiframe").load(function () {
+            var results =  $.parseJSON(this.contentWindow.document.body.innerHTML);
+            console.log(results);
+
+            // get image path after upload and save data to server
+            $('#cart-item').tmpl({
+                "id": results.product.id,
+                "name": results.product.product,
+                "img": results.product.image,
+                "brand": results.product.brand,
+                "color": results.product.color,
+                "price": results.product.price,
+                "sign": results.product.sign
+            }).appendTo($basketContent.find('.cart-content-main'));
+            $basketContent.animate({opacity: 1},{step: function(now){
+                $formContent.css({'opacity': (1-now), 'display':'block'});
             },
-            duration: 300
+                complete: function(){
+                    $formContent.css({'display':'none'})
+                },
+                duration: 300
+            });
+
         });
+        return false;
+
+
 
     });
 
@@ -1060,10 +1103,10 @@ $(function() {
 
         if (value.length >= 2) {
             $.post(
-                '/ajax-test/basket-edit.php',
-                { q: value },
+                '',
+                { q: value, act:'getproducts' },
                 function(res) {
-                    var elems = $.parseJSON(res);
+                    var elems = $.parseJSON(res).products;
                     var $searchResult = $('#search-result');
                     var $basketContent = $('#basket-content-wrapper').find('.cart-content-main');
 
@@ -1072,13 +1115,7 @@ $(function() {
                     $searchResult.html('');
                     if (!isNaN(parseInt(elems.length)) && parseInt(elems.length) != 0) {
                         for (var x in elems) {
-                            $('#cart-item-search').tmpl({
-                                "name": elems[x].name,
-                                "img": "http://placehold.it/171x114",
-                                "brand": elems[x].brand,
-                                "color": elems[x].color,
-                                "price": elems[x].price
-                            }).appendTo($searchResult);
+                            $('#cart-item-search').tmpl(elems[x]).appendTo($searchResult);
                         }
                     } else {
                         $('#cart-item-search-empty').tmpl().appendTo($searchResult)
@@ -1119,14 +1156,42 @@ $(function() {
         e.preventDefault();
         var $basketContent = $('#basket-content-wrapper');
         var formRes = $(this).data('item-info').split(';;');
-        $('#cart-item').tmpl({
+        var item = {
             "name": formRes[1],
-            "img": "http://placehold.it/171x114",
+            "img": formRes[2],
             "brand": formRes[0],
             "color": formRes[3],
-            "price": formRes[4]
-        }).appendTo($basketContent.find('.cart-content-main'));
+            "price": formRes[4],
+            "id": formRes[5]
+        };
+
+        $.ajax({
+            method: "POST",
+            data: {act:'addproduct', product:item.id}
+        })
+            .done(function( msg ) {
+                var results = JSON.parse(msg);
+                if (results.errors && results.errors.length != 0) {
+                    alert(results.errors.join("\n"));
+                } else {
+                    $('#cart-item').tmpl(item).appendTo($basketContent.find('.cart-content-main'));
+                }
+            });
+
     });
+
+    // upload products
+    /*$("#productform").click(function () {
+        $('#postiframe').remove();
+        var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none"></iframe>');
+        $("body").append(iframe);
+        $(this).submit();
+        $("#postiframe").load(function () {
+            var iframeContents = this.contentWindow.document.body.innerHTML;
+            console.log(iframeContents);
+        });
+        return false;
+    });*/
 
 
 });

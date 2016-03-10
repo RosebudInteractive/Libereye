@@ -43,6 +43,7 @@ $aParts = array(
             'mypurchases' => array('url'  =>Conf::getUrl('visitor.private.mypurchases')),
             'purchase' => array('url'  =>Conf::getUrl('visitor.private.purchase')),
             'cart' => array('url'  =>Conf::getUrl('visitor.private.cart')),
+            'cart_shopper' => array('url'  =>Conf::getUrl('visitor.private.cart_shopper')),
         ),
     ), // end part "private"
 );
