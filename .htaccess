@@ -3,8 +3,9 @@ AddDefaultCharset utf-8
 
 #AuthType Basic
 #AuthName "Private zone. Only for administrator!"
-#AuthUserFile  /home/abeltchi/sites/dev.libereye.com/.htpasswd
+#AuthUserFile  /var/www/sites/dev.libereye.com/.htpasswd
 #require valid-user
+
 
 Options -Indexes
 
