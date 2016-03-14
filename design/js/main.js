@@ -1194,4 +1194,41 @@ $(function() {
     });*/
 
 
+    // отмена митингов
+    $('.meetings-list .account-cancel-meeting').click(function(e){
+        e.preventDefault();
+        var that = this;
+        $.ajax({
+            method: "POST",
+            url: '/'+LANGUAGE+'/account/meetings/',
+            data: {id:$(this).data('slot-id'), act:'canceled'}
+        })
+            .done(function( msg ) {
+                var results = JSON.parse(msg);
+                if (results.errors && results.errors.length != 0) {
+                    alert(results.errors.join("\n"));
+                } else {
+                    var $meeting = $(that).closest('.meeting');
+                    $meeting.addClass('deleted');
+                }
+            });
+    });
+    $('.meetings-list  .action-description-deleted a').click(function(e){
+        e.preventDefault();
+        var that = this;
+        $.ajax({
+            method: "POST",
+            url: '/'+LANGUAGE+'/account/meetings/',
+            data: {id:$(this).data('slot-id'), act:'restore'}
+        })
+            .done(function( msg ) {
+                var results = JSON.parse(msg);
+                if (results.errors && results.errors.length != 0) {
+                    alert(results.errors.join("\n"));
+                } else {
+                    $(that).closest('.meeting').removeClass('deleted missed');
+                }
+            });
+    });
+
 });

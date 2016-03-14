@@ -1,0 +1,118 @@
+<div class="container content">
+<div class="row" style="margin-top: 82px;">
+    <div class="col-sm-4 col-md-7 col-lg-9">
+        <div class="page-title">{$aAccount.fname}</div>
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-3">
+        <a href="/{$aLanguage.alias}/account/profile/" class="personal-area-settings-link">Настройки</a>
+    </div>
+</div>
+<div class="row meetings-list-wrapper">
+    <div class="col-sm-6 col-md-9 col-lg-12">
+        <div class="meetings-list-title">Митинги</div>
+        <div class="meetings-list">
+            {foreach from=$aSlotsNormal key=key item=aItems}
+            {foreach from=$aItems key=key2 item=aItem}
+            <div class="meeting">
+                <div class="shopper-photo-td">
+                    <div class="shopper-photo">
+                        <img src="{if $aItem.seller_image}/images/account/{$aItem.seller_image}{else}/design/pic/noimage.png{/if}" />
+                    </div>
+                </div>
+                <div class="shopper-name">
+                   {$aItem.seller}
+                </div>
+                <div class="shop-n-time">
+                    <div class="shop">{$aItem.shop}</div>
+                    <div class="time">{$key|date_format:'%d'} {$aMonths[$key|date_format:'%m']} в <strong>{$aItem.time_from|date_format:'%H:%M'}</strong></div>
+                </div>
+                <div class="buttons">
+                    {if $aItem.start_time && $aItem.start_time!=1}
+                        <span class="btn btn-black">{$aItem.start_time}</span>
+                    {else}
+                        {if $aItem.start_time && $aItem.zoom_start_url}
+                        <a href="{$aItem.zoom_start_url}" target="_blank" class="btn btn-green">Начать митинг</a>
+                        {/if}
+                    {/if}
+                </div>
+                <div class="hide-btn">
+                    {if $aItem.cancel_time>0}
+                    <a href="#" title="Отменить митинг" class="account-cancel-meeting"  data-slot-id="{$aItem.shop_slot_id}"><img src="/design/pic/personal-area-meeting-hide-icon.png" /></a>
+                    {/if}
+                </div>
+                {if $aItem.cancel_time>0}
+                <div class="deleted">
+                    <div class="meeting-time">{$key|date_format:'%d'} {$aMonths[$key|date_format:'%m']} {$aItem.time_from|date_format:'%H:%M'}</div>
+                    <div class="shop-name">{$aItem.shop}</div>
+                    <div class="action-description-deleted">Митинг отменен.&nbsp;<a href="#" data-slot-id="{$aItem.shop_slot_id}">Восстановить</a></div>
+                </div>
+                {/if}
+            </div>
+            {/foreach}
+            {/foreach}
+
+        </div>
+    </div>
+</div>
+<div class="row cart-list-wrapper">
+    <div class="col-sm-6 col-md-9 col-lg-12">
+        <div class="cart-list-title">Корзины</div>
+        <div class="cart-list">
+            {foreach from=$aPurchases item=aPurchase}
+            <div class="cart ">
+                <div>
+                    <div class="shopper-photo-td">
+                        <div class="shopper-photo">
+                            <img src="{if $aPurchase.seller_image}/images/account/{$aPurchase.seller_image}{else}/design/pic/noimage.png{/if}" />
+                        </div>
+                    </div>
+                    <div class="shopper-name visible-lg">
+                        {$aPurchase.seller}
+                    </div>
+                    <div class="shop-n-time">
+                        <div class="shop">{$aPurchase.shop_title}</div>
+                        <div class="time">{$aPurchase.time_from|date_format:'%d'} {$aMonths[$aPurchase.time_from|date_format:'%m']} в <strong>16:20</strong></div>
+                    </div>
+                    <div class="price">{$aPurchase.price+$aPurchase.delivery|number_format} {$aPurchase.sign}</div>
+                    <div class="buttons">
+                        <a href="#" class="btn btn-green">Заказать</a>
+                    </div>
+                    <div class="hide-btn">
+                        <a class="drop-activate" href="#"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-content" style="display: none;">
+                {foreach from=$aCarts[$aPurchase.purchase_id] item=aItem}
+                <div class="cart-item" data-id="{$aItem.product2purchase_id}" data-name="{$aItem.product}">
+                    <div class="cart-item-image">
+                        <img src="{if $aItem.image}/images/product/{$aItem.image}{else}/design/pic/noimage171.png{/if}" />
+                    </div>
+                    <div class="cart-item-info">
+                        <div>{$aItem.product}</div>
+                        <div>{$aItem.color}</div>
+                        <div class="cart-item-price">
+                            {$aItem.price} {$aItem.sign}
+                        </div>
+                    </div>
+                    <div class="cart-item-delete">
+                        <a href="#" class="cart-item-delete-link" data-product="{$aItem.product2purchase_id}">
+                            <img src="/design/pic/cart-item-delete-icon.png" />
+                        </a>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+            {/foreach}
+        </div>
+    </div>
+</div>
+</div>
+{literal}
+<script id="cart-item-deleted" type="text/x-jquery-tmpl">
+    <div>
+        ${name} удален
+        <a href="#" class="cart-item-restore">Восстановить</a>
+    </div>
+</script>
+{/literal}

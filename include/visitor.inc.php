@@ -39,11 +39,12 @@ $aParts = array(
             'logout' => array('url'  =>Conf::getUrl('visitor.private.logout')),
             'booking' => array('url'  =>Conf::getUrl('visitor.private.booking')),
             'meetings' => array('url'  =>Conf::getUrl('visitor.private.meetings')),
-            'purchases' => array('url'  =>Conf::getUrl('visitor.private.purchases')),
-            'mypurchases' => array('url'  =>Conf::getUrl('visitor.private.mypurchases')),
-            'purchase' => array('url'  =>Conf::getUrl('visitor.private.purchase')),
+           // 'purchases' => array('url'  =>Conf::getUrl('visitor.private.purchases')),
+           // 'mypurchases' => array('url'  =>Conf::getUrl('visitor.private.mypurchases')),
+           // 'purchase' => array('url'  =>Conf::getUrl('visitor.private.purchase')),
             'cart' => array('url'  =>Conf::getUrl('visitor.private.cart')),
             'cart_shopper' => array('url'  =>Conf::getUrl('visitor.private.cart_shopper')),
+            'mymeetings' => array('url'  =>Conf::getUrl('visitor.private.mymeetings')),
         ),
     ), // end part "private"
 );

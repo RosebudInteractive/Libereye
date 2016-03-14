@@ -9,3 +9,68 @@
     font-size: 13px;
     margin: 10px 0;
 }
+
+.meetings-list-wrapper .meetings-list .meeting > div.deleted{
+    display: none;
+}
+.meetings-list-wrapper .meetings-list .meeting.deleted > div.deleted{
+    display: table-row;
+}
+
+.meetings-list-wrapper .meeting .deleted {
+    display: none;
+    padding: 20px 15px;
+    width:100%;
+}
+.meetings-list-wrapper .meeting.deleted > div,
+.meetings-list-wrapper .meeting.missed > div{
+    display: none;
+}
+.meetings-list-wrapper .meeting.deleted .deleted,
+.meetings-list-wrapper .meeting.missed .deleted {
+    display: block;
+}
+.meetings-list-wrapper .meeting.deleted .deleted .action-description-missed,
+.meetings-list-wrapper .meeting.missed .deleted .action-description-deleted {
+    display: none;
+}
+.meetings-list-wrapper .meeting.deleted .deleted {
+    background: #f1f1f1;
+}
+.meetings-list-wrapper .meeting.missed .deleted {
+    background: #fdeaea;
+}
+.meetings-list-wrapper .meeting .deleted > div {
+    float: left;
+    font-size: 13px;
+}
+.meetings-list-wrapper .meeting .deleted div.action-description-deleted,
+.meetings-list-wrapper .meeting .deleted div.action-description-missed {
+    float: right;
+}
+.meetings-list-wrapper .meeting .deleted div.action-description-deleted a,
+.meetings-list-wrapper .meeting .deleted div.action-description-missed a {
+    color: #22b46a;
+    text-decoration: none;
+}
+.meetings-list-wrapper .meeting .deleted .meeting-time {
+    margin-right: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.meetings-list-wrapper .meeting .deleted .shop-name {
+
+}
+.meetings-list-wrapper .meeting.missed .deleted .meeting-time {
+    padding-left: 40px;
+    background: url('/design/pic/flag_red.png') no-repeat 0 50%;
+}
+.meetings-list-wrapper .meeting.deleted,
+.meetings-list-wrapper .meeting.missed {
+    padding: 0 !important;
+}
+.meetings-list-wrapper .meeting .deleted:after {
+    content: '';
+    display: table;
+    clear: both;
+}

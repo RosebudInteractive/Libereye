@@ -29,6 +29,7 @@ class Product2purchase extends DbItem
         $aMap = $this->aFields;
         $sCond = $this->_parseCond($aCond, $aMap);
         $sSql = 'SELECT COUNT(*) FROM `'.$this->sTable.'` AS '.$this->sAlias.
+            ' LEFT JOIN purchase pr ON pr.purchase_id='.$this->sAlias.'.purchase_id '.
             ' WHERE '.$sCond;
         $iCnt = $this->oDb->getField($sSql);
         $aRows = array();
@@ -53,6 +54,20 @@ class Product2purchase extends DbItem
             $aRows = $this->oDb->getRows($sSql);
         }
         return array($aRows, $iCnt);
+    }
+
+
+    /** Load info from DB by given condition
+     * @param array $aCond condition
+     * @return array data
+     */
+    function loadBy($aCond)
+    {
+        $sSql = 'SELECT '.$this->_joinFields($this->aFields).' FROM '.$this->sTable.' AS '.$this->sAlias.
+            ' LEFT JOIN purchase pr ON pr.purchase_id='.$this->sAlias.'.purchase_id '.
+            '  WHERE '.$this->_parseCond($aCond, $this->aFields);
+        $this->aData = $this->oDb->getRow($sSql);
+        return sizeof($this->aData);
     }
 
 
