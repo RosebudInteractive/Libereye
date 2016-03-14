@@ -75,7 +75,7 @@
                     </div>
                     <div class="price">{$aPurchase.price+$aPurchase.delivery|number_format} {$aPurchase.sign}</div>
                     <div class="buttons">
-                        <a href="#" class="btn btn-green">Заказать</a>
+                        <a href="/{$aLanguage.alias}/account/cart/{$aPurchase.purchase_id}/" class="btn btn-green btn-booking">Заказать</a>
                     </div>
                     <div class="hide-btn">
                         <a class="drop-activate" href="#"></a>

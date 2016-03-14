@@ -355,7 +355,7 @@
         <div class="total">
             <div class="co-stage-2"  {if $aPurchase.status=='paid'}style="display: none;"{else}style="display: block;"{/if}>Всего:</div>
             <div class="co-stage-3 co-stage-4 co-stage-5"  {if $aPurchase.status!='paid'}style="display: none;"{else}style="display: block;"{/if}>Оплачено:</div>
-            {$aPurchase.price|money_format} {$aPurchase.sign}
+            {$aPurchase.price+$aPurchase.delivery|money_format} {$aPurchase.sign}
         </div>
         <div class="buttons"  {if $aPurchase.status=='paid'}style="display: none;"{/if}>
             <a href="#" class="btn btn-green basket-payment-goto co-stage-1" data-page="2">Продолжить</a>
@@ -363,10 +363,8 @@
         </div>
     </div>
     <div class="delivery-count co-stage-1 co-stage-2" {if $aPurchase.status=='paid'}style="display: none;"{/if}>
-        Предварительная стоимость доставки
         <div>
-            Примерный расчет: {$aPurchase.delivery}{$aPurchase.sign}<br/>
-            Всего с доставкой {$aPurchase.delivery+$aPurchase.price|money_format}{$aPurchase.sign}
+            Стоимость доставки: {$aPurchase.delivery|money_format}{$aPurchase.sign}<br/>
         </div>
     </div>
 </div>

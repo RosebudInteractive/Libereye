@@ -800,6 +800,7 @@ $(function() {
     }
 
     $('.cart .hide-btn a').parents('.cart').click(function(e){
+        if ($(e.target).hasClass('btn-booking')) return true;
         e.preventDefault();
         if ($(e.target).hasClass('btn'))
             return;
