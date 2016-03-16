@@ -937,7 +937,7 @@ $(function() {
     if ($cLinks.length) {
         $cLinks.hover(function(){
             if(!$(this).parent().find('.meeting-cancel-hint').length) {
-                $('#meeting-cancel-hint').tmpl({"time": $(this).data('cancel-time')}).appendTo($(this).parent());
+                $('#meeting-cancel-hint').tmpl({"time": $(this).data('cancel-time'), language:LANGUAGE}).appendTo($(this).parent());
             }
             var $hint = $(this).parent().find('.meeting-cancel-hint');
             $hint.css({'top':($(this).position().top + 35) + 'px'}).stop().fadeIn(200)
@@ -1221,6 +1221,22 @@ $(function() {
             method: "POST",
             url: '/'+LANGUAGE+'/account/meetings/',
             data: {id:$(this).data('slot-id'), act:'restore'}
+        })
+            .done(function( msg ) {
+                var results = JSON.parse(msg);
+                if (results.errors && results.errors.length != 0) {
+                    alert(results.errors.join("\n"));
+                } else {
+                    $(that).closest('.meeting').removeClass('deleted missed');
+                }
+            });
+    });
+
+    // сохраняем коробку при заказе
+    $('#inBox').change(function(){
+        $.ajax({
+            method: "POST",
+            data: {box:$(this).val(), act:'boxselect'}
         })
             .done(function( msg ) {
                 var results = JSON.parse(msg);

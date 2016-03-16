@@ -15,6 +15,7 @@ Conf::loadClass('ShopSlot');
 Conf::loadClass('Product2purchase');
 Conf::loadClass('Brand');
 Conf::loadClass('Image');
+Conf::loadClass('Box');
 
 $oCountry = new Country();
 $oBrand = new Brand();
@@ -22,6 +23,7 @@ $oPurchase = new Purchase();
 $oProduct = new Product();
 $oShopSlot = new ShopSlot();
 $oImage = new Image();
+$oBox = new Box();
 $oProduct2purchase = new Product2purchase();
 $iShopSlotId = $oReq->getInt('id');
 $aPurchase = array();
@@ -49,6 +51,8 @@ else {
         'udate' => Database::date(),
     );
     $aPurchase['purchase_id'] = $oPurchase->insert();
+    $oPurchase->loadBy(array('shop_slot_id'=>'='.$iShopSlotId));
+    $aPurchase = $oPurchase->aData;
 }
 
 switch ($oReq->getAction())
@@ -124,6 +128,18 @@ switch ($oReq->getAction())
                 $aErrors[] = Conf::format('Product not found in shopper cart');
         } else
             $aErrors[] = Conf::format('Product not found');
+        echo json_encode(array('errors'=>$aErrors));
+        exit;
+        break;
+
+    case 'boxselect':
+        $iBoxId = $oReq->getInt('box');
+        if ($oBox->load($iBoxId)) {
+           $oPurchase->aData = array('purchase_id'=>$aPurchase['purchase_id'], 'box_id'=>$iBoxId);
+           if (!$oPurchase->update())
+               $aErrors = $oPurchase->getErrors();
+        } else
+            $aErrors[] = Conf::format('Box not found');
         echo json_encode(array('errors'=>$aErrors));
         exit;
         break;
@@ -243,6 +259,7 @@ $oTpl->assignSrc(array(
     'aProducts'		=> $aProducts,
     'aCountries' => $oCountry->getHash('title',array(),'',$aLanguage['language_id']),
     'aBrands' => $oBrand->getHash('title',array('{#s2b.shop_id}'=>'s2b.shop_id='.$aShopSlot['shop_id']),'',1000,$aLanguage['language_id']),
+    'aBoxes' => $oBox->getHash(),
 ));
 
 ?>

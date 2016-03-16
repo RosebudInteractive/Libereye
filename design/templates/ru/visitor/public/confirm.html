@@ -1,20 +1,19 @@
-<div class="main-col">
-    <div class="profile-container">
-        <header class="profile-header">
-            <h1 class="profile-name">{$aPhrases['Register']}</h1>
-        </header>
-        <form enctype="multipart/form-data" action="" method="POST" class="profile-header">
-
-            <div class="content">
-                {if $bConfirmed}
-                    {$aPhrases['Thank you for registering']}
-                {else}
-                    {$aPhrases['An incorrect code is confirmed']}
-                {/if}
-
+<div class="container content">
+    <div class="row">
+        <div class="right-column" style="width: 90%;">
+            <div class="right-inner" style="max-width: 1100px;">
+                <div class="shop-description" style="padding-top: 50px;">
+                    <a name="about" class="internal-a"></a>
+                    <div class="block-title">{$aPhrases['Register']}</div>
+                    <div class="text">
+                        {if $bConfirmed}
+                        {$aPhrases['Thank you for registering']}
+                        {else}
+                        {$aPhrases['An incorrect code is confirmed']}
+                        {/if}
+                    </div>
+                </div>
             </div>
-
-        </form>
+        </div>
     </div>
 </div>
-<br>

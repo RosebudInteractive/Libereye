@@ -175,13 +175,14 @@ if ($aTodayOpenTime) {
 
 // шопперы и слоты
 $sStartTime = strtotime(date('Y-m-d', $nTimeOffset));
+//$sStartTime = $nTimeOffset;
 $sEndTime = $sStartTime+6*86400;
 $aShoppers = $aSlots = array();
 $aWeekDays = array('Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa');
 list($aItems,) = $oAccount->getList(array('shop_id'=>'='.$nShopId, 'status'=>'="seller"'));
 if ($aItems) list($aSlots,) = $oShopSlot->getList(array(
     '{#shop_id}'=>'ss.shop_id='.$nShopId,
-    '{#time_from}'=>'time_from>="'.Database::date($sStartTime).'" AND DATE(time_from)<="'.date('Y-m-d', $sEndTime).'"',
+    '{#time_from}'=>'time_from>="'.Database::date($nUtcTime).'" AND DATE(time_from)<="'.date('Y-m-d', $sEndTime).'"',
     'seller_id'=>'IN('.$oAccount->getListIds($aItems, true).')',
     'status'=>'IN("free", "booked")',
 ), 0, 0, 'ss.time_from');
