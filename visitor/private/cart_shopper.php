@@ -182,7 +182,7 @@ switch ($oReq->getAction())
             $oProduct->aData = $aProduct;
             if ($iProductId = $oProduct->insert(true, array('title'))) {
 
-                if (isset($_FILES['photo']) && isset($_FILES['photo']['tmp_name'])) {
+                if (isset($_FILES['photo']) && isset($_FILES['photo']['tmp_name']) && $_FILES['photo']['tmp_name']) {
                     $sExt = strtolower(substr($_FILES['photo']['name'], strrpos($_FILES['photo']['name'], '.') + 1));
                     if ($iImageId = $oImage->upload($_FILES['photo']['tmp_name'], 'product', $iProductId, $sExt)) {
                         $aProduct['img'] = $oImage->aData['name'];

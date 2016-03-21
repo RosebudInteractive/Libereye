@@ -28,20 +28,21 @@
             </div>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-4">
-            <form method="post" action="" class="form-standart">
-                <div class="inputs" style="    margin-top: 18px;">
-                    <div class="input">
-                        <label for="inBrand" style="width: auto;text-align: left;">Коробка</label>
-                        <div class="select">
-                            <select id="inBox" name="box">
-                                <option value="0">не выбрана</option>{html_options options=$aBoxes selected=$aPurchase.box_id}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </form>
+
 
             <div id="basket-content-wrapper">
+                <form method="post" action="" class="form-standart">
+                    <div class="inputs" style="    margin-top: 18px;">
+                        <div class="input">
+                            <label for="inBrand" style="width: auto;text-align: left;">Коробка</label>
+                            <div class="select">
+                                <select id="inBox" name="box">
+                                    <option value="0">не выбрана</option>{html_options options=$aBoxes selected=$aPurchase.box_id}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 <div class="search-input">
                     <input type="text" id="brand-input2" name="brand" value="" placeholder="Название бренда">
                 </div>
