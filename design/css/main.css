@@ -22,7 +22,7 @@ img {
 }
 .container {
     width: 100%;
-    min-width: 600px;
+    min-width: 700px;
     padding: 0 3.9%;
     position: relative;
 }
@@ -42,12 +42,18 @@ img {
 .header .logo {
     vertical-align: middle;
 }
+.header .logo .logo-image {
+    position: relative;
+    top: 5px;
+    vertical-align: bottom;
+}
 .header a {
     color: #fff;
     text-decoration: none;
     margin-right: 20px;
     font-size: 13px;
-    vertical-align: middle;
+    line-height: 7px;
+    vertical-align: bottom;
     transition: border 0.3s, background 0.3s;
 }
 .header a:hover, .header a:active {
@@ -62,27 +68,45 @@ img {
 }
 .header .personal-links a {
     margin: 0;
-    padding: 10px 14px;
+    padding: 9px 15px;
+    line-height: 12px;
     border-radius: 25px;
+    display: inline-block;
+    position: relative;
+    top: 5px;
+}
+.main .header .personal-links a {
+    top: 4px;
+}
+.header [class*='col-'] {
+    height: 32px;
 }
 .header .personal-links a:hover, .header .personal-links a:active {
     background: #000;
     /*border: 1px solid #000;*/
     border: none;
-    padding: 10px 14px;
+    padding: 9px 15px;
     color: #fff;
 }
 .header .personal-links a.menu-activator {
     vertical-align: middle;
     display: inline-block;
-    height: 37px;
+    height: 30px;
+    position: relative;
+    top: 7px;
+    padding: 6px 15px 8px;
 }
 .header .personal-links a.menu-activator img {
     vertical-align: top;
 }
+.main .header .personal-links a.menu-activator img {
+    position: relative;
+    top: 0;
+}
 .header .personal-links a.close-menu {
     display: none;
     vertical-align: middle;
+    padding: 6px 15px 8px;
 }
 .header .personal-links a.close-menu:hover img {
     display: none;
@@ -102,13 +126,16 @@ img {
     display: inline-block;
     width: 1px;
     height: 36px;
-    vertical-align: middle;
+    vertical-align: bottom;
+    top: 8px;
+    position: relative;
 }
 .header .personal-links .icon-links {
     display: inline-block;
 }
 .header .personal-links .icon-links a {
-    padding: 10px 3px;
+    padding: 7px 3px 6px;
+    margin-bottom: -2px;
 }
 .header .personal-links .icon-links a img {
     vertical-align: middle;
@@ -124,12 +151,16 @@ img {
     background: none;
     /*border: 1px solid #000;*/
     border: none;
-    padding: 10px 3px;
+    padding: 7px 3px 6px;
     color: #fff;
 }
 .header .personal-links .login-name {
     font-size: 13px;
-    vertical-align: middle;
+    vertical-align: bottom;
+    line-height: 18px;
+    padding-right: 15px;
+    padding-top: 0;
+    display: inline-block;
 }
 .header .personal-links:before {
     content: '';
@@ -297,7 +328,8 @@ img {
     padding: 19px 25px 21px 25px;
     border-radius: 40px;
     display: inline-block;
-    box-shadow: 4px 3px 10px rgba(0,0,0,.15);
+    /*box-shadow: 4px 3px 10px rgba(0,0,0,.15);*/
+    box-shadow: 0 4px 8px rgba(0,0,0,.15);
     width: 190px;
     text-align: center;
     white-space: nowrap;
@@ -314,6 +346,7 @@ img {
     border: 1px solid #22b46a;
     background: #fff;
     color: #22b46a;
+    font-weight: normal;
 }
 .btn.btn-black {
     border: 1px solid #000;
@@ -829,10 +862,12 @@ div.footer-bottom div a:hover {
     color: #000;
     border: none;
     border-bottom: 1px dotted #000;
-    padding: 7px 7px 5px;
-    width: 90%;
+    padding: 7px 7px 3px;
+    width: 86.5%;
     vertical-align: middle;
     background: transparent;
+    font-size: 17px;
+    font-family: 'Lato', sans-serif;
 }
 .form-standart .input input:hover,
 .form-standart .input input:focus {
@@ -845,11 +880,13 @@ div.footer-bottom div a:hover {
     color: #000;
     border: none;
     border-bottom: 1px dotted #000;
-    width: 90%;
+    width: 86.5%;
     vertical-align: middle;
     display: inline-block;
     overflow: hidden;
-    background: url('/design/pic/select_button.png') no-repeat 97% 50%;
+    /*background: url('/design/pic/select_button.png') no-repeat 97% 50%;*/
+    /*background: url('/design/pic/select_button.png') no-repeat right 6px top 50%;*/
+    /*background: url('/design/pic/select_button.png') no-repeat right 6px top 50%;*/
 }
 .form-standart .input input:hover,
 .form-standart .input input:focus,
@@ -936,7 +973,7 @@ div.footer-bottom div a:hover {
     margin-bottom: 18px;
 }
 .form-standart .inputs-bday {
-    width: 48%;
+    width: 47.5%;
     margin: 0 2% 0 0;
     display: inline-block;
 }
@@ -964,17 +1001,92 @@ div.footer-bottom div a:hover {
 }
 .form-standart .inputs .cols-2 input,
 .form-standart .inputs .cols-2 .select {
-    width: 80%;
+    /*width: 80%;*/
+    width: 72%;
 }
 .form-standart .inputs .inputs-bday input,
 .form-standart .inputs .inputs-bday .select {
-    width: 81%;
+    width: 72%;
 }
 .form-standart .inputs:after {
     content: '';
     width: 100%;
     display: table;
     clear: both;
+}
+
+.langsel {
+    font-size: 13px;
+    color: #000;
+    padding: 9px 29px 9px 15px;
+    border-radius: 20px;
+    line-height: 12px;
+    position: relative;
+    transition: background 0.3s, height 0.3s;
+    /*vertical-align: top !important;*/
+    top: 7px;
+    margin: 0 12px 0 12px;
+}
+.main .langsel {
+    top: 5px;
+}
+.langsel:after {
+    content: '';
+    background: url(/design/pic/lang-select-arrow.png) no-repeat;
+    width: 10px;
+    height: 6px;
+    position: absolute;
+    display: block;
+    right: 15px;
+    top: 16px;
+    margin-top: -3px;
+}
+.langsel.active:after {
+    -moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+}
+.langsel.active, .langsel:hover {
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s, height 0.3s;
+}
+.langsel.active {
+    border-radius: 20px 20px 0 0;
+}
+.langsel .langvalselect {
+    display: none;
+    position: absolute;
+    background: #000;
+    border-radius: 0 0 20px 20px;
+    width: 100%;
+    left: 0;
+    list-style: none;
+    color: #fff;
+    text-align: left;
+    padding: 0 16px 9px;
+}
+.langsel.active .langvalselect {
+    display: block;
+}
+.langsel .langvalselect li {
+    margin-top: 16px;
+}
+.langsel .langvalselect li:hover {
+    color: #7a7a7a;
+    cursor: pointer;
+}
+.langsel .langval {
+    display: block;
+    width: 23px;
+    text-align: left;
+}
+.langsel.active .langval, .main .langsel .langval {
+    color: #fff;
 }
 .overlay-content .error-block {
     color:#d02222;
@@ -1089,7 +1201,7 @@ div.footer-bottom div a:hover {
         display: none !important;
     }
     .form-standart .inputs-bday {
-        width: 30%;
+        width: 29.1%;
         margin: 0 2% 0 0;
     }
     .form-standart .inputs-bday:nth-child(2) {
@@ -1117,11 +1229,11 @@ div.footer-bottom div a:hover {
         margin: 0 2% 0 0;
     }
     .form-standart .inputs .cols-2 input {
-        width: 82%;
+        width: 71%;
     }
     .form-standart .input input,
     .form-standart .input .select {
-        width: 82%;
+        width: 71%;
     }
 }
 
@@ -1197,10 +1309,10 @@ div.footer-bottom div a:hover {
     }
     .form-standart .inputs .inputs-bday input,
     .form-standart .inputs .inputs-bday .select {
-        width: 84%;
+        width: 73.5%;
     }
     .form-standart .inputs .cols-1-2 {
-        width: 48%;
+        width: 47%;
         margin-right: 2%;
     }
     .form-standart .inputs .cols-1-2 ~ .cols-1-2 {
@@ -1211,6 +1323,12 @@ div.footer-bottom div a:hover {
     }
     .form-standart .inputs .cols-2:nth-child(odd) {
         margin: 0 2% 0 0;
+    }
+}
+
+@media (min-width: 950px) and (max-width: 1099px) {
+    .hidden-md {
+        display: none !important;
     }
 }
 

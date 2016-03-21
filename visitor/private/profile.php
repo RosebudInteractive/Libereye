@@ -12,8 +12,12 @@ Conf::loadClass('Region');
 Conf::loadClass('utils/Zoom');
 Conf::loadClass('utils/Validator');
 Conf::loadClass('utils/file/Image');
-Conf::loadClass('utils/mail/Mailer'); 
+Conf::loadClass('utils/mail/Mailer');
+Conf::loadClass('ShopSlot');
+Conf::loadClass('Purchase');
 
+$oShopSlot = new ShopSlot();
+$oPurchase = new Purchase();
 $oUserReg  	= new Account();
 $oCountry  	= new Country();
 $oRegion  	= new Region();
@@ -140,6 +144,9 @@ $oTpl->assignSrc(array(
     'aYears' => range(date('Y'), date('Y')-100),
     'aCountries' => $oCountry->getHash('title',array(),'',$aLanguage['language_id']),
     'aRegions' => $oRegion->getHash('title',array(),'',$aLanguage['language_id']),
+    'iSlotsNewCnt' => $oShopSlot->getCount(array('account_id'=>'='.$aAccount['account_id'], 'status'=>'="booked"', 'time_from'=>'>"'.Database::date(Conf::getTime()).'"')),
+    'iPurchasesNewCnt' => $oPurchase->getCount(array('account_id'=>'='.$aAccount['account_id'], 'udate'=>'>"'.Database::date(time()-86400*3).'"')),
+
 ));
 
 ?>

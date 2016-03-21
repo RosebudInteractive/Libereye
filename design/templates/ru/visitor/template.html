@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{$aLanguage.alias}">
 <head>
     <meta charset="UTF-8">
     {if $aPage.meta_title}<title>{$aPage.meta_title}</title>{else}<title>{$sTitle}</title>{/if}
@@ -39,7 +39,7 @@
     <script src="/design/js/common.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 </head>
-<body>
+<body{if $aPage.uri=='main'} class="main"{/if}>
 <div class="header-gap"></div>
 
 {if $aPage.uri=='main'}
@@ -101,23 +101,43 @@
     </div>
     <div class="container header">
     <div class="row">
-        <div class="col-sm-1 col-md-1 col-lg-2 logo">
-            <a href="/"><img src="/design/pic/logo.png" /></a>
+        <div class="col-sm-2 col-md-2 col-lg-3 logo">
+            <a href="/{$aLanguage.alias}/"><img class="logo-image" src="/design/pic/logo.svg"></a>
         </div>
-        <div class="hidden-sm col-md-3 col-lg-3 text-right main-menu">
+        <div class="hidden-sm col-md-3 col-lg-3 main-menu">
             <a href="/{$aLanguage.alias}/shop/1/">{$aPhrases['Shops']}</a>
             <a href="/{$aLanguage.alias}/page/how/">{$aPhrases['How it works']}</a>
         </div>
-        <div class="col-sm-2 col-md-1 col-lg-2"></div>
-        <div class="hidden-sm col-md-2 col-lg-2">
+        <div class="hidden-sm hidden-md col-lg-2">
             <span class="clock"><span class="city">{$aPhrases['London']}</span></span>&nbsp;&nbsp;<span class="clock"><span class="city">{$aPhrases['Paris']}</span></span>
-            <!--<img src="/design/pic/clock-gap-1.png" />&nbsp;&nbsp;<img src="/design/pic/clock-gap-2.png" />-->
         </div>
-        <div class="col-sm-3 col-md-2 col-lg-3 personal-links text-right">
-            {if $aAccount.account_id}<a href="/{$aLanguage.alias}/account/meetings/" class="profile">{$aAccount.fname}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="/{$aLanguage.alias}/account/logout/" class="profile">{$aPhrases['Logout']}</a>{else}<a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="#" class="login-init">{$aPhrases['Login']}</a>{/if}
+        <div class="col-sm-4 col-md-4 col-lg-4 personal-links text-right">
+            {if $aAccount.account_id}
+                <a href="/{$aLanguage.alias}/{if $aAccount.status == 'seller'}shopper{else}account{/if}/meetings/" class="profile">{$aAccount.fname}</a>&nbsp;
+                <span class="sep"></span>&nbsp;
+                <a href="/{$aLanguage.alias}/account/logout/" class="profile">{$aPhrases['Logout']}</a>
+            {else}
+                <a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;
+                <span class="sep"></span>&nbsp;
+                <a href="#" class="login-init">{$aPhrases['Login']}</a>
+            {/if}
+
+            <div class="langsel">
+                {foreach from=$aLanguages item=aItem}
+                {if $aItem.alias==$aLanguage.alias}<span class="langval">{$aItem.title_short}</span>{/if}
+                {/foreach}
+                <ul class="langvalselect">
+                    {foreach from=$aLanguages item=aItem}
+                        {if $aItem.alias!=$aLanguage.alias}<li data-alias="{$aItem.alias}" data-location="/{$aItem.alias}{$REQUEST_URI}">{$aItem.title_short}</li>{/if}
+                    {/foreach}
+                </ul>
+            </div>
             <div class="visible-sm">
-                <a href="#" class="menu-activator"><img src="/design/pic/small-menu-icon.png" /></a>
-                <a href="#" class="close-menu"><img src="/design/pic/menu-close-icon.png" /></a>
+                <a href="#" class="menu-activator"><img src="/design/pic/small-menu-icon.png"></a>
+                <a href="#" class="close-menu">
+                    <img src="/design/pic/menu-close-icon.png">
+                    <img class="hover" src="/design/pic/menu-close-icon.png">
+                </a>
             </div>
         </div>
     </div>
@@ -127,11 +147,12 @@
     <div class="container header shopper-header">
         <div class="row">
             <div class="col-sm-3 col-md-4 col-lg-6 logo">
-                <a href="/"><img src="/design/pic/logo_black.png" /></a>
+                <a href="/{$aLanguage.alias}/"><img src="/design/pic/logo_black.png" /></a>
+
                 <div class="shopper-photo-header">
                     {if $aAccount.image}
-                    <div class="shopper-photo">
-                        <img src="/images/account/{$aAccount.image}" style="    width: 60px;" />
+                    <div class="shopper-photo hidden-sm">
+                        <img src="/images/account/{$aAccount.image}">
                     </div>
                     {/if}
                     <div class="shopper-name">
@@ -139,7 +160,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="hidden col-md-3 col-lg-4 text-right main-menu">
                 <a href="/{$aLanguage.alias}/shop/1/">{$aPhrases['Shops']}</a>
                 <a href="/{$aLanguage.alias}/page/how/">{$aPhrases['How it works']}</a>
@@ -148,6 +168,16 @@
                 <div class="text-links">
                     <a href="/{$aLanguage.alias}/shopper/meetings/" {if $sSect=='meetings'}class="active"{/if}><span>{$iSlotsCnt}</span>Митинги</a>&nbsp;
                     <a href="/{$aLanguage.alias}/account/profile/" {if $sSect=='profile'}class="active"{/if}>Настройки</a>
+                </div>
+                <div class="langsel">
+                    {foreach from=$aLanguages item=aItem}
+                    {if $aItem.alias==$aLanguage.alias}<span class="langval">{$aItem.title_short}</span>{/if}
+                    {/foreach}
+                    <ul class="langvalselect">
+                        {foreach from=$aLanguages item=aItem}
+                        {if $aItem.alias!=$aLanguage.alias}<li data-alias="{$aItem.alias}" data-location="/{$aItem.alias}{$REQUEST_URI}">{$aItem.title_short}</li>{/if}
+                        {/foreach}
+                    </ul>
                 </div>
                 <div>
                     <a href="#" class="menu-activator"><img src="/design/pic/small-menu-icon_black.png" /></a>
@@ -162,22 +192,48 @@
     {else}
     <div class="container header">
     <div class="row">
-        <div class="col-sm-1 col-md-1 col-lg-2 logo">
-            <a href="/"><img src="/design/pic/logo_black.png" /></a>
+        <div class="col-sm-2 col-md-2 col-lg-3 logo">
+            <a href="/{$aLanguage.alias}/"><img class="logo-image" src="/design/pic/logo_black.svg"></a>
         </div>
         <div class="hidden-sm col-md-3 col-lg-3 text-right main-menu">
             <a href="/{$aLanguage.alias}/shop/1/">{$aPhrases['Shops']}</a>
             <a href="/{$aLanguage.alias}/page/how/">{$aPhrases['How it works']}</a>
         </div>
-        <div class="col-sm-2 col-md-1 col-lg-2"></div>
-        <div class="hidden-sm col-md-2 col-lg-2"><span class="clock black"><span class="city">{$aPhrases['London']}</span></span>&nbsp;&nbsp;<span class="clock black"><span class="city">{$aPhrases['Paris']}</span></span><!--<img src="/design/pic/clock-gap-1_black.png" />&nbsp;&nbsp;<img src="/design/pic/clock-gap-2_black.png" />--></div>
-        <div class="col-sm-3 col-md-2 col-lg-3 personal-links text-right">
-            {if $aAccount.account_id}<a href="/{$aLanguage.alias}/account/meetings/" class="profile">{$aAccount.fname}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="/{$aLanguage.alias}/account/logout/" class="profile">{$aPhrases['Logout']}</a>{else}<a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;<span class="sep"></span>&nbsp;<a href="#" class="login-init">{$aPhrases['Login']}</a>{/if}
+        <div class="hidden-sm hidden-md col-lg-2"><span class="clock black"><span class="city">{$aPhrases['London']}</span></span>&nbsp;&nbsp;<span class="clock black"><span class="city">{$aPhrases['Paris']}</span></span><!--<img src="/design/pic/clock-gap-1_black.png" />&nbsp;&nbsp;<img src="/design/pic/clock-gap-2_black.png" />--></div>
+
+        <div class="col-sm-4 col-md-4 col-lg-4 personal-links text-right">
+            <div class="icon-links">
+                <a href="/{$aLanguage.alias}/account/meetings/#meetings">
+                    {if $iSlotsNewCnt}
+                        <span>{$iSlotsNewCnt}</span>&nbsp;<img src="/design/pic/header-eye-green.png">
+                    {else}
+                        <img src="/design/pic/header-eye-gray.png">
+                    {/if}
+                </a>&nbsp;
+                <a href="/{$aLanguage.alias}/account/meetings/#carts">
+                    {if $iPurchasesNewCnt}
+                        <span>{$iPurchasesNewCnt}</span>&nbsp;<img src="/design/pic/header-bag-green.png">
+                    {else}
+                        <img src="/design/pic/header-bag-gray.png">
+                    {/if}
+                </a>
+            </div>
+            <span class="login-name">{$aAccount.fname}</span>
+            <div class="langsel">
+                {foreach from=$aLanguages item=aItem}
+                {if $aItem.alias==$aLanguage.alias}<span class="langval">{$aItem.title_short}</span>{/if}
+                {/foreach}
+                <ul class="langvalselect">
+                    {foreach from=$aLanguages item=aItem}
+                    {if $aItem.alias!=$aLanguage.alias}<li data-alias="{$aItem.alias}" data-location="/{$aItem.alias}{$REQUEST_URI}">{$aItem.title_short}</li>{/if}
+                    {/foreach}
+                </ul>
+            </div>
             <div class="visible-sm">
-                <a href="#" class="menu-activator"><img src="/design/pic/small-menu-icon_black.png" /></a>
+                <a href="#" class="menu-activator"><img src="/design/pic/small-menu-icon_black.png"></a>
                 <a href="#" class="close-menu">
-                    <img class="hover" src="/design/pic/menu-close-icon.png" />
-                    <img src="/design/pic/menu-close-icon_black.png" />
+                    <img src="/design/pic/menu-close-icon_black.png">
+                    <img class="hover" src="/design/pic/menu-close-icon.png">
                 </a>
             </div>
         </div>
@@ -203,10 +259,10 @@
                 <li><a href="/{$aLanguage.alias}/page/terms/">{$aPhrases['Terms of use']}</a></li>
                 <li><a href="/{$aLanguage.alias}/page/contacts/">{$aPhrases['Contacts']}</a></li>
                 <li><a href="/{$aLanguage.alias}/page/partners/">{$aPhrases['Partners']}</a><li>
-                <li>
+               <!-- <li>
                 {foreach from=$aLanguages item=aItem}
                 <a href="/{$aItem.alias}{$REQUEST_URI}" {if $aItem.alias==$aLanguage.alias}style="font-size: 18px;"{/if} class="user-zone-link sign-in-link"><span>{$aItem.title}</span></a><br>
-                {/foreach}<li>
+                {/foreach}<li>-->
             </ul>
         </div>
         <div class="col-sm-3 col-md-3 col-lg-4">

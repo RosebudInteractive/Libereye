@@ -27,7 +27,7 @@
                     <div class="time">{$key|date_format:'%d'} {$aMonths[$key|date_format:'%m']} в <strong>{$aItem.time_from|date_format:'%H:%M'}</strong></div>
                 </div>
                 <div class="buttons">
-                    {if $aItem.start_time && $aItem.start_time!=1}
+                    {if $aItem.start_time && $aItem.start_time!="1"}
                         <span class="btn btn-black">{$aItem.start_time}</span>
                     {else}
                         {if $aItem.start_time && $aItem.zoom_start_url}

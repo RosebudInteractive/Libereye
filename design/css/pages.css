@@ -6,7 +6,7 @@
     top: 0;
     /*padding-top: 43px !important;
     padding-bottom: 35px !important;*/
-    padding-top: 30px !important;
+    padding-top: 23px !important;
     padding-bottom: 22px !important;
     line-height: 28px;
     white-space: nowrap;
@@ -16,20 +16,24 @@
 }
 .header-gap {
     /*height: 116px;*/
-    height: 92px;
+    height: 78px;
 }
 .header a {
     color: #000;
     text-decoration: none;
     margin-right: 20px;
     font-size: 13px;
-    line-height: 18px;
-    vertical-align: middle;
+    line-height: 9px;
+    vertical-align: bottom;
     transition: border 0.3s, background 0.3s;
 }
 .header a:hover, .header a:active {
     border-bottom: 2px solid #000;
     transition: border 0.3s, background 0.3s;
+}
+
+.header.shopper-header .logo .logo-image {
+    top: -3px;
 }
 .header.shopper-header .personal-links .text-links a {
     color: #000;
@@ -59,8 +63,12 @@
     background: #000;
     display: inline-block;
     width: 1px;
-    height: 36px;
+    height: 30px;
     vertical-align: middle;
+}
+.shopper-header.header .personal-links a.menu-activator {
+    position: relative;
+    top: 8px;
 }
 .header .personal-links a.menu-activator:hover {
     background: #000 url('/design/pic/small-menu-icon.png') no-repeat 50% 50%;
@@ -882,6 +890,7 @@ a.text-unwrap:after {
     border: 1px solid #c5c5c5;
     margin: -19px 0 18px 0 !important;
     border-radius: 0 0 10px 10px;
+    background: #fff;
 }
 .cart-list-wrapper .cart-list .cart-content .cart-item {
     width: 100%;
@@ -962,7 +971,10 @@ a.text-unwrap:after {
     box-shadow: 0 4px 8px rgba(0,0,0,.15);
 }
 .cart-list-wrapper .cart-list .cart.active:hover {
-    box-shadow: none;
+    /*box-shadow: none;*/
+}
+.cart-list-wrapper .cart-list .cart.active.hovered {
+    box-shadow: 0 4px 8px rgba(0,0,0,.15);
 }
 
 .lock-description {
@@ -1128,8 +1140,8 @@ a.text-unwrap:after {
     border-radius: 10px 0 0 10px;
 }
 .shopper-info-block .shopper-photo-td {
-    width: 73px;
-    padding-left: 13px;
+    width: 60px;
+    /*padding-left: 13px;*/
 }
 .shopper-info-block .shopper-photo {
     width: 60px;
@@ -1801,7 +1813,12 @@ span.already-paid {
 .basket-edit .search-result > div {
     /*display: none;*/
 }
-
+.back-to-cabinet {
+    font-size: 13px;
+}
+#new-good-form .input {
+    margin-bottom: 30px;
+}
 
 [class*='-column'] {
     float: left;
@@ -1813,17 +1830,24 @@ span.already-paid {
 .left-column,
 .right-column { width: 92.196%; }
 
+@media (max-width: 1099px) {
+    .confirmation-block .shopper-photo-td {
+        padding-left: 10px;
+        padding-top: 10px;
+    }
+}
+
 @media (min-width: 950px) {
     .header {
-        padding-top: 30px !important;
+        padding-top: 23px !important;
         padding-bottom: 22px !important;
     }
     .header.shopper-header {
-        padding-top: 24px !important;
+        padding-top: 22px !important;
         padding-bottom: 23px !important;
     }
     .header-gap {
-        height: 89px;
+        height: 78px;
     }
 
     .left-column {
@@ -1921,16 +1945,16 @@ span.already-paid {
     .header {
         /*padding-top: 43px !important;
         padding-bottom: 35px !important;*/
-        padding-top: 30px !important;
+        padding-top: 23px !important;
         padding-bottom: 22px !important;
     }
     .header.shopper-header {
-        padding-top: 24px !important;
+        padding-top: 22px !important;
         padding-bottom: 23px !important;
     }
     .header-gap {
         /*height: 116px;*/
-        height: 89px;
+        height: 78px;
     }
 
     .left-column {
@@ -2000,9 +2024,9 @@ span.already-paid {
         border: none;
     }
     .shopper-info-block .shopper-photo-td {
-        width: 73px;
+        width: 60px;
         display: inline-block;
-        padding-left: 13px;
+        /*padding-left: 13px;*/
     }
     .shopper-info-block .shopper-name {
         display: inline-block;

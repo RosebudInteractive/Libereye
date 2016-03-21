@@ -4,11 +4,10 @@
     font: normal 13px "Lato", sans-serif;
     font-weight: normal;
     height:39px;
-    font-weight: 700;
     padding-left: 2px;
     padding-top: 1px;
 }
-.clock.black {color:#000;}
+.clock.black {color:#000;font-weight: 700;}
 
 .clock ul {
     position: relative;

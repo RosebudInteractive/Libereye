@@ -164,15 +164,16 @@
     <div id="basket-payment-page-3" class="basket-payment-page delivery-countdown-wrap" data-name="Delivery countdown" {if $aPurchase.status!='paid'}style="display: none;"{/if}>
         <div class="row row-no-margin">
             <div class="col-sm-2 col-md-3 col-lg-4 delivery-sum">
-                Примерный расчет: {$aPurchase.delivery}{$aPurchase.sign}<br/>
+                Стоимость: {$aPurchase.price}{$aPurchase.sign}<br/>
+                Доставка: {$aPurchase.delivery}{$aPurchase.sign}<br/>
                 Всего: {$aPurchase.delivery+$aPurchase.price|money_format}{$aPurchase.sign}
             </div>
-            <div class="col-sm-4 col-md-6 col-lg-8 delivery-timer">
+           <!-- <div class="col-sm-4 col-md-6 col-lg-8 delivery-timer">
                 <div>Точная стоимость доставки будет готова через</div>
                 <div class="delivery-payment-countdown">
                     23ч. 31мин.
                 </div>
-            </div>
+            </div>-->
         </div>
         <div class="buttons">
             <a href="#" class="btn btn-green basket-payment-goto" style="width: auto;" data-page="4">Отправить сейчас</a>
@@ -336,11 +337,11 @@
         <div class="cart-content">
             {foreach from=$aProducts item=aItem}
             <div class="cart-item" data-id="itemid1" data-name="{$aItem.product}">
-                {if $aItem.image}
+               <!-- {if $aItem.image}
                 <div class="cart-item-image">
                     <img width="100" src="/images/product/{$aItem.image}" />
                 </div>
-                {/if}
+                {/if}-->
                 <div class="cart-item-info">
                     <div>{$aItem.product}</div>
                     {if $aItem.description}<div>{$aItem.description}</div>{/if}

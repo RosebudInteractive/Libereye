@@ -17,7 +17,10 @@
       padding-right: 20px;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap; }
+      white-space: nowrap;
+      font-size: 17px;
+      background: url('/design/pic/select_button.png') no-repeat right 6px top 50%;
+      }
     .select2-container .select2-selection--single .select2-selection__clear {
       position: relative; }
   .select2-container[dir="rtl"] .select2-selection--single .select2-selection__rendered {
@@ -70,7 +73,7 @@
 
 .select2-results__option {
   color: #666666;
-  padding: 6px;
+  padding: 6px 18px;
   user-select: none;
   -webkit-user-select: none; }
   .select2-results__option[aria-selected] {
@@ -88,6 +91,26 @@
   /*border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;*/ }
+.select2-container--open .select2-selection__rendered {
+  background: none !important;
+}
+.select2-container--open .select2-selection__rendered::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 37px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url('/design/pic/select_button.png') no-repeat right 6px top 50%;
+
+  -moz-transform: scaleY(-1);
+  -o-transform: scaleY(-1);
+  -webkit-transform: scaleY(-1);
+  transform: scaleY(-1);
+  filter: FlipV;
+  -ms-filter: "FlipV";
+}
 
 .select2-search--dropdown {
   display: block;
@@ -187,7 +210,8 @@
     list-style: none;
     margin: 0;
     padding: 0 5px;
-    width: 100%; }
+    width: 100%;
+  }
   .select2-container--default .select2-selection--multiple .select2-selection__placeholder {
     color: #999;
     margin-top: 5px;
@@ -328,7 +352,8 @@
     border: 1px solid #5897fb; }
   .select2-container--classic .select2-selection--single .select2-selection__rendered {
     color: #444;
-    line-height: 28px; }
+    line-height: 28px;
+  }
   .select2-container--classic .select2-selection--single .select2-selection__clear {
     cursor: pointer;
     float: right;

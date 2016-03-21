@@ -163,6 +163,15 @@ class Conf
         }
     }
 
+    // Время со смещением временной зоны на сегодня
+    static  function getTime(){
+        $sTimezoneOffset = isset($_COOKIE['timezone'])?$_COOKIE['timezone']:0;
+        $nTime = time();
+        $nUtcTime = $nTime + date("Z", $nTime);
+        $nTimeOffset = $nUtcTime - Conf::getTimezoneOffset(time(), $sTimezoneOffset);
+        return $nTimeOffset;
+    }
+
     static function getTimezoneOffset($nTime, $sTimezoneOffset, $shiftSummer=false) {
         $aDatesOffset = explode(';', $sTimezoneOffset);
         $aOffsets = [];

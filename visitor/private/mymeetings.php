@@ -14,7 +14,7 @@ Conf::loadClass('Product');
 Conf::loadClass('Product2purchase');
 Conf::loadClass('utils/Validator');
 Conf::loadClass('utils/file/Image');
-Conf::loadClass('utils/mail/Mailer'); 
+Conf::loadClass('utils/mail/Mailer');
 
 $oAccount  	= new Account();
 $oShopSlot  	= new ShopSlot();
@@ -109,6 +109,7 @@ foreach ($aSlots as $nKey=>$aSlot) {
     }
 
     $aSlots[$nKey]['start_time'] =  $aSlots[$nKey]['time_from']-$nTimeOffset; // начинать митинг можно за час до начала и час вперед
+
     if ($aSlots[$nKey]['start_time'] > -3600 && $aSlots[$nKey]['start_time'] < 3600 ) {
         $aSlots[$nKey]['start_time'] = 1;
     } else if ($aSlots[$nKey]['start_time'] > 3600 ) {
@@ -155,9 +156,12 @@ $sTitle = Conf::format('Meetings');
 $oTpl->assign(array(
     'aSlotsNormal' => $aSlotsNormal,
     'iSlotsCnt' => $iSlotsCnt,
+    'iSlotsNewCnt' => $oShopSlot->getCount(array('account_id'=>'='.$aAccount['account_id'], 'status'=>'="booked"', 'time_from'=>'>"'.Database::date($nTimeOffset).'"')),
     'aMonths' => $aMonths,
     'aPurchases' => $aPurchases,
     'aCarts' => $aCarts,
+    'iPurchasesNewCnt' => $oPurchase->getCount(array('account_id'=>'='.$aAccount['account_id'], 'udate'=>'>"'.Database::date(time()-86400*3).'"')),
+
 ));
 
 ?>

@@ -35,6 +35,10 @@ if ($oAccount->isLoggedIn() && $oAccount->load($oAccount->isLoggedIn())) {
         date_default_timezone_set($aAccount['timezone']);
     else
         date_default_timezone_set('UTC');
+
+    // слоты
+
+
 } else {
     date_default_timezone_set('UTC');
 }
