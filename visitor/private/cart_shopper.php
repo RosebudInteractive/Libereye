@@ -16,6 +16,7 @@ Conf::loadClass('Product2purchase');
 Conf::loadClass('Brand');
 Conf::loadClass('Image');
 Conf::loadClass('Box');
+Conf::loadClass('Price');
 
 $oCountry = new Country();
 $oBrand = new Brand();
@@ -24,6 +25,7 @@ $oProduct = new Product();
 $oShopSlot = new ShopSlot();
 $oImage = new Image();
 $oBox = new Box();
+$oPrice = new Price();
 $oProduct2purchase = new Product2purchase();
 $iShopSlotId = $oReq->getInt('id');
 $aPurchase = array();
@@ -195,6 +197,7 @@ switch ($oReq->getAction())
                 foreach($aProducts as $aItem) {
                     $iSum += $aItem['amount']*$aItem['price'];
                 }
+
                 $oProduct2purchase->aData = array(
                     'product_id' => $iProductId,
                     'purchase_id' => $aPurchase['purchase_id'],
@@ -202,9 +205,7 @@ switch ($oReq->getAction())
                     'price' => $aPrice['price'],
                     'price_sum' => $aPrice['price'],
                 );
-                if (!$oProduct2purchase->insert()) {
-                    $aErrors = $oProduct2purchase->getErrors();
-
+                if ($oProduct2purchase->insert()) {
                     // покупка
                     $oPurchase->aData = array(
                         'purchase_id' => $aPurchase['purchase_id'],
@@ -218,7 +219,8 @@ switch ($oReq->getAction())
                     $oPrice->aData = $aPrice;
                     if (!$oPrice->insert())
                         $aErrors = $oPrice->getErrors();
-                }
+                } else
+                    $aErrors = $oProduct2purchase->getErrors();
 
                 list($aProducts,) = $oProduct2purchase->getList(array('product_id'=>'='.$iProductId, 'status'=>'!="deleted"'));
                 $aProduct = $aProducts[0];

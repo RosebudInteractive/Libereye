@@ -1089,7 +1089,6 @@ $(function() {
 
         $("#postiframe").load(function () {
             var results =  $.parseJSON(this.contentWindow.document.body.innerHTML);
-            console.log(results);
 
             // get image path after upload and save data to server
             $('#cart-item').tmpl({

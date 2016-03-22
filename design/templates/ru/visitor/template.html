@@ -158,6 +158,7 @@
                     <div class="shopper-name">
                         {$aAccount.fname}
                     </div>
+
                 </div>
             </div>
             <div class="hidden col-md-3 col-lg-4 text-right main-menu">
@@ -168,6 +169,7 @@
                 <div class="text-links">
                     <a href="/{$aLanguage.alias}/shopper/meetings/" {if $sSect=='meetings'}class="active"{/if}><span>{$iSlotsCnt}</span>Митинги</a>&nbsp;
                     <a href="/{$aLanguage.alias}/account/profile/" {if $sSect=='profile'}class="active"{/if}>Настройки</a>
+                    <a href="/{$aLanguage.alias}/account/logout/" class="profile">{$aPhrases['Logout']}</a>
                 </div>
                 <div class="langsel">
                     {foreach from=$aLanguages item=aItem}
@@ -219,6 +221,8 @@
                 </a>
             </div>
             <span class="login-name">{$aAccount.fname}</span>
+            <span class="sep"></span>&nbsp;
+            <a href="/{$aLanguage.alias}/account/logout/" class="profile">{$aPhrases['Logout']}</a>
             <div class="langsel">
                 {foreach from=$aLanguages item=aItem}
                 {if $aItem.alias==$aLanguage.alias}<span class="langval">{$aItem.title_short}</span>{/if}
@@ -284,7 +288,7 @@
             {$aPhrases['All Rights Reserved']}
         </div>
         <div class="col-sm-3 col-md-5 col-lg-6 text-right">
-            <a href="/admin/">{$aPhrases['Sign up using']}</a>
+            <a href="#" class="login-init">{$aPhrases['Sign up using']}</a>
         </div>
     </div>
 </div>
