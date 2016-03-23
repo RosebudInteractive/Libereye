@@ -12,7 +12,9 @@ Conf::loadClass('utils/Sorter');
 Conf::loadClass('utils/Pager');
 Conf::loadClass('Account');
 Conf::loadClass('Image');
+Conf::loadClass('utils/Zoom');
 
+$oZoom  	= new Zoom();
 $oImage = new Image();
 $oAccount = new Account();
 
@@ -102,8 +104,13 @@ switch($oReq->getAction())
         $aAccountPost = $oReq->getArray('aAccount');
         $aImages = $oReq->get('images') ? explode(',', $oReq->get('images')) : array();
         $oAccount->aData = $aAccountPost;
+
         if ($aAccountPost) {
             if ($iAccountId) {
+
+               $oAccount->load($iAccountId);
+               $aAccount = $oAccount->aData;
+                $oAccount->aData = $aAccountPost;
                 $oAccount->aData['account_id'] = $iAccountId;
                 if ($oAccount->aData['pass']) $oAccount->aData['pass'] = md5($oAccount->aData['pass']);
                 else unset($oAccount->aData['pass']);
@@ -116,22 +123,52 @@ switch($oReq->getAction())
                     else $oAccount->aData['shop_id'] = intval($oAccount->aData['shop_id']);
                 }
                 if ($oAccount->isUniqueEmail($iAccountId)) {
-                    if (!$oAccount->update(array(), array('country_id', 'shop_id', 'image_id'))) {
-                        $aErrors = $oAccount->getErrors();
+                    $oZoomUser = true;
+                    if ($aAccount['status']=='seller' && $oAccount->aData['fname']!=$aAccount['fname'])
+                        $oZoomUser = $oZoom->updateUser(array('id'=>$aAccount['zoom_id'], 'type'=>1, 'first_name'=>$oAccount->aData['fname']));
+
+                    if ($oZoomUser) {
+                        if ($oAccount->update(array(), array('country_id', 'shop_id', 'image_id')))
+                        {}
+                        else
+                            $aErrors = $oAccount->getErrors();
+                    } else {
+                        $aErrors = $oZoom->getErrors();
                     }
                 } else $aErrors[] = 'Пользователь с таким email уже зарегистрирован';
             } else {
                 $oAccount->aData['pass'] = md5($oAccount->aData['pass']);
                 $oAccount->aData['cdate'] = Database::date();
+                $oAccount->aData['timezone'] =  ''; // заполнять таймзон надо
                 if ($aImages && intval($aImages[0]))
                     $oAccount->aData['image_id'] = intval($aImages[0]);
                 if (!$oAccount->aData['country_id']) $oAccount->aData['country_id'] = 'NULL';
                 else $oAccount->aData['country_id'] = intval($oAccount->aData['country_id']);
-                if (!$oAccount->aData['shop_id']) $oAccount->aData['shop_id'] = 'NULL';
+                if (!isset($oAccount->aData['shop_id']) || !$oAccount->aData['shop_id']) $oAccount->aData['shop_id'] = 'NULL';
                 else $oAccount->aData['shop_id'] = intval($oAccount->aData['shop_id']);
                 if ($oAccount->isUniqueEmail()) {
-                    if (!($iAccountId = $oAccount->insert(array('country_id', 'shop_id', 'image_id')))) {
-                        $aErrors = $oAccount->getErrors();
+
+                    // создаем пользователя зум если шопппер
+                    $oZoomUser = true;
+                    if ($oAccount->aData['status']=='seller')
+                        $oZoomUser = $oZoom->addUser(array(
+                            'email' => $oAccount->aData['email'],
+                            'type' => 1,
+                            'first_name' => $oAccount->aData['fname'],
+                            'timezone' => $oAccount->aData['timezone'],
+                        ));
+                    if ($oZoomUser) {
+                        if (property_exists($oZoomUser, 'id'))
+                            $oAccount->aData['zoom_id'] = $oZoomUser->id;
+                    } else {
+                        $aErrors = $oZoom->getErrors();
+                    }
+
+                    if (!$aErrors) {
+                        if (!($iAccountId = $oAccount->insert(array('country_id', 'shop_id', 'image_id')))) {
+
+                            $aErrors = $oAccount->getErrors();
+                        }
                     }
                 } else $aErrors[] = 'Пользователь с таким email уже зарегистрирован';
             }

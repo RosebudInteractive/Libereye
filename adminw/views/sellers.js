@@ -17,7 +17,7 @@ define([
     var controls = [
         { view: "button", id:'addBtn', type: "iconButton", icon: "plus", label: "Добавить", width: 120, click: function(){
             var ui = this.$scope.ui(accountform.$ui);
-            accountform.setData({account_id:0, shop_id:data.shop_id});
+            accountform.setData({account_id:0, shop_id:data.shop_id, status:'seller'});
             ui.show();
         }},
         { view: "button", id:'account-edit-btn', disabled:true, type: "iconButton", icon: "pencil", label: "Редактировать", width: 150, click: function(){

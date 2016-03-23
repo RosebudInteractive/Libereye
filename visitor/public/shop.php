@@ -8,6 +8,7 @@ Conf::loadClass('Ptype2group');
 Conf::loadClass('Brand');
 Conf::loadClass('ShopSlot');
 Conf::loadClass('utils/mail/Mailer');
+Conf::loadClass('utils/Zoom');
 
 $oShop   = new Shop();
 $oOpenTime   = new OpenTime();
@@ -16,6 +17,7 @@ $oPtype   = new Ptype();
 $oPtype2group   = new Ptype2group();
 $oBrand   = new Brand();
 $oShopSlot   = new ShopSlot();
+$oZoom  	= new Zoom();
 $nShopId = $oReq->getInt('id');
 $sTimezoneOffset = isset($_COOKIE['timezone'])?$_COOKIE['timezone']:0;
 
@@ -72,7 +74,8 @@ switch($oReq->getAction()) {
         if (!$aErrors) {
 
             // смещенение в UTC
-            $nTimeOffset = strtotime($sDate) + Conf::getTimezoneOffset(strtotime($sDate), $sTimezoneOffset, $aShop['time_shift']);
+            $nTimezoneOffset = Conf::getTimezoneOffset(strtotime($sDate), $sTimezoneOffset, $aShop['time_shift']);
+            $nTimeOffset = strtotime($sDate) + $nTimezoneOffset;
 
             // если не указан продавец находим любого свободного
             if (!$iSellerId) {
@@ -80,6 +83,10 @@ switch($oReq->getAction()) {
                 if (!$iSellerId) {
                     $aErrors[] = Conf::format('Slot not found');
                 }
+            }
+            if ($iSellerId) {
+                $oAccount->load($iSellerId);
+                $aSeller = $oAccount->aData;
             }
 
             if (!$aErrors) {
@@ -95,19 +102,43 @@ switch($oReq->getAction()) {
                                 $oShopSlot->aData['status'] = 'booked';
                                 $oShopSlot->aData['udate'] = Database::date();
                                 $oShopSlot->aData['ip'] = $_SERVER['REMOTE_ADDR'];
-                                if ($oShopSlot->update()) {
-                                    // отправляем подтверждение
-                                    $oMailer = new Mailer();
-                                    $oMailer->send(
-                                        'confirm_booking',
-                                        $sEmail,
-                                        array(
-                                            'date'	=>  date('d/m/Y', strtotime($sDate)),
-                                            'time'	=>  date('H:i', strtotime($sDate)),
-                                        )
-                                        ,array(), array(), $aLanguage['language_id']);
-                                } else
-                                    $aErrors = $oShopSlot->getErrors();
+
+                                // создаем запись в зум
+                                $oZoomMeeting = $oZoom->addMeeting(array(
+                                    'host_id'=>$aSeller['zoom_id'],
+                                    'topic'=>$aSeller['fname'].' '.date('d/m/Y H:i', $nTimeOffset),
+                                    'type'=>2,
+                                    'start_time'=>date('Y-m-d\TH:i:s\Z', $nTimeOffset),
+                                    'duration'=>30,
+                                    'timezone'=>$nTimezoneOffset // нужно переделать под "Europe/Paris"
+                                ));
+
+                                if ($oZoomMeeting) {
+                                    $oShopSlot->aData['zoom_id'] = $oZoomMeeting->id;
+                                    $oShopSlot->aData['zoom_start_url'] = $oZoomMeeting->start_url;
+                                    $oShopSlot->aData['zoom_join_url'] = $oZoomMeeting->join_url;
+
+                                } else {
+                                    $aErrors = $oZoom->getErrors();
+                                }
+
+                                if (!$aErrors) {
+                                    if ($oShopSlot->update()) {
+
+                                        // отправляем подтверждение
+                                        $oMailer = new Mailer();
+                                        $oMailer->send(
+                                            'confirm_booking',
+                                            $sEmail,
+                                            array(
+                                                'date' => date('d/m/Y', strtotime($sDate)),
+                                                'time' => date('H:i', strtotime($sDate)),
+                                            )
+                                            , array(), array(), $aLanguage['language_id']);
+                                    } else
+                                        $aErrors = $oShopSlot->getErrors();
+                                }
+
                             } else {
                                 $aErrors[] = Conf::format('Slot is already booked');
                             }

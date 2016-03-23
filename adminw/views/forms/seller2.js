@@ -4,6 +4,7 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
 
     function _setData(item, setfields) {
         data = item;
+        $$('account-form2').setValues({"aAccount[status]":item.status?item.status:'seller',"aAccount[shop_id]":item.shop_id?item.shop_id:'1'}, true);
         if (setfields) {
             $$('account-form2').setValues({
                 id:item.account_id,
@@ -16,6 +17,8 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                 "aAccount[housing]":item.housing?item.housing:'',
                 "aAccount[apartment]":item.apartment?item.apartment:'',
                 "aAccount[phone]":item.phone?item.phone:'',
+                "aAccount[status]":item.status?item.status:'seller',
+                "aAccount[shop_id]":item.shop_id?item.shop_id:'1',
                 "aAccount[pass]":''
             }, true);
             $$('account-win2').getHead().setHTML(item.account_id==0?'Добавить шоппера':'Редактирование шоппера');
