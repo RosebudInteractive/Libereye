@@ -1,3 +1,30 @@
+{if $aPage.uri=='main'}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-9 col-lg-12 text-center">
+            <h1>{$aPhrases['News']}</h1>
+        </div>
+    </div>
+    <div class="news-list row">
+        {foreach from=$aNews item=aItem name=news}
+        <div class="col-sm-3 col-md-3 col-lg-4 news-item    ">
+            <div class="news-title">
+                <a href="/{$aLanguage.alias}/news/{$aItem.news_id}/">
+                    {if $aItem.image}<span class="img"><img src="/images/news/{$aItem.image}" /></span>{/if}
+                    <span>{$aItem.title}</span>
+                </a>
+                <div>{$aItem.annotation}</div>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-9 col-lg-12 text-center">
+            <a href="#more" class="more-news">{$aPhrases['More articles']}</a>
+        </div>
+    </div>
+</div>
+{else}
 <div class="container">
     <div class="row">
         <div class="col-sm-6 col-md-9 col-lg-12 text-center">
@@ -13,3 +40,4 @@
     <br>
     <br>
 </div>
+{/if}
