@@ -32,22 +32,31 @@
 
             <div id="basket-content-wrapper">
                 <form method="post" action="" class="form-standart">
+                    <div class="fieldset-block">Оценка доставки</div>
+                    <div class="success-block" id="msg-save-delivery"></div>
                     <div class="inputs" style="    margin-top: 18px;">
                         <div class="input">
-                            <label for="inBrand" style="width: auto;text-align: left;">Коробка</label>
+                            <label for="inBox" style="    width: 180px;">Коробка</label>
                             <div class="select">
                                 <select id="inBox" name="box">
                                     <option value="0">не выбрана</option>{html_options options=$aBoxes selected=$aPurchase.box_id}
                                 </select>
                             </div>
                         </div>
+                        <div class="input">
+                            <label for="inDelivery" style="    width: 180px;">Стоимость доставки</label>
+                            <input id="inDelivery" type="text" name="delivery" value="{$aPurchase.delivery}" />
+                        </div>
                     </div>
+                    <a href="#" id="btn-save-delivery" class="btn btn-green btn-sm">Сохранить</a>
                 </form>
+                <!--<div class="fieldset-block" style="padding-top: 20px;">Поиск товаров</div>-->
                 <div class="search-input">
                     <input type="text" id="brand-input2" name="brand" value="" placeholder="Название бренда">
                 </div>
                 <div class="search-result cart-content" id="search-result"></div>
                 <div class="cart-content cart-content-main">
+                    <!--<div class="fieldset-block" style="padding-top: 20px;">Корзина</div>-->
                     {if !$aProducts}
                     <div class="basket-empty">Корзина пуста</div>
                     {else}
@@ -64,6 +73,7 @@
                                 <div>{$aItem.brand}</div>
                                 <div class="cart-item-price">
                                     <span>{$aItem.amount|intval} шт.</span>&nbsp;{$aItem.price} {$aItem.sign}</div>
+
                                 </div>
                         <div class="cart-item-delete"> <a href="#" class="cart-item-delete-link" data-product="{$aItem.product_id}"><img src="/design/pic/cart-item-delete-icon.png"></a>
                         </div>
@@ -134,7 +144,7 @@
                             <input id="inPrice" type="text" name="price" value="" />
                         </div>
                     </div>
-                    <button class="btn btn-green basket-new-good-save" ><span>+</span>&nbsp;Сохранить товар</button>
+                    <button class="btn btn-green basket-new-good-save" ><span>+</span>&nbsp;Сохранить товар</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="green-link small new-good-cancel">Отмена</a>
                 </form>
                 <iframe name="postiframe" id="postiframe" style="display: none"></iframe>
             </div>

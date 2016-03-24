@@ -9,6 +9,11 @@
     font-size: 13px;
     margin: 10px 0;
 }
+.fieldset-block {
+    font: 700 18px 'Lato', sans-serif;
+    line-height: 24px;
+    letter-spacing: .1px;
+}
 
 .meetings-list-wrapper .meetings-list .meeting > div.deleted{
     display: none;
@@ -80,4 +85,8 @@ input {font-size: 16px;}
     .overlay-content .overlay-buttons .btn {
         width: 100%;
     }
+}
+
+.basket-edit.basket-vertsep > div[class*='col-']:nth-child(2) {
+    min-height: 600px;
 }

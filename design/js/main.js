@@ -1116,6 +1116,22 @@ $(function() {
 
     });
 
+    $('.new-good-cancel').click(function(e){
+        e.preventDefault();
+
+        var $basketContent = $('#basket-content-wrapper');
+        var $formContent = $('#new-good-form');
+
+        $basketContent.animate({opacity: 1},{step: function(now){
+            $formContent.css({'opacity': (1-now), 'display':'block'});
+        },
+            complete: function(){
+                $formContent.css({'display':'none'})
+            },
+            duration: 300
+        });
+    });
+
     function getValues($form) {
         var result = {};
         var fields = $form.serializeArray();
@@ -1265,17 +1281,18 @@ $(function() {
     });
 
     // сохраняем коробку при заказе
-    $('#inBox').change(function(){
+    $('#btn-save-delivery').click(function(e){
+        e.preventDefault();
         $.ajax({
             method: "POST",
-            data: {box:$(this).val(), act:'boxselect'}
+            data: {box:$('#inBox').val(), delivery:$('#inDelivery').val(), act:'boxselect'}
         })
             .done(function( msg ) {
                 var results = JSON.parse(msg);
                 if (results.errors && results.errors.length != 0) {
-                    alert(results.errors.join("\n"));
+                    $('#msg-save-delivery').addClass('error-block').removeClass('success-block').html(results.errors.join("<br>"));
                 } else {
-                    $(that).closest('.meeting').removeClass('deleted missed');
+                    $('#msg-save-delivery').addClass('success-block').removeClass('error-block').html(results.msg);
                 }
             });
     });

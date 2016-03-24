@@ -29,6 +29,7 @@ $aParts = array(
             'remind' => array('url'  =>Conf::getUrl('visitor.public.remind')),
             'confirm' => array('url'  =>Conf::getUrl('visitor.public.confirm')),
             'shop' => array('url'  =>Conf::getUrl('visitor.public.shop')),
+            'news' => array('url'  =>Conf::getUrl('visitor.public.news')),
         ),
     ), // end part "public"
     'private' => array(

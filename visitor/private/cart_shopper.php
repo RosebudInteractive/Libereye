@@ -17,7 +17,9 @@ Conf::loadClass('Brand');
 Conf::loadClass('Image');
 Conf::loadClass('Box');
 Conf::loadClass('Price');
+Conf::loadClass('Carrier');
 
+$oCarrier = new Carrier();
 $oCountry = new Country();
 $oBrand = new Brand();
 $oPurchase = new Purchase();
@@ -136,13 +138,33 @@ switch ($oReq->getAction())
 
     case 'boxselect':
         $iBoxId = $oReq->getInt('box');
-        if ($oBox->load($iBoxId)) {
-           $oPurchase->aData = array('purchase_id'=>$aPurchase['purchase_id'], 'box_id'=>$iBoxId);
-           if (!$oPurchase->update())
-               $aErrors = $oPurchase->getErrors();
-        } else
-            $aErrors[] = Conf::format('Box not found');
-        echo json_encode(array('errors'=>$aErrors));
+        $iDelivery = $oReq->getStrFloat($oReq->getInt('delivery'));
+        $iWeight = $oReq->getStrFloat($oReq->getInt('weight'));
+        if ($iBoxId) {
+            if ($oBox->load($iBoxId)) {
+
+                $aDeliveryParams = array(
+                    'price' => $aPurchase['price'],
+                    'box_id' => $iBoxId,
+                    'region_id' => 1, // сделать выбор
+                    'carrier_id' => 1, // сделать выбор
+                    'weight' => $iWeight,
+                );
+
+                $oPurchase->aData = array('purchase_id' => $aPurchase['purchase_id'], 'box_id' => $iBoxId, 'delivery' => $oCarrier->calcDelivery($aDeliveryParams));
+                if (!$oPurchase->update())
+                    $aErrors = $oPurchase->getErrors();
+            } else
+                $aErrors[] = Conf::format('Box not found');
+        } else if ($iDelivery) {
+            $oPurchase->aData = array('purchase_id' => $aPurchase['purchase_id'], 'box_id' => 'NULL', 'delivery' => $iDelivery);
+            if (!$oPurchase->update(array(), array('box_id')))
+                $aErrors = $oPurchase->getErrors();
+
+        } else {
+            $aErrors[] = Conf::format('Need select box or set delivery value');
+        }
+        echo json_encode(array('errors'=>$aErrors, 'msg'=>Conf::format('Delivery price saved')));
         exit;
         break;
 
