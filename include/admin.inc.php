@@ -10,6 +10,14 @@ require_once 'messages/'.LANGUAGE.'/admin.mess.php';
 
 
 $aParts = array(
+    'content' => array(
+        'title'   =>Conf::format('part.content'),
+        'url'     =>Conf::getUrl('admin.content'),
+        'sections'=>array(
+            'list'=>array('url' =>Conf::getUrl('admin.content.list')),
+            'content_edit'=>array('url' =>Conf::getUrl('admin.content.content_edit')),
+        ),
+    ), //end part "content"
     'accounts' => array(
         'title'   =>Conf::format('part.accounts'),
         'url'     =>Conf::getUrl('admin.accounts'),
@@ -42,14 +50,7 @@ $aParts = array(
             'purchase_edit'=>array('url' =>Conf::getUrl('admin.purchases.purchase_edit')),
         ),
     ), //end part "bookings"
-    'content' => array(
-        'title'   =>Conf::format('part.content'),
-        'url'     =>Conf::getUrl('admin.content'),
-        'sections'=>array(
-            'list'=>array('url' =>Conf::getUrl('admin.content.list')),
-            'content_edit'=>array('url' =>Conf::getUrl('admin.content.content_edit')),
-        ),
-    ), //end part "content"
+
     'shops' => array(
         'title'   =>Conf::format('part.shops'),
         'url'     =>Conf::getUrl('admin.shops'),
@@ -134,16 +135,16 @@ $aParts = array(
 );
 
 $aMenu = array(
-    'accounts'       => array('url' => 'admin.accounts', 'title' => Conf::format('menu.accounts')),
-    'news'       => array('url' => 'admin.news', 'title' => Conf::format('menu.news')),
-    'bookings'       => array('url' => 'admin.bookings', 'title' => Conf::format('menu.bookings')),
-    'purchases'       => array('url' => 'admin.purchases', 'title' => Conf::format('menu.purchases')),
-    'brands'    => array('url' => 'admin.brands', 'title' => Conf::format('menu.brands')),
-    'shops'    => array('url' => 'admin.shops', 'title' => Conf::format('menu.shops')),
+    //'accounts'       => array('url' => 'admin.accounts', 'title' => Conf::format('menu.accounts')),
+    //'news'       => array('url' => 'admin.news', 'title' => Conf::format('menu.news')),
+    //'bookings'       => array('url' => 'admin.bookings', 'title' => Conf::format('menu.bookings')),
+    //'purchases'       => array('url' => 'admin.purchases', 'title' => Conf::format('menu.purchases')),
+    //'brands'    => array('url' => 'admin.brands', 'title' => Conf::format('menu.brands')),
+    //'shops'    => array('url' => 'admin.shops', 'title' => Conf::format('menu.shops')),
     'content'       => array('url' => 'admin.content', 'title' => Conf::format('menu.content')),
-    'subscribe'       => array('url' => 'admin.subscribe', 'title' => Conf::format('menu.subscribe')),
-    'phrases'       => array('url' => 'admin.phrases', 'title' => Conf::format('menu.phrases')),
-    'settings'    => array('url' => 'admin.settings', 'title' => Conf::format('menu.settings')),
+    //'subscribe'       => array('url' => 'admin.subscribe', 'title' => Conf::format('menu.subscribe')),
+    //'phrases'       => array('url' => 'admin.phrases', 'title' => Conf::format('menu.phrases')),
+    //'settings'    => array('url' => 'admin.settings', 'title' => Conf::format('menu.settings')),
 );
 
 $oReq->setAreaConfig('admin', $aParts, $aMenu);
