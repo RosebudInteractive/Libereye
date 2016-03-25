@@ -88,5 +88,8 @@ input {font-size: 16px;}
 }
 
 .basket-edit.basket-vertsep > div[class*='col-']:nth-child(2) {
-    min-height: 600px;
+    min-height: 700px;
 }
+
+.page-content {}
+.page-content p{padding-bottom:10px;}

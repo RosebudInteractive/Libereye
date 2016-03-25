@@ -209,6 +209,25 @@ class Carrier extends DbItem
 
         return round($aParams['togl'], 2);
     }
+
+    function calcDeliverySum($iPurchaseId) {
+        $aPurchase = $this->oDb->getRow('SELECT * FROM purchase WHERE purchase_id='.$iPurchaseId);
+        if (!$aPurchase) return false;
+
+        $aProducts = $this->oDb->getRows('SELECT pp.product_id, pp.price, p.box_id, p.weight FROM product2purchase pp LEFT JOIN product p USING(product_id)  WHERE pp.status!="deleted" AND pp.purchase_id='.$iPurchaseId);
+        $fDelivery = 0;
+
+        foreach($aProducts as $aProduct) {
+            $fDelivery += $this->calcDelivery(array(
+                'price' => $aProduct['price'],
+                'box_id' => $aProduct['box_id'],
+                'region_id' => 1, //$aProduct['region_id'],
+                'carrier_id' => 1, //$aProduct['carrier_id'],
+                'weight' => $aProduct['weight'],
+            ));
+        }
+        return $fDelivery;
+    }
     
 }
 ?>

@@ -17,11 +17,11 @@ $iContentId = $oReq->getInt('id');
 $iParentId = $oReq->getInt('parent'); 
 $aContent = array(
 	'is_text_block' => 1,
-	'is_can_delete' => 1,
-	'is_can_parent' => 1,
+	//'is_can_delete' => 1,
+	//'is_can_parent' => 1,
 	'is_can_uri' => 1,
-	'is_can_index' => 1,
-	'is_can_hide' => 1,
+	//'is_can_index' => 1,
+	//'is_can_hide' => 1,
 );
 $aParent = array();
 
@@ -54,10 +54,6 @@ switch($oReq->getAction())
     	$aContent = $oReq->getArray('aContent');
         $oContent->aData = $aContent;        
         $oContent->aData['content_id'] = $iContentId;
-        $oContent->aData['is_can_delete'] = 1;
-        $oContent->aData['is_can_parent'] = 1;
-        $oContent->aData['is_can_hide'] = 1;
-        $oContent->aData['is_can_index'] = 1;
         $oContent->aData['cdate'] = Database::date($aContent['cdate']?strtotime($aContent['cdate']):0);
         $oContent->aData['udate'] = Database::date();
                 
@@ -78,8 +74,9 @@ switch($oReq->getAction())
         break; 
     case 'add':
         $aContent = $oReq->getArray('aContent');
-        $oContent->aData = $aContent;    
-        $oContent->aData['parent_id'] = $iParentId;    
+        $oContent->aData = $aContent;
+        if ($iParentId)
+            $oContent->aData['parent_id'] = $iParentId;
         $oContent->aData['is_can_delete'] = 1;
         $oContent->aData['is_can_parent'] = 1;
         $oContent->aData['is_can_hide'] = 1;

@@ -32,17 +32,17 @@
 
             <div id="basket-content-wrapper">
                 <form method="post" action="" class="form-standart">
-                    <div class="fieldset-block">Оценка доставки</div>
+                    <!--<div class="fieldset-block">Оценка доставки</div>-->
                     <div class="success-block" id="msg-save-delivery"></div>
                     <div class="inputs" style="    margin-top: 18px;">
-                        <div class="input">
+                        <!--<div class="input">
                             <label for="inBox" style="    width: 180px;">Коробка</label>
                             <div class="select">
                                 <select id="inBox" name="box">
                                     <option value="0">не выбрана</option>{html_options options=$aBoxes selected=$aPurchase.box_id}
                                 </select>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="input">
                             <label for="inDelivery" style="    width: 180px;">Стоимость доставки</label>
                             <input id="inDelivery" type="text" name="delivery" value="{$aPurchase.delivery}" />
@@ -138,6 +138,18 @@
                         <div class="input">
                             <label for="inArticle">Артикул</label>
                             <input id="inArticle" type="text" name="article" value="" />
+                        </div>
+                        <div class="input">
+                            <label for="inWeight">Вес</label>
+                            <input id="inWeight" type="text" name="weight" value="" />
+                        </div>
+                        <div class="input">
+                            <label for="inBox">Коробка</label>
+                            <div class="select">
+                                <select id="inBox" name="box">
+                                    <option value="0">не выбрана</option>{html_options options=$aBoxes}
+                                </select>
+                            </div>
                         </div>
                         <div class="input">
                             <label for="inPrice">Цена</label>

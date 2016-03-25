@@ -107,8 +107,8 @@ switch ($oReq->getAction())
 
                     $oPurchase->aData = array(
                         'purchase_id' => $aPurchase['purchase_id'],
-                        'currency_id' => $oProduct->aData['currency_id'],
-                        'price' => $iSum+$oProduct->aData['price'],
+                        'price' => $iSum,
+                        'delivery' => $aPurchase['delivery_manual']?$aPurchase['delivery']:$oCarrier->calcDeliverySum($aPurchase['purchase_id'])
                     );
                     $oPurchase->update();
                 }
@@ -128,6 +128,19 @@ switch ($oReq->getAction())
                 $oProduct2purchase->aData = array('product2purchase_id'=>$oProduct2purchase->aData['product2purchase_id'], 'status'=>'deleted');
                if (!$oProduct2purchase->update())
                    $aErrors = $oProduct2purchase->getErrors();
+
+                list($aProducts,) = $oProduct2purchase->getList(array('purchase_id'=>'='.$aPurchase['purchase_id'], 'status'=>'!="deleted"'));
+                $iSum = 0;
+                foreach($aProducts as $aProduct) {
+                    $iSum += $aProduct['amount']*$aProduct['price'];
+                }
+                $oPurchase->aData = array(
+                    'purchase_id' => $aPurchase['purchase_id'],
+                    'price' => $iSum,
+                    'delivery' => $aPurchase['delivery_manual']?$aPurchase['delivery']:$oCarrier->calcDeliverySum($aPurchase['purchase_id'])
+                );
+                $oPurchase->update();
+
             } else
                 $aErrors[] = Conf::format('Product not found in shopper cart');
         } else
@@ -140,7 +153,7 @@ switch ($oReq->getAction())
         $iBoxId = $oReq->getInt('box');
         $iDelivery = $oReq->getStrFloat($oReq->getInt('delivery'));
         $iWeight = $oReq->getStrFloat($oReq->getInt('weight'));
-        if ($iBoxId) {
+       /* if ($iBoxId) {
             if ($oBox->load($iBoxId)) {
 
                 $aDeliveryParams = array(
@@ -156,14 +169,31 @@ switch ($oReq->getAction())
                     $aErrors = $oPurchase->getErrors();
             } else
                 $aErrors[] = Conf::format('Box not found');
-        } else if ($iDelivery) {
-            $oPurchase->aData = array('purchase_id' => $aPurchase['purchase_id'], 'box_id' => 'NULL', 'delivery' => $iDelivery);
+        } else if ($iDelivery>=0) {
+            $oPurchase->aData = array('purchase_id' => $aPurchase['purchase_id'], 'box_id' => 'NULL', 'delivery' => $iDelivery, 'delivery_manual'=>1);
             if (!$oPurchase->update(array(), array('box_id')))
                 $aErrors = $oPurchase->getErrors();
 
         } else {
-            $aErrors[] = Conf::format('Need select box or set delivery value');
+            $aErrors[] = Conf::format('Need set delivery value');
+        }*/
+
+        $oPurchase->aData = array('purchase_id' => $aPurchase['purchase_id'], 'box_id' => 'NULL', 'delivery' => $iDelivery, 'delivery_manual'=>$iDelivery>0?1:0);
+        if (!$oPurchase->update(array(), array('box_id')))
+            $aErrors = $oPurchase->getErrors();
+
+        list($aProducts,) = $oProduct2purchase->getList(array('purchase_id'=>'='.$aPurchase['purchase_id'], 'status'=>'!="deleted"'));
+        $iSum = 0;
+        foreach($aProducts as $aProduct) {
+            $iSum += $aProduct['amount']*$aProduct['price'];
         }
+        $oPurchase->aData = array(
+            'purchase_id' => $aPurchase['purchase_id'],
+            'price' => $iSum,
+            'delivery' => $aPurchase['delivery_manual']?$aPurchase['delivery']:$oCarrier->calcDeliverySum($aPurchase['purchase_id'])
+        );
+        $oPurchase->update();
+
         echo json_encode(array('errors'=>$aErrors, 'msg'=>Conf::format('Delivery price saved')));
         exit;
         break;
@@ -175,6 +205,19 @@ switch ($oReq->getAction())
                 $oProduct2purchase->aData = array('product2purchase_id'=>$oProduct2purchase->aData['product2purchase_id'], 'status'=>'normal');
                if (!$oProduct2purchase->update())
                    $aErrors = $oProduct2purchase->getErrors();
+
+                list($aProducts,) = $oProduct2purchase->getList(array('purchase_id'=>'='.$aPurchase['purchase_id'], 'status'=>'!="deleted"'));
+                $iSum = 0;
+                foreach($aProducts as $aProduct) {
+                    $iSum += $aProduct['amount']*$aProduct['price'];
+                }
+                $oPurchase->aData = array(
+                    'purchase_id' => $aPurchase['purchase_id'],
+                    'price' => $iSum,
+                    'delivery' => $aPurchase['delivery_manual']?$aPurchase['delivery']:$oCarrier->calcDeliverySum($aPurchase['purchase_id'])
+                );
+                $oPurchase->update();
+
             } else
                 $aErrors[] = Conf::format('Product not found in shopper cart');
         } else
@@ -190,6 +233,8 @@ switch ($oReq->getAction())
             'title' => array(LANGUAGEID=>$oReq->get('name')),
             'color' => $oReq->get('color'),
             'article' => $oReq->get('article'),
+            'box_id' => $oReq->getInt('box'),
+            'weight' => $oReq->getStrFloat($oReq->get('weight')),
         );
         $aPrice = array(
             'price' => $oReq->getFloat('price'),
@@ -199,6 +244,7 @@ switch ($oReq->getAction())
         );
 
         if (!$aProduct['title']) $aErrors[] = Conf::format('Name is required');
+        if (!$aProduct['box_id']) $aErrors[] = Conf::format('Box is required');
         if (!$aPrice['price']) $aErrors[] = Conf::format('Price is required');
 
         if (!$aErrors) {
@@ -233,6 +279,7 @@ switch ($oReq->getAction())
                         'purchase_id' => $aPurchase['purchase_id'],
                         'currency_id' => $aPrice['currency_id'],
                         'price' => $iSum+$aPrice['price'],
+                        'delivery' => $aPurchase['delivery_manual']?$aPurchase['delivery']:$oCarrier->calcDeliverySum($aPurchase['purchase_id'])
                     );
                     $oPurchase->update();
 
