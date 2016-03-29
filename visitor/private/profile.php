@@ -15,6 +15,7 @@ Conf::loadClass('utils/file/Image');
 Conf::loadClass('utils/mail/Mailer');
 Conf::loadClass('ShopSlot');
 Conf::loadClass('Purchase');
+Conf::loadClass('Image');
 
 $oShopSlot = new ShopSlot();
 $oPurchase = new Purchase();
@@ -22,6 +23,7 @@ $oUserReg  	= new Account();
 $oCountry  	= new Country();
 $oRegion  	= new Region();
 $oZoom  	= new Zoom();
+$oImage  	= new Image();
 $bSuccess 	= $oReq->get('success');
 $aUserReg 	= $aAccount;//$oReq->getArray('aUser');
 $aErrors 	= array();
@@ -83,6 +85,20 @@ switch ($oReq->getAction())
                     unset($oUserReg->aData['country_id']);
 
                 if ($oZoomUser) {
+
+                    // загрузка картинки
+                    $sType = $oReq->get('type', 'account');
+                    if (isset($_FILES['photo']) && isset($_FILES['photo']['tmp_name'])) {
+                        $sExt = strtolower(substr($_FILES['photo']['name'], strrpos($_FILES['photo']['name'], '.')+1));
+                        if ($iImageId = $oImage->upload($_FILES['photo']['tmp_name'], $sType, 0, $sExt) ) {
+                            $oUserReg->aData['image_id'] = $iImageId;
+                        }
+                        else
+                            $aErrors = $oImage->getErrors();
+                    } else {
+                        $aErrors[] = 'File not upload';
+                    }
+
                     if ($oUserReg->update()) {
                         $oReq->forward('/'.($aLanguage['alias']).'/account/profile/', Conf::format('Data saved successfully'));
                     }else
@@ -131,6 +147,7 @@ if (isset($aUserReg['birthday']) && $aUserReg['birthday'] !='0000-00-00') {
     $aUserReg['bmonth'] = intval(date('m', strtotime($aUserReg['birthday'])));
     $aUserReg['byear'] = intval(date('Y', strtotime($aUserReg['birthday'])));
 }
+
 // Title
 $sTitle = Conf::format('Settings');
 $oTpl->assignSrc(array(

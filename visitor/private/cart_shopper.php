@@ -89,12 +89,8 @@ switch ($oReq->getAction())
     case 'addproduct':
         $iProductId = $oReq->getInt('product');
         if ($oProduct->load($iProductId)) {
-            if (!$oProduct2purchase->loadBy(array('product_id' => '='.$iProductId, 'purchase_id' => '='.$aPurchase['purchase_id'],))) {
-                list($aProducts,) = $oProduct2purchase->getList(array('purchase_id'=>'='.$aPurchase['purchase_id'], 'status'=>'!="deleted"'));
-                $iSum = 0;
-                foreach($aProducts as $aProduct) {
-                    $iSum += $aProduct['amount']*$aProduct['price'];
-                }
+            if (!$oProduct2purchase->loadBy(array('product_id' => '='.$iProductId, 'purchase_id' => '='.$aPurchase['purchase_id'], 'status'=>'!="deleted"'))) {
+
                 $oProduct2purchase->aData = array(
                     'product_id' => $iProductId,
                     'purchase_id' => $aPurchase['purchase_id'],
@@ -102,22 +98,25 @@ switch ($oReq->getAction())
                     'price' => $oProduct->aData['price'],
                     'price_sum' => $oProduct->aData['price'],
                 );
-                if (!$oProduct2purchase->insert()) {
-                    $aErrors = $oProduct2purchase->getErrors();
+                if ($oProduct2purchase->insert()) {
 
+                    // пересчитываем сумму корзины и стоимость доставки
+                    $iSum = $oProduct2purchase->getSum($aPurchase['purchase_id']);
                     $oPurchase->aData = array(
                         'purchase_id' => $aPurchase['purchase_id'],
                         'price' => $iSum,
                         'delivery' => $aPurchase['delivery_manual']?$aPurchase['delivery']:$oCarrier->calcDeliverySum($aPurchase['purchase_id'])
                     );
                     $oPurchase->update();
-                }
+
+                } else
+                    $aErrors = $oProduct2purchase->getErrors();
             } else
                 $aErrors[] = Conf::format('Product already in shopper cart');
 
         } else
             $aErrors[] = Conf::format('Product not found');
-        echo json_encode(array('errors'=>$aErrors));
+        echo json_encode(array('errors'=>$aErrors, 'price'=>$iSum, 'sign'=>$aPurchase?$aPurchase['sign']:''));
         exit;
         break;
 
@@ -129,11 +128,8 @@ switch ($oReq->getAction())
                if (!$oProduct2purchase->update())
                    $aErrors = $oProduct2purchase->getErrors();
 
-                list($aProducts,) = $oProduct2purchase->getList(array('purchase_id'=>'='.$aPurchase['purchase_id'], 'status'=>'!="deleted"'));
-                $iSum = 0;
-                foreach($aProducts as $aProduct) {
-                    $iSum += $aProduct['amount']*$aProduct['price'];
-                }
+                // пересчитываем сумму корзины и стоимость доставки
+                $iSum = $oProduct2purchase->getSum($aPurchase['purchase_id']);
                 $oPurchase->aData = array(
                     'purchase_id' => $aPurchase['purchase_id'],
                     'price' => $iSum,
@@ -145,7 +141,7 @@ switch ($oReq->getAction())
                 $aErrors[] = Conf::format('Product not found in shopper cart');
         } else
             $aErrors[] = Conf::format('Product not found');
-        echo json_encode(array('errors'=>$aErrors));
+        echo json_encode(array('errors'=>$aErrors, 'price'=>$iSum, 'sign'=>$aPurchase?$aPurchase['sign']:''));
         exit;
         break;
 
@@ -206,11 +202,8 @@ switch ($oReq->getAction())
                if (!$oProduct2purchase->update())
                    $aErrors = $oProduct2purchase->getErrors();
 
-                list($aProducts,) = $oProduct2purchase->getList(array('purchase_id'=>'='.$aPurchase['purchase_id'], 'status'=>'!="deleted"'));
-                $iSum = 0;
-                foreach($aProducts as $aProduct) {
-                    $iSum += $aProduct['amount']*$aProduct['price'];
-                }
+                // пересчитываем сумму корзины и стоимость доставки
+                $iSum = $oProduct2purchase->getSum($aPurchase['purchase_id']);
                 $oPurchase->aData = array(
                     'purchase_id' => $aPurchase['purchase_id'],
                     'price' => $iSum,
@@ -222,7 +215,7 @@ switch ($oReq->getAction())
                 $aErrors[] = Conf::format('Product not found in shopper cart');
         } else
             $aErrors[] = Conf::format('Product not found');
-        echo json_encode(array('errors'=>$aErrors));
+        echo json_encode(array('errors'=>$aErrors, 'price'=>$iSum, 'sign'=>$aPurchase?$aPurchase['sign']:''));
         exit;
         break;
 

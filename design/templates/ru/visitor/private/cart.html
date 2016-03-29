@@ -366,6 +366,7 @@
     <div class="delivery-count co-stage-1 co-stage-2" {if $aPurchase.status=='paid'}style="display: none;"{/if}>
         <div>
             Стоимость доставки: {$aPurchase.delivery|money_format}{$aPurchase.sign}<br/>
+            <b>Включена в общую стоимость!</b>
         </div>
     </div>
 </div>

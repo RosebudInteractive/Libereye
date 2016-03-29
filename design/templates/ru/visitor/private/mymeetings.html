@@ -59,7 +59,7 @@
         <div class="cart-list-title">Корзины</div>
         <div class="cart-list">
             {foreach from=$aPurchases item=aPurchase}
-            <div class="cart ">
+            <div class="cart" id="cart{$aPurchase.purchase_id}">
                 <div>
                     <div class="shopper-photo-td">
                         <div class="shopper-photo">
@@ -73,7 +73,7 @@
                         <div class="shop">{$aPurchase.shop_title}</div>
                         <div class="time">{$aPurchase.time_from|date_format:'%d'} {$aMonths[$aPurchase.time_from|date_format:'%m']} в <strong>16:20</strong></div>
                     </div>
-                    <div class="price">{$aPurchase.price+$aPurchase.delivery|number_format} {$aPurchase.sign}</div>
+                    <div class="price">{$aPurchase.price|money_format} {$aPurchase.sign}</div>
                     <div class="buttons">
                         <a href="/{$aLanguage.alias}/account/cart/{$aPurchase.purchase_id}/" class="btn btn-green btn-booking">Заказать</a>
                     </div>
@@ -84,17 +84,11 @@
             </div>
             <div class="cart-content" style="display: none;">
                 {foreach from=$aCarts[$aPurchase.purchase_id] item=aItem}
-                <div class="cart-item" data-id="{$aItem.product2purchase_id}" data-name="{$aItem.product}">
+                <div class="cart-item" data-id="{$aItem.product2purchase_id}" data-cart="{$aPurchase.purchase_id}" data-name="{$aItem.product}">
                     <div class="cart-item-image">
                         <img src="{if $aItem.image}/images/product/{$aItem.image}{else}/design/pic/noimage171.png{/if}" />
                     </div>
-                    <div class="cart-item-info">
-                        <div>{$aItem.product}</div>
-                        <div>{$aItem.color}</div>
-                        <div class="cart-item-price">
-                            {$aItem.price} {$aItem.sign}
-                        </div>
-                    </div>
+
                     <div class="cart-item-delete">
                         <a href="#" class="cart-item-delete-link" data-product="{$aItem.product2purchase_id}">
                             <img src="/design/pic/cart-item-delete-icon.png" />

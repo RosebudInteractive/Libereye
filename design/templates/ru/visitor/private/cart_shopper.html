@@ -17,10 +17,15 @@
                     {$aPurchase.fname}
                 </div>
             </div>
-            <div class="meeting-info">
+            <div class="meeting-info" id="cart{$aPurchase.purchase_id}">
                 <div class="description">
                     <div class="shop-name">{$aPurchase.shop_title}</div>
-                    {$aPurchase.description}
+                    {$aPurchase.description}<br>
+                    <div class="price-info">
+                        <div class="price">
+                            {if $aPurchase.price}{$aPurchase.price|money_format} {$aPurchase.sign}{else}{/if}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="buttons">
@@ -61,7 +66,7 @@
                     <div class="basket-empty">Корзина пуста</div>
                     {else}
                     {foreach from=$aProducts item=aItem}
-                    <div class="cart-item" data-id="{$aItem.product_id}" data-name="{$aItem.product}">
+                    <div class="cart-item" data-id="{$aItem.product_id}" data-cart="{$aItem.purchase_id}" data-name="{$aItem.product}">
                         {if $aItem.image}
                         <div class="cart-item-image">
                             <img src="{if $aItem.image}/images/product/{$aItem.image}{else}/design/pic/noimage171.png{/if}" />

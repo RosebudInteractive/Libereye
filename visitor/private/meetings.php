@@ -187,6 +187,7 @@ $aMonths = array(
     '12' => Conf::format('December')
 );
 
+//d($aSlotsNormal);
 
 // Title
 $sTitle = Conf::format('Meetings');

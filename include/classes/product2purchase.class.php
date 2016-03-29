@@ -52,6 +52,9 @@ class Product2purchase extends DbItem
                 ($sSort?(' ORDER BY '.$sSort):'').
                 ($iPageSize?(' LIMIT '.$iOffset.','.$iPageSize):'');
             $aRows = $this->oDb->getRows($sSql);
+           /* foreach($aRows as $nKey=>$aRow) {
+                $aRows[$nKey]['price'] = $aRows[$nKey]['price']*Conf::getSetting('MARKUP')/100;
+            }*/
         }
         return array($aRows, $iCnt);
     }
@@ -70,6 +73,14 @@ class Product2purchase extends DbItem
         return sizeof($this->aData);
     }
 
+    function getSum($iPurchaseId) {
+        list($aProducts,) = $this->getList(array('purchase_id'=>'='.$iPurchaseId, 'status'=>'!="deleted"'));
+        $iSum = 0;
+        foreach($aProducts as $aProduct) {
+            $iSum += $aProduct['amount']*$aProduct['price'];
+        }
+        return $iSum;
+    }
 
 }
 ?>

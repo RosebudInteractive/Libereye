@@ -18,14 +18,23 @@ $(function(){
         {if $aErrors}<div class="error-block" style="margin-left: 30px;">{foreach from=$aErrors item=sError}{$sError}<br>{/foreach}</div>{/if}
         {if $aSessErr}{literal}{/literal}<div class="success-block" style="margin-left: 30px;">{foreach from=$aSessErr item=sError}{$sError}<br>{/foreach}</div>{/if}
 
-        <form id="profile-form" action="" method="post" class="form-standart" style="margin-bottom: 90px;">
+        <form id="profile-form" action="" method="post" enctype="multipart/form-data" class="form-standart" style="margin-bottom: 90px;">
             <input type="hidden" name="act" id="form-act" value="register" />
             <div class="col-sm-6 col-md-9 col-lg-9">
                 <div class="inputs">
+                    <div style="width: 48%;float: left;margin-right: 2%;">
+                    <div class="input">
+                        <label for="inPhoto">Фото {if $aUserReg.image}<img src="/images/account/{$aUserReg.image}" height="26" /> {/if}</label>
+                        <input type="file" name="photo" id="inPhoto" style="width: 81%;" />
+                    </div>
+                    </div>
+                    <div style="width: 48%;float: left;margin-left: 2%;">
                     <div class="input">
                         <label for="inEmail">Почта</label>
-                        {if $aAccount.status=='seller'}{$aAccount.email}{else}<input id="inEmail" type="text" name="aUser[email]" value="{$aUserReg.email}" style="width: 91%;" />{/if}
+                        {if $aAccount.status=='seller'}{$aAccount.email}{else}<input id="inEmail" type="text" name="aUser[email]" value="{$aUserReg.email}" style="width: 81%;" />{/if}
                     </div>
+                    </div>
+                    <div style="clear: both"></div>
                     <div style="width: 48%;float: left;margin-right: 2%;">
                         <div class="input">
                             <label for="inName">Имя</label>

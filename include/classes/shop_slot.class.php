@@ -44,11 +44,14 @@ class ShopSlot extends DbItem
         {
             $iOffset = $this->_getOffset($iPage, $iPageSize, $iCnt);
             $sSql = 'SELECT '.$this->_joinFields($aMap, $aFields).', a.fname, a.email, a2.fname seller, a2.email seller_email, i.name image, i2.name seller_image'.
+                ', p.price, c.sign'.
                 ' FROM '.$this->sTable.' AS '.$this->sAlias.
                 ' LEFT JOIN account a USING(account_id)'.
                 ' LEFT JOIN image i ON a.image_id=i.image_id'.
                 ' LEFT JOIN account a2 ON a2.account_id=ss.seller_id'.
                 ' LEFT JOIN image i2 ON a2.image_id=i2.image_id'.
+                ' LEFT JOIN purchase p ON p.shop_slot_id='.$this->sAlias.'.shop_slot_id'.
+                ' LEFT JOIN currency c ON c.currency_id=p.currency_id '.
                 ' WHERE '.$sCond.
                 ($sSort?(' ORDER BY '.$sSort):'').
                 ($iPageSize?(' LIMIT '.$iOffset.','.$iPageSize):'');

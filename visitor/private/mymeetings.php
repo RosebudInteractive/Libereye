@@ -57,26 +57,52 @@ switch ($oReq->getAction())
 
 
     case 'delproduct':
+        $iSum = 0; $aPurchase = array();
         $iProduct2purchaseId = $oReq->getInt('product');
         if ($oProduct2purchase->loadBy(array('{#account_id}'=>'pr.account_id='.$aAccount['account_id'], 'product2purchase_id' => '='.$iProduct2purchaseId, 'status'=>'="normal"'))) {
+            $iPurchaseId = $oProduct2purchase->aData['purchase_id'];
             $oProduct2purchase->aData = array('product2purchase_id'=>$oProduct2purchase->aData['product2purchase_id'], 'status'=>'deleted');
-            if (!$oProduct2purchase->update())
+            if ($oProduct2purchase->update()) {
+                // пересчитываем сумму корзины и стоимость доставки
+                $oPurchase->loadBy(array('purchase_id'=>'='.$iPurchaseId));
+                $aPurchase = $oPurchase->aData;
+                $iSum = $oProduct2purchase->getSum($aPurchase['purchase_id']);
+                $oPurchase->aData = array(
+                    'purchase_id' => $aPurchase['purchase_id'],
+                    'price' => $iSum,
+                    'delivery' => $aPurchase['delivery_manual']?$aPurchase['delivery']:$oCarrier->calcDeliverySum($aPurchase['purchase_id'])
+                );
+                $oPurchase->update();
+            } else
                 $aErrors = $oProduct2purchase->getErrors();
         } else
             $aErrors[] = Conf::format('Product not found in shopper cart');
-        echo json_encode(array('errors'=>$aErrors));
+        echo json_encode(array('errors'=>$aErrors, 'price'=>$iSum, 'sign'=>$aPurchase?$aPurchase['sign']:''));
         exit;
         break;
 
     case 'restoreproduct':
+        $iSum = 0; $aPurchase = array();
         $iProduct2purchaseId = $oReq->getInt('product');
         if ($oProduct2purchase->loadBy(array('{#account_id}'=>'pr.account_id='.$aAccount['account_id'], 'product2purchase_id' => '='.$iProduct2purchaseId, 'status'=>'="deleted"'))) {
+            $iPurchaseId = $oProduct2purchase->aData['purchase_id'];
             $oProduct2purchase->aData = array('product2purchase_id'=>$oProduct2purchase->aData['product2purchase_id'], 'status'=>'normal');
-            if (!$oProduct2purchase->update())
+            if ($oProduct2purchase->update()) {
+                // пересчитываем сумму корзины и стоимость доставки
+                $oPurchase->loadBy(array('purchase_id'=>'='.$iPurchaseId));
+                $aPurchase = $oPurchase->aData;
+                $iSum = $oProduct2purchase->getSum($aPurchase['purchase_id']);
+                $oPurchase->aData = array(
+                    'purchase_id' => $aPurchase['purchase_id'],
+                    'price' => $iSum,
+                    'delivery' => $aPurchase['delivery_manual']?$aPurchase['delivery']:$oCarrier->calcDeliverySum($aPurchase['purchase_id'])
+                );
+                $oPurchase->update();
+            } else
                 $aErrors = $oProduct2purchase->getErrors();
         } else
             $aErrors[] = Conf::format('Product not found in shopper cart');
-        echo json_encode(array('errors'=>$aErrors));
+        echo json_encode(array('errors'=>$aErrors, 'price'=>$iSum, 'sign'=>$aPurchase?$aPurchase['sign']:''));
         exit;
         break;
 }
@@ -130,10 +156,12 @@ list($aPurchases,) = $oPurchase->getList(array('account_id'=>'='.$aAccount['acco
 list($aProducts,) = $oProduct2purchase->getList(array('{#account_id}'=>'pr.account_id='.$aAccount['account_id'], 'status'=>'="normal"'), 0, 0, 'pr.purchase_id desc ');
 $aCarts = array();
 foreach($aProducts as $aProduct) {
+    $aProduct['price'] = round($aProduct['price']+$aProduct['price']*Conf::getSetting('MARKUP')/100, 2);
     $aCarts[$aProduct['purchase_id']][] = $aProduct;
 }
 foreach($aPurchases as $nKey=>$aPurchase) {
     $aPurchases[$nKey]['time_from'] = strtotime($aPurchase['time_from']) - Conf::getTimezoneOffset(strtotime($aPurchase['time_from']), $sTimezoneOffset, $aShops[$aPurchase['shop_id']]['time_shift']);
+    $aPurchases[$nKey]['price'] = round($aPurchase['price']+$aPurchase['price']*Conf::getSetting('MARKUP')/100, 2);
 }
 
 $aMonths = array(

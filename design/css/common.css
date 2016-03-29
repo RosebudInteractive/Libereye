@@ -93,3 +93,11 @@ input {font-size: 16px;}
 
 .page-content {}
 .page-content p{padding-bottom:10px;}
+
+
+ .price-info .price {
+    /*text-align: right;*/
+    font: normal 40px 'Playfair Display', serif;
+    white-space: nowrap;
+
+}

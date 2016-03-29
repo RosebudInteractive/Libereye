@@ -863,6 +863,9 @@ $(function() {
                     alert(results.errors.join("\n"));
                 } else {
                     var item = $(that).parents('.cart-item');
+
+                    $('#cart' + item.data('cart')+' .price').html(results.price+' '+results.sign);
+
                     var itemClone = item.clone(true);
                     item.html('').addClass('deleted');
                     $('#cart-item-deleted').tmpl({"name": item.data('name')}).appendTo(item);
@@ -879,6 +882,7 @@ $(function() {
                                     alert(results.errors.join("\n"));
                                 } else {
                                     item.after(itemClone).remove();
+                                    $('#cart' + item.data('cart')+' .price').html(results.price+' '+results.sign);
                                 }
                             });
                     })
