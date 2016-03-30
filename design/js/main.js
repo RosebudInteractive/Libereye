@@ -1233,7 +1233,8 @@ $(function() {
             "brand": formRes[0],
             "color": formRes[3],
             "price": formRes[4],
-            "id": formRes[5]
+            "id": formRes[5],
+            "cart": formRes[6]
         };
 
         $.ajax({
@@ -1245,7 +1246,10 @@ $(function() {
                 if (results.errors && results.errors.length != 0) {
                     alert(results.errors.join("\n"));
                 } else {
-                    $('#cart-item').tmpl(item).appendTo($basketContent.find('.cart-content-main'));
+                    item.cart = results.purchase_id;
+                    var addedItem = $('#cart-item').tmpl(item).appendTo($basketContent.find('.cart-content-main'));
+                    addedItem.find('.cart-item-delete-link').click(delItemFunc);
+                    $('#cart' + results.purchase_id + ' .price').html(results.price+' '+results.sign);
                 }
             });
 
@@ -1369,6 +1373,7 @@ $(function() {
                 // The item selected from the menu, if any. Otherwise the property is null
                 //so clear the item for force selection
                 $("#inBrand").val("");
+                $("#inBrandId").val(0);
             } else {
                 $("#inBrandId").val(ui.item.id);
             }

@@ -116,7 +116,7 @@ switch ($oReq->getAction())
 
         } else
             $aErrors[] = Conf::format('Product not found');
-        echo json_encode(array('errors'=>$aErrors, 'price'=>$iSum, 'sign'=>$aPurchase?$aPurchase['sign']:''));
+        echo json_encode(array('errors'=>$aErrors, 'price'=>$iSum, 'purchase_id'=>$aPurchase?$aPurchase['purchase_id']:'', 'sign'=>$aPurchase?$aPurchase['sign']:''));
         exit;
         break;
 
