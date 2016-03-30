@@ -101,3 +101,7 @@ input {font-size: 16px;}
     white-space: nowrap;
 
 }
+
+.form-standart .input .input-error {max-width: 300px;}
+.form-standart .input .input-error:after {
+    left: inherit;right: 9px;}

@@ -746,6 +746,7 @@ $(function() {
                 if (validation == true) {
                     var data = {act:'register', ajax:1};
                     data.fname = $('#inName').val();
+                    data.gender = $('#inGender').val();
                     data.email = $('#inEmail').val();
                     data.pass = $('#inPass').val();
                     data.pass_confirm = $('#inPass').val();
@@ -1331,5 +1332,34 @@ $(function() {
         });
     }
 
+    // автокомплитер брендов
+    var cache = {};
+    $( "#inBrand" ).autocomplete({
+        minLength: 1,
+        source: function( request, response ) {
+            var term = request.term;
+            request.act = 'getbrands';
+            if ( term in cache ) {
+                response( cache[ term ] );
+                return;
+            }
+
+            $.getJSON( "", request, function( data, status, xhr ) {
+                cache[ term ] = data;
+                response( data );
+            });
+        },
+        change: function (event, ui) {
+            if(!ui.item){
+                //http://api.jqueryui.com/autocomplete/#event-change -
+                // The item selected from the menu, if any. Otherwise the property is null
+                //so clear the item for force selection
+                $("#inBrand").val("");
+            } else {
+                $("#inBrandId").val(ui.item.id);
+            }
+
+        }
+    });
 
 });

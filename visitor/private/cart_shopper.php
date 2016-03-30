@@ -297,6 +297,23 @@ switch ($oReq->getAction())
         exit;
         break;
 
+    case 'getbrands':
+
+        // search
+        $aCond = $aSuggest = array();
+        if (isset($_GET['term']) && $_GET['term'])
+            $aCond['{#title}'] = 'pd1.phrase LIKE "%'.Database::escapeLike($_GET['term']).'%"';
+        $iPos = $oReq->getInt('start');
+        $iPageSize = $oReq->getInt('count', 50);
+        $aSort = $oReq->getArray('sort' , array('pd1.phrase'=>'asc'));
+        list($aItems, $iCnt) = $oBrand->getListOffset($aCond, $iPos, $iPageSize, str_replace('=', ' ', http_build_query($aSort, ' ', ', ')));
+        foreach($aItems as $aItem){
+            $aSuggest[] = array("id"=>$aItem['brand_id'],"label"=>$aItem['title'], "value"=>$aItem['title']);
+        }
+        echo json_encode($aSuggest);
+        exit;
+        break;
+
 }
 list($aProducts,) = $oProduct2purchase->getList(array('purchase_id'=>'='.$aPurchase['purchase_id'], 'status'=>'!="deleted"'));
 

@@ -276,6 +276,7 @@ switch ($oReq->getAction())
             $aUserReg = $oUserReg->aData = array(
                 'fname' => $oReq->get('fname'),
                 'email' => $oReq->get('email'),
+                'gender' => $oReq->getInt('gender'),
                 'pass' => $oReq->get('pass'),
                 'birthday' => $oReq->get('birthday'),
                 'status' => 'client',

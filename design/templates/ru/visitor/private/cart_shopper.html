@@ -130,11 +130,8 @@
                         </div>
                         <div class="input">
                             <label for="inBrand">Брэнд</label>
-                            <div class="select">
-                                <select id="inBrand" name="brand">
-                                    {html_options options=$aBrands}
-                                </select>
-                            </div>
+                            <input id="inBrand" type="text" name="brandname" value="" />
+                            <input id="inBrandId" type="hidden" name="brand" value="" />
                         </div>
                         <div class="input">
                             <label for="inColor">Цвет</label>

@@ -88,7 +88,13 @@
                     <div class="cart-item-image">
                         <img src="{if $aItem.image}/images/product/{$aItem.image}{else}/design/pic/noimage171.png{/if}" />
                     </div>
-
+                    <div class="cart-item-info">
+                        <div>{$aItem.product}</div>
+                        <div>{$aItem.color}</div>
+                        <div class="cart-item-price">
+                            {$aItem.price} {$aItem.sign}
+                        </div>
+                    </div>
                     <div class="cart-item-delete">
                         <a href="#" class="cart-item-delete-link" data-product="{$aItem.product2purchase_id}">
                             <img src="/design/pic/cart-item-delete-icon.png" />

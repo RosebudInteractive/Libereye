@@ -27,6 +27,9 @@
     <script src="/design/js/vendor/jquery.tmpl.min.js"></script>
     <script src="/design/js/vendor/jquery.cookie.js"></script>
 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
     <script src="/design/js/vendor/jquery.maskedinput.min.js"></script>
     <script src="/design/js/vendor/select2.min.js"></script>
     <script src="/design/js/vendor/modernizr.custom.min.js"></script>
@@ -312,6 +315,15 @@
                 <div class="input">
                     <label for="inName">{$aPhrases['Name']}</label>
                     <input id="inName" type="text" name="name" value=""  />
+                </div>
+                <div class="input">
+                    <label for="inGender">Я</label>
+                    <div class="select" >
+                        <select id="inGender" name="gender">
+                            <option value="0">Мужчина</option>
+                            <option value="1">Женщина</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="input">
                     <label for="inEmail">Email</label>
