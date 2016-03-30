@@ -107,3 +107,16 @@ input {font-size: 16px;}
     left: inherit;right: 9px;}
 
 .form-standart .input label {overflow:hidden;}
+
+.cart-list-wide .shopper-info-block .shopper-photo img {
+    width: 60px;
+}
+.header .shopper-photo-header .shopper-photo img {
+    width: 60px;
+}
+.basket-edit .client-info .client-photo img {
+    width: 60px;
+}
+.shopper-meetings-list-wrapper .meetings-on-date .meeting .client-info .client-photo img{
+    width: 60px;
+}

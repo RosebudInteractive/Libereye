@@ -50,7 +50,7 @@
                         </div>-->
                         <div class="input">
                             <label for="inDelivery" style="    width: 180px;">Стоимость доставки</label>
-                            <input id="inDelivery" type="text" name="delivery" value="{$aPurchase.delivery}" />
+                            <input id="inDelivery" type="text" name="delivery" value="{if $aPurchase.delivery_manual}{$aPurchase.delivery}{/if}" />
                         </div>
                     </div>
                     <a href="#" id="btn-save-delivery" class="btn btn-green btn-sm">Сохранить</a>
@@ -67,11 +67,9 @@
                     {else}
                     {foreach from=$aProducts item=aItem}
                     <div class="cart-item" data-id="{$aItem.product_id}" data-cart="{$aItem.purchase_id}" data-name="{$aItem.product}">
-                        {if $aItem.image}
                         <div class="cart-item-image">
                             <img src="{if $aItem.image}/images/product/{$aItem.image}{else}/design/pic/noimage171.png{/if}" />
                         </div>
-                        {/if}
                             <div class="cart-item-info">
                                 <div>{$aItem.product}</div>
                                 <div>{$aItem.color}</div>
@@ -142,7 +140,7 @@
                             <input id="inArticle" type="text" name="article" value="" />
                         </div>
                         <div class="input">
-                            <label for="inWeight">Вес</label>
+                            <label for="inWeight">Вес, кг</label>
                             <input id="inWeight" type="text" name="weight" value="" />
                         </div>
                         <div class="input">
@@ -154,7 +152,7 @@
                             </div>
                         </div>
                         <div class="input">
-                            <label for="inPrice">Цена</label>
+                            <label for="inPrice">Цена, {$aPurchase.sign}</label>
                             <input id="inPrice" type="text" name="price" value="" />
                         </div>
                     </div>
@@ -174,7 +172,7 @@
     </div>
 </script>
 <script id="cart-item" type="text/x-jquery-tmpl">
-    <div class="cart-item" data-name="${name}">
+    <div class="cart-item" data-name="${name}" data-id="${id}" data-cart="${cart}">
         <div class="cart-item-image">
             <img src="{{if $item.data.img}}/images/product/${img}{{else}}/design/pic/noimage171.png{{/if}}" />
         </div>
@@ -187,7 +185,7 @@
             </div>
         </div>
         <div class="cart-item-delete">
-            <a href="#" class="cart-item-delete-link">
+            <a href="#" class="cart-item-delete-link" data-product="${id}" >
                 <img src="/design/pic/cart-item-delete-icon.png" />
             </a>
         </div>

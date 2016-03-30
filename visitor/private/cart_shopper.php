@@ -220,10 +220,10 @@ switch ($oReq->getAction())
         break;
 
     case 'newproduct':
-
+        $iSum = 0;
         $aProduct = array(
             'brand_id' => $oReq->getInt('brand'),
-            'title' => array(LANGUAGEID=>$oReq->get('name')),
+            'title' => $oReq->get('name'),
             'color' => $oReq->get('color'),
             'article' => $oReq->get('article'),
             'box_id' => $oReq->getInt('box'),
@@ -237,13 +237,14 @@ switch ($oReq->getAction())
         );
 
         if (!$aProduct['title']) $aErrors[] = Conf::format('Name is required');
-        if (!$aProduct['box_id']) $aErrors[] = Conf::format('Box is required');
+        if (!$aPurchase['delivery_manual'] && !$aProduct['box_id']) $aErrors[] = Conf::format('Box is required');
         if (!$aPrice['price']) $aErrors[] = Conf::format('Price is required');
 
         if (!$aErrors) {
-
+            if (!$aProduct['box_id']) $aProduct['box_id'] = 'NULL';
+            $aProduct['title'] = array(LANGUAGEID=>$aProduct['title']);
             $oProduct->aData = $aProduct;
-            if ($iProductId = $oProduct->insert(true, array('title'))) {
+            if ($iProductId = $oProduct->insert(array('box_id'), array('title'))) {
 
                 if (isset($_FILES['photo']) && isset($_FILES['photo']['tmp_name']) && $_FILES['photo']['tmp_name']) {
                     $sExt = strtolower(substr($_FILES['photo']['name'], strrpos($_FILES['photo']['name'], '.') + 1));
@@ -293,7 +294,7 @@ switch ($oReq->getAction())
         }
 
 
-        echo json_encode(array('errors'=>$aErrors, 'product'=>$aProduct));
+        echo json_encode(array('errors'=>$aErrors, 'product'=>$aProduct, 'price'=>$iSum+$aPrice['price'], 'sign'=>$aPurchase?$aPurchase['sign']:''));
         exit;
         break;
 

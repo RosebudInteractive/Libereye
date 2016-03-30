@@ -77,7 +77,7 @@ switch ($oReq->getAction())
                 $aErrors = $oProduct2purchase->getErrors();
         } else
             $aErrors[] = Conf::format('Product not found in shopper cart');
-        echo json_encode(array('errors'=>$aErrors, 'price'=>$iSum, 'sign'=>$aPurchase?$aPurchase['sign']:''));
+        echo json_encode(array('errors'=>$aErrors, 'price'=>round($iSum+$iSum*Conf::getSetting('MARKUP')/100, 2), 'sign'=>$aPurchase?$aPurchase['sign']:''));
         exit;
         break;
 
@@ -102,7 +102,7 @@ switch ($oReq->getAction())
                 $aErrors = $oProduct2purchase->getErrors();
         } else
             $aErrors[] = Conf::format('Product not found in shopper cart');
-        echo json_encode(array('errors'=>$aErrors, 'price'=>$iSum, 'sign'=>$aPurchase?$aPurchase['sign']:''));
+        echo json_encode(array('errors'=>$aErrors, 'price'=>round($iSum+$iSum*Conf::getSetting('MARKUP')/100, 2), 'sign'=>$aPurchase?$aPurchase['sign']:''));
         exit;
         break;
 }

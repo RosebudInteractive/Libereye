@@ -59,7 +59,7 @@ switch ($oReq->getAction())
             );
 
             // данные о заказе
-            $fAmount = $aPurchase['price'];//$oPurchase->getAmount($aPurchase);
+            $fAmount = round($aPurchase['price']+$aPurchase['price']*Conf::getSetting('MARKUP')/100, 2)+$aPurchase['delivery'];//$oPurchase->getAmount($aPurchase);
             $orderParams = array(
                 'PAYMENTREQUEST_0_AMT' => $fAmount,
                 //'PAYMENTREQUEST_0_SHIPPINGAMT' => 100,
@@ -67,7 +67,6 @@ switch ($oReq->getAction())
                 'PAYMENTREQUEST_0_ITEMAMT' => $fAmount,
                 'PAYMENTREQUEST_0_INVNUM' => uniqid($aPurchase['purchase_id'].'-'),
             );
-           // d($orderParams,1);
 
             // Описание
             $item = array(
@@ -144,11 +143,12 @@ else
     $oReq->forward('/');
 
 list($aProducts,) = $oProduct2purchase->getList(array('purchase_id'=>'='.$iPurchaseId, 'status'=>'!="deleted"'));
-foreach($aProducts as $aProduct) {
-    $aProduct['price'] = round($aProduct['price']+$aProduct['price']*Conf::getSetting('MARKUP')/100, 2);
-    $aProduct['price_sum'] = round($aProduct['price_sum']+$aProduct['price_sum']*Conf::getSetting('MARKUP')/100, 2);
+foreach($aProducts as $nKey=>$aProduct) {
+    $aProducts[$nKey]['price'] = round($aProduct['price']+$aProduct['price']*Conf::getSetting('MARKUP')/100, 2);
+    $aProducts[$nKey]['price_sum'] = round($aProduct['price_sum']+$aProduct['price_sum']*Conf::getSetting('MARKUP')/100, 2);
 }
 $aPurchase['price'] = round($aPurchase['price']+$aPurchase['price']*Conf::getSetting('MARKUP')/100, 2);
+
 
 $oUserReg  	= new Account();
 $oCountry  	= new Country();

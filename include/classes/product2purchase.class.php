@@ -73,13 +73,16 @@ class Product2purchase extends DbItem
         return sizeof($this->aData);
     }
 
-    function getSum($iPurchaseId) {
+    function getSum($iPurchaseId, $bMarkup=false) {
         list($aProducts,) = $this->getList(array('purchase_id'=>'='.$iPurchaseId, 'status'=>'!="deleted"'));
         $iSum = 0;
         foreach($aProducts as $aProduct) {
             $iSum += $aProduct['amount']*$aProduct['price'];
         }
-        return $iSum;
+        if ($bMarkup)
+            return round($iSum + Conf::getSetting('MARKUP')/100*$iSum, 2);
+        else
+            return $iSum;
     }
 
 }

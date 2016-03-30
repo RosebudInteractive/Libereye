@@ -851,7 +851,7 @@ $(function() {
         }
     });
 
-    $('.cart-item-delete-link').click(function(e){
+    var delItemFunc = function(e){
         e.preventDefault();
         var that = this, productId = $(this).data('product');
         $.ajax({
@@ -890,7 +890,9 @@ $(function() {
                 }
             });
 
-    });
+    };
+
+    $('.cart-item-delete-link').click(delItemFunc);
 
     $('.payment-type-select input').click(function(e){
         $('.payment-type-pages').hide();
@@ -1079,6 +1081,7 @@ $(function() {
         })
     });
 
+
     $('#new-good-form').find('.basket-new-good-save').click(function(e){
         e.preventDefault();
 
@@ -1092,35 +1095,46 @@ $(function() {
         // отправляем через iframe
         $('#productform').submit();
 
-        $("#postiframe").load(function () {
-            var results =  $.parseJSON(this.contentWindow.document.body.innerHTML);
-            if (results.errors && results.errors.length != 0)
-                alert(results.errors.join("\n"));
-            else {
-                // get image path after upload and save data to server
-                $('#cart-item').tmpl({
-                    "id": results.product.id,
-                    "name": results.product.product,
-                    "img": results.product.image,
-                    "brand": results.product.brand,
-                    "color": results.product.color,
-                    "price": results.product.price,
-                    "sign": results.product.sign
-                }).appendTo($basketContent.find('.cart-content-main'));
-                $basketContent.animate({opacity: 1},{step: function(now){
-                    $formContent.css({'opacity': (1-now), 'display':'block'});
-                },
-                    complete: function(){
-                        $formContent.css({'display':'none'})
-                    },
-                    duration: 300
-                });
-            }
 
-        });
         return false;
 
 
+
+    });
+
+    // после получения iframe
+    $("#postiframe").load(function () {
+        var $basketContent = $('#basket-content-wrapper');
+        var $formContent = $('#new-good-form');
+        var results =  $.parseJSON(this.contentWindow.document.body.innerHTML);
+        if (results.errors && results.errors.length != 0)
+            alert(results.errors.join("\n"));
+        else {
+            // get image path after upload and save data to server
+            var addedItem = $('#cart-item').tmpl({
+                "id": results.product.product_id,
+                "cart": results.product.purchase_id,
+                "name": results.product.product,
+                "img": results.product.image,
+                "brand": results.product.brand,
+                "color": results.product.color,
+                "price": results.product.price,
+                "sign": results.product.sign
+            }).appendTo($basketContent.find('.cart-content-main'));
+
+            addedItem.find('.cart-item-delete-link').click(delItemFunc);
+
+            $('#cart' + results.product.purchase_id + ' .price').html(results.price+' '+results.sign);
+
+            $basketContent.animate({opacity: 1},{step: function(now){
+                $formContent.css({'opacity': (1-now), 'display':'block'});
+            },
+                complete: function(){
+                    $formContent.css({'display':'none'});
+                },
+                duration: 300
+            });
+        }
 
     });
 
