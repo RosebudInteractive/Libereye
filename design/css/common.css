@@ -105,3 +105,5 @@ input {font-size: 16px;}
 .form-standart .input .input-error {max-width: 300px;}
 .form-standart .input .input-error:after {
     left: inherit;right: 9px;}
+
+.form-standart .input label {overflow:hidden;}

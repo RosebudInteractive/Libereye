@@ -155,6 +155,11 @@ foreach ($aSlots as $nKey=>$aSlot) {
 list($aPurchases,) = $oPurchase->getList(array('account_id'=>'='.$aAccount['account_id']), 0, 0, 'purchase_id desc ');
 list($aProducts,) = $oProduct2purchase->getList(array('{#account_id}'=>'pr.account_id='.$aAccount['account_id'], 'status'=>'="normal"'), 0, 0, 'pr.purchase_id desc ');
 $aCarts = array();
+if (!isset($aShops[$aPurchase['shop_id']])) {
+    $oShop->load($aPurchase['shop_id'], LANGUAGEID);
+    $aShops[$aPurchase['shop_id']] = $oShop->aData;
+}
+
 foreach($aProducts as $aProduct) {
     $aProduct['price'] = round($aProduct['price']+$aProduct['price']*Conf::getSetting('MARKUP')/100, 2);
     $aCarts[$aProduct['purchase_id']][] = $aProduct;
