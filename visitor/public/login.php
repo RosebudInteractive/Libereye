@@ -29,8 +29,15 @@ switch ($oReq->getAction())
         if ($oValidator->isValid($oReq->getAll()))
         {
             if ($oAccount->login($sLogin, $sPass, array(), 'common', 0, $oReq->get('remember'))){
+                $oAccount->load($oAccount->isLoggedIn());
+                $aAccount = $oAccount->aData;
+
+                $sRedirectUrl = '';
+                if ($aAccount['status'] == 'seller')
+                    $sRedirectUrl =  '/'.$aLanguage['alias'].'/shopper/meetings/';
+
                 if ($oReq->get('ajax')) {
-                    echo json_encode(array('errors'=>$aErrors));
+                    echo json_encode(array('errors'=>$aErrors, 'url'=>$sRedirectUrl));
                     exit;
                 }
                 else

@@ -624,7 +624,10 @@ $(function() {
                         if (results.errors && results.errors.length != 0) {
                             $('.overlay-content .error-block').empty().html(results.errors.join('<br>')).show();
                         } else {
-                            location.reload();
+                            if (results.url == '')
+                                location.reload();
+                            else
+                                location.href = results.url;
                         }
                     });
             } else {
