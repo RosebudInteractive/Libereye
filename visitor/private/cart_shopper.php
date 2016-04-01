@@ -147,8 +147,9 @@ switch ($oReq->getAction())
 
     case 'boxselect':
         $iBoxId = $oReq->getInt('box');
-        $iDelivery = $oReq->getStrFloat($oReq->getInt('delivery'));
-        $iWeight = $oReq->getStrFloat($oReq->getInt('weight'));
+        $iDelivery = $oReq->getStrFloat($oReq->get('delivery'));
+
+        //$iWeight = $oReq->getStrFloat($oReq->get('weight'));
        /* if ($iBoxId) {
             if ($oBox->load($iBoxId)) {
 
@@ -183,6 +184,9 @@ switch ($oReq->getAction())
         foreach($aProducts as $aProduct) {
             $iSum += $aProduct['amount']*$aProduct['price'];
         }
+
+        $oPurchase->loadBy(array('shop_slot_id'=>'='.$iShopSlotId));
+        $aPurchase = $oPurchase->aData;
         $oPurchase->aData = array(
             'purchase_id' => $aPurchase['purchase_id'],
             'price' => $iSum,
