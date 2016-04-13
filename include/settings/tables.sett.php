@@ -8,6 +8,7 @@ global $_TBL;
 
 $_TBL['account']        = array('account',       'acc', 'account_id');
 $_TBL['mail_template']  = array('mail_template', 'mt', 'template_id');
+$_TBL['template']  = array('template', 't', 'template_id');
 $_TBL['setting']        = array('setting',       's', 'id');
 $_TBL['content']        = array('content',          'c', 'content_id');
 $_TBL['purchase']       = array('purchase',          'p', 'purchase_id');

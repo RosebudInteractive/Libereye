@@ -1,5 +1,6 @@
 <?php
 require_once 'mime.class.php';
+require_once '../../mail_template.class.php';
 
 class Mailer extends Common
 {
@@ -34,7 +35,15 @@ class Mailer extends Common
             return $this->_addError('mail.empty_to');
 
         $oDb = &Database::get();
-        $aTpl = $oDb->getRow('SELECT m_subject, m_text, m_html, m_fname, m_faddr, m_rname, m_raddr FROM '.Conf::getT('mail_template').' WHERE code="'.$sTplCode.'" and language_id="'.$nLanguage.'"');
+        $aTpl = $oDb->getRow('SELECT subject, body, fname, faddr, rname, raddr'.
+            ', pd1.phrase subject'.
+            ', pd2.phrase body'.
+            ' FROM template AS t'.
+            ' LEFT JOIN phrase p1 ON p1.object_id=t.template_id AND p1.object_type_id=14   AND p1.object_field="subject" '.
+            ' LEFT JOIN phrase_det pd1 ON pd1.phrase_id=p1.phrase_id AND pd1.language_id='.$nLanguage.'  '.
+            ' LEFT JOIN phrase p2 ON p2.object_id=t.template_id AND p2.object_type_id=14   AND p2.object_field="body" '.
+            ' LEFT JOIN phrase_det pd2 ON pd2.phrase_id=p2.phrase_id AND pd2.language_id='.$nLanguage.'  '.
+            ' WHERE t.code="'.$sTplCode.'"');
         if (! $aTpl)
             return $this->_addError('mail.invalid_code', $sTplCode, true);
 
@@ -43,25 +52,22 @@ class Mailer extends Common
 
         if ($aVars)
         {
-            $aTpl['m_subject'] = $this->_compile($aTpl['m_subject'], $aVars);
-            $aTpl['m_text']  = $this->_compile($aTpl['m_text'], $aVars);
-            $aTpl['m_html'] = $this->_compile($aTpl['m_html'], $aVars);
+            $aTpl['subject'] = $this->_compile($aTpl['subject'], $aVars);
+            $aTpl['body'] = $this->_compile($aTpl['body'], $aVars);
         }
 
         foreach ($aFiles as $sName => $sPath)
             $this->oSender->addAttachment(file_get_contents($sPath), $sName);
 
-        $this->oSender->setSubject($this->_encode($aTpl['m_subject'], true));
-        //$this->oSender->setText($this->_encode($aTpl['m_text']));
-        
+        $this->oSender->setSubject($this->_encode($aTpl['subject'], true));
         $oTpl = new Template();
-        $oTpl->assignSrc(array('sHtml'=>$aTpl['m_html']));
-        $aTpl['m_html'] = $oTpl->fetch('visitor/mail_template.html');
+        $oTpl->assignSrc(array('sHtml'=>$aTpl['body']));
+        $aTpl['body'] = $oTpl->fetch('visitor/mail_template.html');
         
-        $this->oSender->setHtml($aTpl['m_html'], $aTpl['m_text']);
+        $this->oSender->setHtml($aTpl['body']);
 
-        $this->oSender->setHeader('From', $this->_encode($aTpl['m_fname'], true).' <'.$aTpl['m_faddr'].'>');
-        // $this->oSender->setHeader('Reply-To', $aTpl['rname'].' <'.$aTpl['raddr'].'>');
+        $this->oSender->setHeader('From', $this->_encode($aTpl['fname'], true).' <'.$aTpl['faddr'].'>');
+        $this->oSender->setHeader('Reply-To', $this->_encode($aTpl['rname'], true).' <'.$aTpl['raddr'].'>');
 
         if (! $this->oSender->send(array($sEmail)))
             return $this->_addError('mail.send', $this->oSender->errors);

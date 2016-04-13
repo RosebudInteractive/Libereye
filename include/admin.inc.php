@@ -67,6 +67,14 @@ $aParts = array(
             'brand_edit'=>array('url' =>Conf::getUrl('admin.brands.brand_edit')),
         ),
     ), //end part "brands"
+    'templates' => array(
+        'title'   =>Conf::format('part.templates'),
+        'url'     =>Conf::getUrl('admin.templates'),
+        'sections'=>array(
+            'list'=>array('url' =>Conf::getUrl('admin.templates.list')),
+            'template_edit'=>array('url' =>Conf::getUrl('admin.templates.template_edit')),
+        ),
+    ), //end part "templates"
     'boxes' => array(
         'title'   =>Conf::format('part.boxes'),
         'url'     =>Conf::getUrl('admin.boxes'),

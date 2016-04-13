@@ -59,7 +59,8 @@ define(function(){
                             { id: "settings", value: "Настройки", icon: "tasks",  $css: "settings", details:"Управление настройками"},
 							{ id: "boxes", value: "Коробки", icon: "cube",  details:"Управление коробками доставки товаров"},
 							{ id: "regions", value: "Регионы", icon: "map-marker",  $css: "orders", details:"Регионы"},
-							{ id: "carriers", value: "Перевозчики", icon: "sliders",  $css: "sliders", details:"Перевозчики"}/*,
+							{ id: "carriers", value: "Перевозчики", icon: "sliders",  $css: "sliders", details:"Перевозчики"},
+							{ id: "templates", value: "Шаблоны", icon: "file-text-o",  $css: "templates", details:"Шаблоны"}/*,
 							{ id: "products", value: "Products", icon: "cube",  $css: "products", details:"all products"},
 							{ id: "product_edit", value: "Product Edit", icon: "pencil-square-o", details: "changing product data"}*/
                       //  ]},
