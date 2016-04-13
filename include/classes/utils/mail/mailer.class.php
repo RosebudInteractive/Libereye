@@ -1,6 +1,5 @@
 <?php
 require_once 'mime.class.php';
-require_once '../../mail_template.class.php';
 
 class Mailer extends Common
 {
