@@ -34,7 +34,7 @@ class Mailer extends Common
             return $this->_addError('mail.empty_to');
 
         $oDb = &Database::get();
-        $aTpl = $oDb->getRow('SELECT subject, body, fname, faddr, rname, raddr'.
+        $aTpl = $oDb->getRow('SELECT fname, faddr, rname, raddr'.
             ', pd1.phrase subject'.
             ', pd2.phrase body'.
             ' FROM template AS t'.
