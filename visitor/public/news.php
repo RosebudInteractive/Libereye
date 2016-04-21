@@ -13,7 +13,6 @@ if ($iNewsId && !$oNews->load($iNewsId, LANGUAGEID))
 }
 $aNews = $oNews->aData;
 
-
 // Variables
 $oTpl->assignSrc(array(
 	'aNews' => $aNews,

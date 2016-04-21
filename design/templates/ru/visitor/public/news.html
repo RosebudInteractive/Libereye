@@ -5,10 +5,15 @@
         </div>
     </div>
     <div class="news-list row">
-                <div>{$aNews.full_news}</div>
+                <div style="vertical-align: top;">
+                    {if $aNews.image}<img src="/images/news/{$aNews.image}" style="float:left;width:auto; margin-right: 20px; margin-bottom: 20px;"  />{/if}
+                    {$aNews.full_news}
+
+                </div>
     </div>
     <br>
     <br>
+    <div align="center"><a href="/{$aLanguage.alias}/">Перейти на главную</a></div>
     <br>
     <br>
     <br>
