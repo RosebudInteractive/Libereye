@@ -18,6 +18,8 @@ if ($sConfirmCode && $oAccount->loadBy(array('confirm_code'=>'="'.Database::esca
     $oAccount->aData['is_active'] = 1;
     $oAccount->aData['confirm_date'] = Database::date();
     $bConfirmed = $oAccount->update();
+    if ($bConfirmed)
+        $oReq->forward('/'.$aLanguage['alias'].'/');
 }
 $oTpl->assign(array(
     'bConfirmed'    	=> $bConfirmed,
