@@ -41,11 +41,18 @@ class LangPhrase extends DbItem
         {
             $oDb = &Database::get();
             // Expiration times can be set from 0, meaning "never expire", to 30 days.
+            $aPhrasesDef = array();
+            $aPhrasesAll = $oDb->getRows('SELECT p.alias, pd.phrase FROM '.conf::getT('phrase_det').' pd '.
+                ' LEFT JOIN '.conf::getT('phrase').' p ON p.phrase_id=pd.phrase_id '.
+                ' WHERE pd.language_id=(SELECT language_id FROM language WHERE is_default=1 LIMIT 1) and p.object_type_id=1', true, 0);
+            foreach($aPhrasesAll as $aPhrase) {
+                $aPhrasesDef[$aPhrase['alias']] = $aPhrase['phrase'];
+            }
             $aPhrasesAll = $oDb->getRows('SELECT p.alias, pd.phrase FROM '.conf::getT('phrase_det').' pd '.
                 ' LEFT JOIN '.conf::getT('phrase').' p ON p.phrase_id=pd.phrase_id '.
                 ' WHERE pd.language_id="'.$nLang.'" and p.object_type_id=1', true, 0);
             foreach($aPhrasesAll as $aPhrase) {
-                $aPhrases[$aPhrase['alias']] = $aPhrase['phrase'];
+                $aPhrases[$aPhrase['alias']] = $aPhrase['phrase']?$aPhrase['phrase']:$aPhrasesDef[$aPhrase['alias']];
             }
         }
         return $aPhrases;
