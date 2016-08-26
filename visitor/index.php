@@ -94,7 +94,7 @@ $oTpl->assign(array(
 
     'aLanguages' => $aLanguages,
     'aContentPages' => $aContentPages ,
-    'REQUEST_URI' => preg_replace('@^/(ru|en|fr)/@si', '/', $_SERVER['REQUEST_URI']),
+    'REQUEST_URI' => preg_replace('@^/(ru|en|fr|ar|es)/@si', '/', $_SERVER['REQUEST_URI']),
 ));
 
 $oTpl->assignSrc(array(
