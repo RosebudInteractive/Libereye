@@ -1,3 +1,5 @@
+body.ar {direction: rtl;}
+
 .department-list ul li:first-letter { text-transform:uppercase; }
 .error-block {
     color: #d02222;

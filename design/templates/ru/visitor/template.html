@@ -39,10 +39,11 @@
     <script src="/design/js/main.js"></script>
     <script src="/design/js/moment.js"></script>
     <script src="/design/js/moment-timezone-with-data.js"></script>
+    <script src="/design/js/jquery.formatter.min.js"></script>
     <script src="/design/js/common.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 </head>
-<body{if $aPage.uri=='main'} class="main"{/if}>
+<body class="{if $aPage.uri=='main'}main{/if} {$aLanguage.alias}">
 <div class="header-gap"></div>
 
 {if $aPage.uri=='main'}
