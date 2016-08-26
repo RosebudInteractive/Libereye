@@ -52,45 +52,68 @@ switch ($oReq->getAction())
             $oPurchase->aData = array('purchase_id'=>$iPurchaseId, 'delivery_address'=>join(', ', $aAddress), 'delivery_phone'=>$oReq->get('phone'));
             $oPurchase->update();
 
-            // Параметры нашего запроса
-            $requestParams = array(
-                'RETURNURL' => Conf::get('http').Conf::get('host').'/'.($aLanguage['alias']).'/account/cart/'.$iPurchaseId.'/?act=notify&success=true',
-                'CANCELURL' => Conf::get('http').Conf::get('host').'/'.($aLanguage['alias']).'/account/cart/'.$iPurchaseId.'/?act=notify&success=false'
-            );
+            if ($oReq->get('payment-type') == 'card') { // оплата через карту
+                // Проверяем заполненность данных карты
+                if (!$oReq->get('card-number') ) $aErrors[] = Conf::format('Card number is not specified');
+                else if (!preg_match('@[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}@',$oReq->get('card-number'))) $aErrors[] = Conf::format('Card number is invalid');
+                if (!$oReq->get('card-exp-month')) $aErrors[] = Conf::format('Month is not specified');
+                if (!$oReq->get('card-exp-year')) $aErrors[] = Conf::format('Year is not specified');
+                if (!$oReq->get('card-holder-name')) $aErrors[] = Conf::format('Card holder is not specified');
+                if (!$oReq->get('card-cvv')) $aErrors[] = Conf::format('CVV is not specified');
+                if ($aErrors) {
+                    echo json_encode(array('errors'=>$aErrors));
+                    exit;
+                }
+                $aPurchase['amount'] = round($aPurchase['price']+$aPurchase['price']*Conf::getSetting('MARKUP')/100, 2)+$aPurchase['delivery'];//$oPurchase->getAmount($aPurchase);
+                if ($oPaypal->payCreditCard($aPurchase, $oReq->getAll())) {
+                    $oReq->forward('/'.($aLanguage['alias']).'/account/cart/'.$iPurchaseId.'/', Conf::format('Purchase was successfully paid'));
+                } else
+                    $aErrors = $oPaypal->getErrors();
 
-            // данные о заказе
-            $fAmount = round($aPurchase['price']+$aPurchase['price']*Conf::getSetting('MARKUP')/100, 2)+$aPurchase['delivery'];//$oPurchase->getAmount($aPurchase);
-            $orderParams = array(
-                'PAYMENTREQUEST_0_AMT' => $fAmount,
-                //'PAYMENTREQUEST_0_SHIPPINGAMT' => 100,
-                'PAYMENTREQUEST_0_CURRENCYCODE' => $aPurchase['currency'],
-                'PAYMENTREQUEST_0_ITEMAMT' => $fAmount,
-                'PAYMENTREQUEST_0_INVNUM' => uniqid($aPurchase['purchase_id'].'-'),
-            );
 
-            // Описание
-            $item = array(
-                'L_PAYMENTREQUEST_0_NAME0' => '№'.$aPurchase['purchase_id'],
-                'L_PAYMENTREQUEST_0_DESC0' => $aPurchase['description'],
-                'L_PAYMENTREQUEST_0_AMT0' => $fAmount,
-                // 'L_PAYMENTREQUEST_0_QTY0' => '1'
-            );
+            } else { // оплата через пейпал
+                // Параметры нашего запроса
+                $requestParams = array(
+                    'RETURNURL' => Conf::get('http').Conf::get('host').'/'.($aLanguage['alias']).'/account/cart/'.$iPurchaseId.'/?act=notify&success=true',
+                    'CANCELURL' => Conf::get('http').Conf::get('host').'/'.($aLanguage['alias']).'/account/cart/'.$iPurchaseId.'/?act=notify&success=false'
+                );
 
-            $oPaypal = new Paypal();
-            $response = $oPaypal->request('SetExpressCheckout',$requestParams + $orderParams + $item);
+                // данные о заказе
+                $fAmount = round($aPurchase['price']+$aPurchase['price']*Conf::getSetting('MARKUP')/100, 2)+$aPurchase['delivery'];//$oPurchase->getAmount($aPurchase);
+                $orderParams = array(
+                    'PAYMENTREQUEST_0_AMT' => $fAmount,
+                    //'PAYMENTREQUEST_0_SHIPPINGAMT' => 100,
+                    'PAYMENTREQUEST_0_CURRENCYCODE' => $aPurchase['currency'],
+                    'PAYMENTREQUEST_0_ITEMAMT' => $fAmount,
+                    'PAYMENTREQUEST_0_INVNUM' => uniqid($aPurchase['purchase_id'].'-'),
+                );
 
-            // Если запрос был успешным, мы получим токен в параметре TOKEN в ответе от PayPal.
-            if(is_array($response) && isset($response['ACK']) && $response['ACK'] == 'Success') { // Запрос был успешно принят
-                $token = $response['TOKEN'];
-                //header( 'Location: https://www.'.(Conf::getSetting('PAYPAL_TEST_MODE')?'sandbox.':'').'paypal.com/webscr?cmd=_express-checkout&useraction=commit&token=' . urlencode($token) );
-                echo json_encode(array('paypalUrl'=> 'https://www.'.(Conf::getSetting('PAYPAL_TEST_MODE')?'sandbox.':'').'paypal.com/webscr?cmd=_express-checkout&useraction=commit&token=' . urlencode($token)));
-                exit;
-            } else {
-                if (isset($response['ACK']) && $response['ACK'] == 'Failure')
-                    $aErrors[] = $response['L_SHORTMESSAGE0'];
-                else
-                    $aErrors = Conf::format('The request failed paypal');//$aErrors = $oPaypal->getErrors();//$aErrors = 'Ошибка запроса paypal';
+                // Описание
+                $item = array(
+                    'L_PAYMENTREQUEST_0_NAME0' => '№'.$aPurchase['purchase_id'],
+                    'L_PAYMENTREQUEST_0_DESC0' => $aPurchase['description'],
+                    'L_PAYMENTREQUEST_0_AMT0' => $fAmount,
+                    // 'L_PAYMENTREQUEST_0_QTY0' => '1'
+                );
+
+                $oPaypal = new Paypal();
+                $response = $oPaypal->request('SetExpressCheckout',$requestParams + $orderParams + $item);
+
+                // Если запрос был успешным, мы получим токен в параметре TOKEN в ответе от PayPal.
+                if(is_array($response) && isset($response['ACK']) && $response['ACK'] == 'Success') { // Запрос был успешно принят
+                    $token = $response['TOKEN'];
+                    //header( 'Location: https://www.'.(Conf::getSetting('PAYPAL_TEST_MODE')?'sandbox.':'').'paypal.com/webscr?cmd=_express-checkout&useraction=commit&token=' . urlencode($token) );
+                    echo json_encode(array('paypalUrl'=> 'https://www.'.(Conf::getSetting('PAYPAL_TEST_MODE')?'sandbox.':'').'paypal.com/webscr?cmd=_express-checkout&useraction=commit&token=' . urlencode($token)));
+                    exit;
+                } else {
+                    if (isset($response['ACK']) && $response['ACK'] == 'Failure')
+                        $aErrors[] = $response['L_SHORTMESSAGE0'];
+                    else
+                        $aErrors = Conf::format('The request failed paypal');//$aErrors = $oPaypal->getErrors();//$aErrors = 'Ошибка запроса paypal';
+                }
             }
+
+
         } else
             $aErrors[] = Conf::format('Purchase Found');
 

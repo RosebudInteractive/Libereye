@@ -1,3 +1,6 @@
+
+
+
 <div class="container content">
 <div class="row payment-navigation">
     <div class="col-sm-6 col-md-9 col-lg-12">
@@ -372,3 +375,12 @@
 </div>
 </div>
 </div>
+
+{literal}
+<script>
+    $('#card-number').formatter({pattern: '{{9999}}-{{9999}}-{{9999}}-{{9999}}'});
+    $('#card-expiration-month').formatter({pattern: '{{99}}'});
+    $('#card-expiration-year').formatter({pattern: '{{99}}'});
+    $('#card-cvv').formatter({pattern: '{{999}}'});
+</script>
+{/literal}

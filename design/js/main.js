@@ -958,7 +958,8 @@ $(function() {
                     if (results.errors && results.errors.length != 0) {
                         $('.ajax.error-block').empty().html(results.errors.join('<br>')).show();
                     } else {
-                        location.href = results.paypalUrl;
+                        if (results.paypalUrl)
+                            location.href = results.paypalUrl;
                     }
                 });
 
