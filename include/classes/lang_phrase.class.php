@@ -50,8 +50,8 @@ class LangPhrase extends DbItem
             }
 
             $aPhrasesAll = $oDb->getRows('SELECT p.alias, pd.phrase FROM '.conf::getT('phrase').' p '.
-                ' LEFT JOIN  '.conf::getT('phrase_det').' pd ON p.phrase_id=pd.phrase_id '.
-                ' WHERE pd.language_id="'.$nLang.'" and p.object_type_id=1', true, 0);
+                ' LEFT JOIN  '.conf::getT('phrase_det').' pd ON p.phrase_id=pd.phrase_id AND pd.language_id="'.$nLang.'"  '.
+                ' WHERE p.object_type_id=1', true, 0);
             foreach($aPhrasesAll as $aPhrase) {
                 $aPhrases[$aPhrase['alias']] = $aPhrase['phrase']?$aPhrase['phrase']:$aPhrasesDef[$aPhrase['alias']];
             }
