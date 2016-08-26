@@ -55,7 +55,6 @@ class LangPhrase extends DbItem
             foreach($aPhrasesAll as $aPhrase) {
                 $aPhrases[$aPhrase['alias']] = $aPhrase['phrase']?$aPhrase['phrase']:$aPhrasesDef[$aPhrase['alias']];
             }
-            d($aPhrases);
         }
         return $aPhrases;
     }
