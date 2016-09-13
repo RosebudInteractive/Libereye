@@ -29,8 +29,13 @@ switch ($oReq->getAction())
     case 'login':
         if ($oValidator->isValid($oReq->getAll()))
         {
-            if ($oAdmin->login($sLogin, $sPass, array('admin', 'manager', 'translator')))
-                $oReq->forward('/adminw/');
+            if ($oAdmin->login($sLogin, $sPass, array('admin', 'manager', 'translator'))) {
+                $oAdmin->load($oAdmin->isLoggedIn());
+                if ($oAdmin->aData['status'] == 'translator')
+                    $oReq->forward('/adminw/#!/app/phrases');
+                else
+                    $oReq->forward('/adminw/');
+            }
             $aErrors[] = conf::format('login.error');
         }
         else
