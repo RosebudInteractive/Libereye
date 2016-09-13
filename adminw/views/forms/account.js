@@ -81,7 +81,7 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                             "name": "aAccount[pass]",
                             "id": "pass"
                         },
-                        {view:"select", label:"Статус", name:"aAccount[status]", id:"status", value:'seller', options:[{id:'client', value:'Клиент'},{id:'seller', value:'Шоппер'},{id:'admin', value:'Админ'}] },
+                        {view:"select", label:"Статус", name:"aAccount[status]", id:"status", value:'seller', options:[{id:'client', value:'Клиент'},{id:'seller', value:'Шоппер'},{id:'admin', value:'Админ'},{id:'translator', value:'Переводчик'}] },
                         {label:"Магазин шоппера", name:"aAccount[shop_id]", id:"shop_id", value:0,  view:"richselect", options:{
                                 body:{
                                     url: '/admin/index.php/part_shops/act_get/suggest_1/?sort[title]=asc&count=1000'
