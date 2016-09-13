@@ -43,7 +43,7 @@ else {
 	<link rel="stylesheet" href="//cdn.webix.com/edge/webix.css">
 	<link rel="stylesheet/less" href="assets/theme.siberia.less">-->
 
-    <script type="text/javascript" src="/design/js/webix/codebase/webix.js"></script>
+    <script type="text/javascript" src="/design/js/webix/codebase/webix_debug.js"></script>
     <script src="/design/js/webix/codebase/i18n/ru.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">webix.i18n.setLocale('ru-RU');</script>
     <link rel="stylesheet" href="/design/js/webix/codebase/webix.css">

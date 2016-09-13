@@ -20,7 +20,7 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
         view:"window", modal:true, id:"phrase-win", position:"center", width:600,
         head:"Добавить фразу",
         body:{
-            paddingY:20, paddingX:30, elementsConfig:{labelWidth: 140}, view:"form", id:"phrase-form", elements:[
+            paddingY:20, paddingX:30, elementsConfig:{labelWidth: 140}, view:"form", id:"phrase-form2", elements:[
                 {
                     "rows": [{
             id: "phrase-form",

@@ -30,10 +30,41 @@ define([
             }
         }},
         {},
+        { view: "button",  id:'exportBtn', type: "iconButton", icon: "file-excel-o", label: "Экспорт", width: 120, click: function(){
+            window.open('/admin/index.php/part_phrases/sect_export');
+        }},
+        { view: "button", type:"uploader", id:'importBtn', type: "iconButton", icon: "file-excel-o", label: "Импорт", width: 120, click: function(){
+            $$("uploadAPI").fileDialog();
+        }},
         { view: "icon", icon: "refresh",width: 40 , click: function(){
             grid.refresh($$('grid-phrase'), '/admin/index.php/part_phrases/act_get');
         }}
     ];
+
+    webix.ui({
+        id:"uploadAPI",
+        view:"uploader",
+        upload:"/admin/index.php/part_phrases/sect_import",
+        on:{
+            onBeforeFileAdd:function(item){
+                var type = item.type.toLowerCase();
+                if (type != "csv"){
+                    webix.message("Для импорта используется csv файл");
+                    return false;
+                }
+            },
+            onFileUpload:function(item, response){
+                webix.message(response.message);
+            },
+            onFileUploadError:function(item, response){
+                if (response && response.errors)
+                    webix.alert(response.errors);
+                else
+                    webix.alert("Error during file upload");
+            }
+        },
+        apiOnly:true
+    });
 
     var gridphrase = {
         margin:10,

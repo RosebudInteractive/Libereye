@@ -40,6 +40,8 @@ $aParts = array(
         'sections'=>array(
             'list'=>array('url' =>Conf::getUrl('admin.phrases.list')),
             'phrase_edit'=>array('url' =>Conf::getUrl('admin.phrases.phrase_edit')),
+            'import'=>array('url' =>Conf::getUrl('admin.phrases.import')),
+            'export'=>array('url' =>Conf::getUrl('admin.phrases.export')),
         ),
     ), //end part "phrases"
     'purchases' => array(

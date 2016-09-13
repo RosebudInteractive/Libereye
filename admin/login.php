@@ -29,7 +29,7 @@ switch ($oReq->getAction())
     case 'login':
         if ($oValidator->isValid($oReq->getAll()))
         {
-            if ($oAdmin->login($sLogin, $sPass, array('admin', 'manager')))
+            if ($oAdmin->login($sLogin, $sPass, array('admin', 'manager', 'translator')))
                 $oReq->forward('/adminw/');
             $aErrors[] = conf::format('login.error');
         }
