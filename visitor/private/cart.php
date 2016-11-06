@@ -65,11 +65,19 @@ switch ($oReq->getAction())
                     exit;
                 }
                 $aPurchase['amount'] = round($aPurchase['price']+$aPurchase['price']*Conf::getSetting('MARKUP')/100, 2)+$aPurchase['delivery'];//$oPurchase->getAmount($aPurchase);
-                if ($oPaypal->payCreditCard($aPurchase, $oReq->getAll())) {
-                    $oReq->forward('/'.($aLanguage['alias']).'/account/cart/'.$iPurchaseId.'/', Conf::format('Purchase was successfully paid'));
-                } else
+                $payment = $oPaypal->payCreditCard($aPurchase, $oReq->getAll());var_dump($result);exit;
+                if ($payment) {
+                    $transactionId = $payment->getId();
+                    $oPurchase->aData = array('purchase_id'=>$iPurchaseId, 'status'=>'paid', 'track_id'=>$transactionId, 'udate'=>Database::date(), 'pay_system_id'=>'1');
+                    $oPurchase->update();
+                    $sOkUrl = '/'.($aLanguage['alias']).'/account/cart/'.$iPurchaseId.'/';
+                    $_SESSION[$sOkUrl] = Conf::format('Purchase was successfully paid');
+                    echo json_encode(array('paypalUrl'=> $sOkUrl));
+                    exit;
+                } else {
                     $aErrors = $oPaypal->getErrors();
-
+                    if(!$aErrors) $aErrors[] = Conf::format('Paypal error');
+                }
 
             } else { // оплата через пейпал
                 // Параметры нашего запроса

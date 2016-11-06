@@ -133,9 +133,6 @@ class Paypal extends DbItem {
         $aParams['card-number'] = preg_replace('/[^\d]/', '', $aParams['card-number']);
         if (strlen($aParams['card-exp-year'])==2) $aParams['card-exp-year'] = '20'.$aParams['card-exp-year'];
         list($aParams['card-holder-first'], $aParams['card-holder-last']) =  explode(' ', $aParams['card-holder-name'], 2);
-d( Conf::getSetting('PAYPAL_API_CLIENT_ID'));
-d(Conf::getSetting('PAYPAL_API_SECRET'));
-
 
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
@@ -190,7 +187,7 @@ d(Conf::getSetting('PAYPAL_API_SECRET'));
         $item1->setName('LiberEye #'.$aPurchase['purchase_id'])
            // ->setDescription('')
             ->setCurrency($aPurchase['currency'])
-           // ->setQuantity(1)
+            ->setQuantity(1)
            // ->setTax(0)
             ->setPrice($aPurchase['amount']);
         /*$item1->setName('¹'.$aPurchase['purchase_id'])
@@ -216,7 +213,7 @@ d(Conf::getSetting('PAYPAL_API_SECRET'));
         // payment - what is the payment for and who
         // is fulfilling it.
         $transaction = new Transaction();
-        $transaction->setAmount($aPurchase['amount'])
+        $transaction->setAmount($amount)
             ->setItemList($itemList)
             ->setInvoiceNumber(uniqid());
 
@@ -236,10 +233,8 @@ d(Conf::getSetting('PAYPAL_API_SECRET'));
         // The return object contains the state.
         try {
             $result = $payment->create($apiContext);
-            return $result;
+            return $payment;
         } catch (Exception $ex) {
-            d($ex->getData());
-            d($ex);
             return $this->_addError(Conf::format('Paypal connection error'));
         }
 
