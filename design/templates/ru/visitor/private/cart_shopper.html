@@ -2,7 +2,7 @@
 <div class="container content">
     <div class="row basket-edit basket-vertsep">
         <div class="col-lg-3 col-md-3 col-sm-2">
-            <a href="/{$aLanguage.alias}/shopper/meetings/" class="green-link back-to-cabinet">Отмена</a>
+            <a href="/{$aLanguage.alias}/shopper/meetings/" class="green-link back-to-cabinet">{$aPhrases['Cancel']}</a>
             <div class="meeting-time">
                 {$aPurchase.time_from|date_format:'%d.%m'}
             </div>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="buttons">
-                <a href="/{$aLanguage.alias}/shopper/meetings/" id="submit-basket" class="btn btn-green btn-sm">Отправить</a>
+                <a href="/{$aLanguage.alias}/shopper/meetings/" id="submit-basket" class="btn btn-green btn-sm">{$aPhrases['Send']}</a>
             </div>
         </div>
         <div class="col-lg-9 col-md-6 col-sm-4">
@@ -49,21 +49,21 @@
                             </div>
                         </div>-->
                         <div class="input">
-                            <label for="inDelivery" style="    width: 180px;">Стоимость доставки</label>
+                            <label for="inDelivery" style="    width: 180px;">{$aPhrases['Cost of delivery']}</label>
                             <input id="inDelivery" type="text" name="delivery" value="{if $aPurchase.delivery_manual}{$aPurchase.delivery}{/if}" />
                         </div>
                     </div>
-                    <a href="#" id="btn-save-delivery" class="btn btn-green btn-sm">Сохранить</a>
+                    <a href="#" id="btn-save-delivery" class="btn btn-green btn-sm">{$aPhrases['Save']}</a>
                 </form>
                 <!--<div class="fieldset-block" style="padding-top: 20px;">Поиск товаров</div>-->
                 <div class="search-input">
-                    <input type="text" id="brand-input2" name="brand" value="" placeholder="Название бренда">
+                    <input type="text" id="brand-input2" name="brand" value="" placeholder="{$aPhrases['Brand name']}">
                 </div>
                 <div class="search-result cart-content" id="search-result"></div>
                 <div class="cart-content cart-content-main">
                     <!--<div class="fieldset-block" style="padding-top: 20px;">Корзина</div>-->
                     {if !$aProducts}
-                    <div class="basket-empty">Корзина пуста</div>
+                    <div class="basket-empty">{$aPhrases['Cart is empty']}</div>
                     {else}
                     {foreach from=$aProducts item=aItem}
                     <div class="cart-item" data-id="{$aItem.product_id}" data-cart="{$aItem.purchase_id}" data-name="{$aItem.product}">
@@ -84,7 +84,7 @@
                     {/foreach}
                     {/if}
                 </div>
-                <button class="btn btn-green-white basket-new-good"><span>+</span>&nbsp;Создать новый товар <strong></strong></button>
+                <button class="btn btn-green-white basket-new-good"><span>+</span>&nbsp;{$aPhrases['Create a new item']} <strong></strong></button>
 
             </div>
             <div id="new-good-form">
@@ -119,44 +119,44 @@
                     <!--<a href="#" class="btn btn-green-white new-photo-button"  onClick="return takeSnapshot()">Сделать фото</a>-->
                     <div class="inputs">
                         <div class="input">
-                            <label for="inName">Фото</label>
+                            <label for="inName">{$aPhrases['Photo']}</label>
                             <input type="file" name="photo" />
                         </div>
                         <div class="input">
-                            <label for="inName">Название</label>
+                            <label for="inName">{$aPhrases['Title']}</label>
                             <input id="inName" type="text" name="name" value="" />
                         </div>
                         <div class="input">
-                            <label for="inBrand">Брэнд</label>
+                            <label for="inBrand">{$aPhrases['Brand name']}</label>
                             <input id="inBrand" type="text" name="brandname" value="" />
                             <input id="inBrandId" type="hidden" name="brand" value="" />
                         </div>
                         <div class="input">
-                            <label for="inColor">Цвет</label>
+                            <label for="inColor">{$aPhrases['Color']}</label>
                             <input id="inColor" type="text" name="color" value="" />
                         </div>
                         <div class="input">
-                            <label for="inArticle">Артикул</label>
+                            <label for="inArticle">{$aPhrases['Article']}</label>
                             <input id="inArticle" type="text" name="article" value="" />
                         </div>
                         <div class="input">
-                            <label for="inWeight">Вес, кг</label>
+                            <label for="inWeight">{$aPhrases['WeightKg']}</label>
                             <input id="inWeight" type="text" name="weight" value="" />
                         </div>
                         <div class="input">
-                            <label for="inBox">Коробка</label>
+                            <label for="inBox">{$aPhrases['Box']}</label>
                             <div class="select">
                                 <select id="inBox" name="box">
-                                    <option value="0">не выбрана</option>{html_options options=$aBoxes}
+                                    <option value="0"></option>{html_options options=$aBoxes}
                                 </select>
                             </div>
                         </div>
                         <div class="input">
-                            <label for="inPrice">Цена, {$aPurchase.sign}</label>
+                            <label for="inPrice">{$aPhrases['Price']}, {$aPurchase.sign}</label>
                             <input id="inPrice" type="text" name="price" value="" />
                         </div>
                     </div>
-                    <button class="btn btn-green basket-new-good-save" ><span>+</span>&nbsp;Сохранить товар</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="green-link small new-good-cancel">Отмена</a>
+                    <button class="btn btn-green basket-new-good-save" ><span>+</span>&nbsp;{$aPhrases['Save item']}</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="green-link small new-good-cancel">{$aPhrases['Cancel']}</a>
                 </form>
                 <iframe name="postiframe" id="postiframe" style="display: none"></iframe>
             </div>
