@@ -282,6 +282,7 @@ switch ($oReq->getAction())
                 'status' => 'client',
                 'register_type' => 'common',
                 'cdate' => Database::date(),
+                'is_active' => 0
             );
 	    	$oUserReg->aData['pass'] = md5($oUserReg->aData['pass']);
 

@@ -564,8 +564,15 @@ $(function() {
     $('.login-init').click(function(e){
         e.preventDefault();
         showOverlay();
-
-        $('#login-init').tmpl().appendTo('.overlay-content');
+        
+        if ($(this).hasClass('admin-login')) {
+            var tmpl = $('#login-init').tmpl();
+            tmpl.find('.overlay-buttons').hide();
+            tmpl.find('.or-short').hide();
+            tmpl.appendTo('.overlay-content');
+        } else {
+            $('#login-init').tmpl().appendTo('.overlay-content');
+        }
 
         $('#login').submit(function(e) {
             e.preventDefault();

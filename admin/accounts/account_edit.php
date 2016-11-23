@@ -94,6 +94,7 @@ switch($oReq->getAction())
             $oAccount->aData = $oReq->getArray('aAccount');
             $oAccount->aData['pass'] = md5($oAccount->aData['pass']);
             $oAccount->aData['cdate'] = Database::date();
+            $oAccount->aData['is_active'] = 1;
 
             if ($oAccount->isUniqueEmail($iAccountId))
             {

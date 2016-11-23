@@ -137,6 +137,7 @@ switch($oReq->getAction())
                     }
                 } else $aErrors[] = 'Пользователь с таким email уже зарегистрирован';
             } else {
+                $oAccount->aData['is_active'] = 1;
                 $oAccount->aData['pass'] = md5($oAccount->aData['pass']);
                 $oAccount->aData['cdate'] = Database::date();
                 $oAccount->aData['timezone'] =  ''; // заполнять таймзон надо

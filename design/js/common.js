@@ -51,7 +51,7 @@ $(function() {
             var mdegree = mins * 6;
             var mrotate = "rotate(" + mdegree + "deg)";
             $min.css({"-moz-transform" : mrotate, "-webkit-transform" : mrotate});
-            $time.html(date.format('hh:mm'));
+            $time.html(date.format('HH:mm'));
         }, 1000);
     });
 
