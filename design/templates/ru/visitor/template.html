@@ -209,24 +209,35 @@
 
         <div class="col-sm-4 col-md-4 col-lg-4 personal-links text-right">
             <div class="icon-links">
-                <a href="/{$aLanguage.alias}/account/meetings/#meetings">
-                    {if $iSlotsNewCnt}
+                {if $aAccount.account_id}
+                    <a href="/{$aLanguage.alias}/account/meetings/#meetings">
+                        {if $iSlotsNewCnt}
                         <span>{$iSlotsNewCnt}</span>&nbsp;<img src="/design/pic/header-eye-green.png">
-                    {else}
+                        {else}
                         <img src="/design/pic/header-eye-gray.png">
-                    {/if}
-                </a>&nbsp;
-                <a href="/{$aLanguage.alias}/account/meetings/#carts">
-                    {if $iPurchasesNewCnt}
+                        {/if}
+                    </a>&nbsp;
+                    <a href="/{$aLanguage.alias}/account/meetings/#carts">
+                        {if $iPurchasesNewCnt}
                         <span>{$iPurchasesNewCnt}</span>&nbsp;<img src="/design/pic/header-bag-green.png">
-                    {else}
+                        {else}
                         <img src="/design/pic/header-bag-gray.png">
-                    {/if}
-                </a>
+                        {/if}
+                    </a>
+                {/if}
             </div>
-            <span class="login-name">{$aAccount.fname}</span>
-            <span class="sep"></span>&nbsp;
-            <a href="/{$aLanguage.alias}/account/logout/" class="profile">{$aPhrases['Logout']}</a>
+
+            {if $aAccount.account_id}
+                <span class="login-name">{$aAccount.fname}</span>
+                <span class="sep"></span>&nbsp;
+                <a href="/{$aLanguage.alias}/account/logout/" class="profile">{$aPhrases['Logout']}</a>
+            {else}
+                <a href="#" class="registration-init">{$aPhrases['Register']}</a>&nbsp;
+                <span class="sep"></span>&nbsp;
+                <a href="#" class="login-init">{$aPhrases['Login']}</a>
+            {/if}
+
+
             <div class="langsel">
                 {foreach from=$aLanguages item=aItem}
                 {if $aItem.alias==$aLanguage.alias}<span class="langval">{$aItem.title_short}</span>{/if}
@@ -321,8 +332,8 @@
                     <label for="inGender">Я</label>
                     <div class="select" >
                         <select id="inGender" name="gender">
-                            <option value="0">Мужчина</option>
-                            <option value="1">Женщина</option>
+                            <option value="0">{$aPhrases['Man']}</option>
+                            <option value="1">{$aPhrases['Female']}</option>
                         </select>
                     </div>
                 </div>
@@ -344,18 +355,18 @@
                     <div class="select">
                         <select id="inMonth" name="bmonth">
                             <option value="00"></option>
-                            <option value="01">январь</option>
-                            <option value="02">февраль</option>
-                            <option value="03">март</option>
-                            <option value="04">апрель</option>
-                            <option value="05">май</option>
-                            <option value="06">июнь</option>
-                            <option value="07">июль</option>
-                            <option value="08">август</option>
-                            <option value="09">сентябрь</option>
-                            <option value="10">октябрь</option>
-                            <option value="11">ноябрь</option>
-                            <option value="12">декабрь</option>
+                            <option value="01">{$aPhrases['January']}</option>
+                            <option value="02">{$aPhrases['February']}</option>
+                            <option value="03">{$aPhrases['March']}</option>
+                            <option value="04">{$aPhrases['April']}</option>
+                            <option value="05">{$aPhrases['May']}</option>
+                            <option value="06">{$aPhrases['June']}</option>
+                            <option value="07">{$aPhrases['July']}</option>
+                            <option value="08">{$aPhrases['August']}</option>
+                            <option value="09">{$aPhrases['September']}</option>
+                            <option value="10">{$aPhrases['October']}</option>
+                            <option value="11">{$aPhrases['November']}</option>
+                            <option value="12">{$aPhrases['December']}</option>
                         </select>
                     </div>
                 </div>
@@ -408,57 +419,63 @@
             <div class="error-block"></div>
             <div class="overlay-submit"><input type="submit" name="sub" value="{$aPhrases['Sign up']}" /></div>
             <div class="overlay-line"></div>
-            <div class="text-center">Вы уже на LiberEye? <a href="#" class="overlay-login-href">Войти</a>
+            <div class="text-center">{$aPhrases['You already LiberEye?']} <a href="#" class="overlay-login-href">{$aPhrases['Login']}</a>
             {literal}
         </form>
 </script>
 <script id="login-init" type="text/x-jquery-tmpl">
+        {/literal}
         <form action="" method="post" id="login">
-            <div class="overlay-title">Войти</div>
+            <div class="overlay-title">{$aPhrases['Login']}</div>
             <br/>
             <div class="overlay-buttons login">
-                <a href="#" class="btn btn-fb btn-overlay" onclick="return fbQuery('login');"><span></span>&nbsp;<i>Войти через Facebook</i></a>
-                <a href="#" class="btn btn-vk btn-green-white btn-overlay" onclick="return vkQuery('login');"><span></span>&nbsp;<i>Войти через Вконтакте</i></a>
-                <a href="#" class="btn btn-g btn-green-white btn-overlay" onclick="return googleQuery('login');"><span></span>&nbsp;<i>Войти через Google</i></a>
+                <a href="#" class="btn btn-fb btn-overlay" onclick="return fbQuery('login');"><span></span>&nbsp;<i>{$aPhrases['Login with Facebook']}</i></a>
+                <a href="#" class="btn btn-vk btn-green-white btn-overlay" onclick="return vkQuery('login');"><span></span>&nbsp;<i>{$aPhrases['Log in with VK']}</i></a>
+                <a href="#" class="btn btn-g btn-green-white btn-overlay" onclick="return googleQuery('login');"><span></span>&nbsp;<i>{$aPhrases['Log in with Google']}</i></a>
             </div>
-            <div class="or or-short"><span>или</span></div>
+            <div class="or or-short"><span>{$aPhrases['or']}</span></div>
             <div class="inputs">
                     <div class="input">
                         <label for="inEmail">Email</label>
                         <input id="inEmail" type="text" name="email" value=""  />
                     </div>
                     <div class="input">
-                        <label for="inPass">Пароль</label>
+                        <label for="inPass">{$aPhrases['Password']}</label>
                         <input id="inPass" type="password" name="password" value=""  />
                     </div>
-                    <a href="#" class="overlay-forget-link">Забыли пароль?</a>
-                    <input type="checkbox" name="remember" value="1" id="inRemember" />&nbsp;<label for="inRemember">Запомнить меня</label>
+                    <a href="#" class="overlay-forget-link">{$aPhrases['Forgot your password?']}</a>
+                    <input type="checkbox" name="remember" value="1" id="inRemember" />&nbsp;<label for="inRemember">{$aPhrases['Remember me']}</label>
             </div>
             <div class="error-block"></div>
-            <div class="overlay-submit"><input type="submit" name="sub" value="Войти" /></div>
+            <div class="overlay-submit"><input type="submit" name="sub" value="{$aPhrases['Login']}" /></div>
             <div class="overlay-line"></div>
-            <div class="text-center">Вы еще не зарегистрированы на LiberEye? <a href="#" class="overlay-login-href">Регистрация</a>
+            <div class="text-center">{$aPhrases['You have not yet registered on LiberEye?']} <a href="#" class="overlay-login-href">{$aPhrases['Register']}</a>
         </form>
+        {literal}
 </script>
 <script id="registration-init" type="text/x-jquery-tmpl">
-        <div class="overlay-title">Зарегистрируйтесь</div>
-        <div>и посетите самые крупные универмаги мира.</div>
+        {/literal}
+            <div class="overlay-title">{$aPhrases['Register!']}</div>
+        <div>{$aPhrases['and visit the largest stores in the world.']}</div>
         <br/>
         <div class="error-block" style="display:none;"></div>
         <div class="overlay-buttons">
-            <a href="#" class="btn btn-fb btn-overlay" onclick="return fbQuery('register');"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Facebook</a>
-            <a href="#" class="btn btn-vk btn-green-white btn-overlay" onclick="return vkQuery('register');"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Вконтакте</a>
-            <a href="#" class="btn btn-g btn-green-white btn-overlay" onclick="return googleQuery('register');"><span></span>&nbsp;Зарегистрироваться<br/>с помощью Google</a>
+            <a href="#" class="btn btn-fb btn-overlay" onclick="return fbQuery('register');"><span></span>&nbsp;{$aPhrases['Sign in with Facebook']}</a>
+            <a href="#" class="btn btn-vk btn-green-white btn-overlay" onclick="return vkQuery('register');"><span></span>&nbsp;{$aPhrases['Sign up using Vkontakte']}</a>
+            <a href="#" class="btn btn-g btn-green-white btn-overlay" onclick="return googleQuery('register');"><span></span>&nbsp;{$aPhrases['Sign up using Google']}</a>
         </div>
         <div class="or or-short"><span>или</span></div>
-        <div class="email-registration-block"><a href="#" id="email-registration">Регистрация через E-mail</a></div>
+        <div class="email-registration-block"><a href="#" id="email-registration">{$aPhrases['Register by E-mail']}</a></div>
         <div class="overlay-line"></div>
-        <div class="text-center">Вы уже на LiberEye? <a href="#" class="overlay-login-href">Войти</a>
+        <div class="text-center">{$aPhrases['You already LiberEye?']} <a href="#" class="overlay-login-href">{$aPhrases['Login']}</a>
+        {literal}
 </script>
 <script id="registration-success" type="text/x-jquery-tmpl">
         <div class="registration-success">
+
             <span>Ура!</span>
             Мы выслали на <strong>${email}</strong> письмо с дальнейшими инструкциями.
+            {$aPhrases['We sent a letter to Email']}
         </div>
 </script>
 {/literal}

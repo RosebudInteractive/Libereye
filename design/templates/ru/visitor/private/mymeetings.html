@@ -4,7 +4,7 @@
         <div class="page-title">{$aAccount.fname}</div>
     </div>
     <div class="col-sm-2 col-md-2 col-lg-3">
-        <a href="/{$aLanguage.alias}/account/profile/" class="personal-area-settings-link">Настройки</a>
+        <a href="/{$aLanguage.alias}/account/profile/" class="personal-area-settings-link">{$aPhrases['Settings']}</a>
     </div>
 </div>
 <div class="row meetings-list-wrapper">
@@ -56,7 +56,7 @@
 </div>
 <div class="row cart-list-wrapper">
     <div class="col-sm-6 col-md-9 col-lg-12">
-        <div class="cart-list-title">Корзины</div>
+        <div class="cart-list-title">{$aPhrases['Baskets']}</div>
         <div class="cart-list">
             {foreach from=$aPurchases item=aPurchase}
             <div class="cart" id="cart{$aPurchase.purchase_id}">
@@ -75,7 +75,7 @@
                     </div>
                     <div class="price">{$aPurchase.price|money_format} {$aPurchase.sign}</div>
                     <div class="buttons">
-                        <a href="/{$aLanguage.alias}/account/cart/{$aPurchase.purchase_id}/" class="btn btn-green btn-booking">Заказать</a>
+                        <a href="/{$aLanguage.alias}/account/cart/{$aPurchase.purchase_id}/" class="btn btn-green btn-booking">{$aPhrases['Order']}</a>
                     </div>
                     <div class="hide-btn">
                         <a class="drop-activate" href="#"></a>

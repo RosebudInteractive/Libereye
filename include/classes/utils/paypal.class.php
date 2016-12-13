@@ -14,28 +14,28 @@ use PayPal\Api\Transaction;
 class Paypal extends DbItem {
 
     /**
-     * Ïîñëåäíèå ñîîáùåíèÿ îá îøèáêàõ
+     * ÐŸÐ¾ÑÐ»ÐµÐ´Ð½Ð¸Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐ°Ñ…
      * @var array
      */
     protected $_errors = array();
 
     /**
-     * Äàííûå API
-     * Îáðàòèòå âíèìàíèå íà òî, ÷òî äëÿ ïåñî÷íèöû íóæíî èñïîëüçîâàòü ñîîòâåòñòâóþùèå äàííûå
+     * Ð”Ð°Ð½Ð½Ñ‹Ðµ API
+     * ÐžÐ±Ñ€Ð°Ñ‚Ð¸Ñ‚Ðµ Ð²Ð½Ð¸Ð¼Ð°Ð½Ð¸Ðµ Ð½Ð° Ñ‚Ð¾, Ñ‡Ñ‚Ð¾ Ð´Ð»Ñ Ð¿ÐµÑÐ¾Ñ‡Ð½Ð¸Ñ†Ñ‹ Ð½ÑƒÐ¶Ð½Ð¾ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ ÑÐ¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ
      * @var array
      */
     protected $_credentials = array();
 
     /**
-     * Óêàçûâàåì, êóäà áóäåò îòïðàâëÿòüñÿ çàïðîñ
-     * Ðåàëüíûå óñëîâèÿ - https://api-3t.paypal.com/nvp
-     * Ïåñî÷íèöà - https://api-3t.sandbox.paypal.com/nvp
+     * Ð£ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼, ÐºÑƒÐ´Ð° Ð±ÑƒÐ´ÐµÑ‚ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÑÑ‚ÑŒÑÑ Ð·Ð°Ð¿Ñ€Ð¾Ñ
+     * Ð ÐµÐ°Ð»ÑŒÐ½Ñ‹Ðµ ÑƒÑÐ»Ð¾Ð²Ð¸Ñ - https://api-3t.paypal.com/nvp
+     * ÐŸÐµÑÐ¾Ñ‡Ð½Ð¸Ñ†Ð° - https://api-3t.sandbox.paypal.com/nvp
      * @var string
      */
     protected $_endPoint = 'https://api-3t.sandbox.paypal.com/nvp';
 
     /**
-     * Âåðñèÿ API
+     * Ð’ÐµÑ€ÑÐ¸Ñ API
      * @var string
      */
     protected $_version = '74.0';
@@ -58,35 +58,35 @@ class Paypal extends DbItem {
 
 
     /**
-     * Ñôîðìèðîâûâàåì çàïðîñ
+     * Ð¡Ñ„Ð¾Ñ€Ð¼Ð¸Ñ€Ð¾Ð²Ñ‹Ð²Ð°ÐµÐ¼ Ð·Ð°Ð¿Ñ€Ð¾Ñ
      *
-     * @param string $method Äàííûå î âûçûâàåìîì ìåòîäå ïåðåâîäà
-     * @param array $params Äîïîëíèòåëüíûå ïàðàìåòðû
+     * @param string $method Ð”Ð°Ð½Ð½Ñ‹Ðµ Ð¾ Ð²Ñ‹Ð·Ñ‹Ð²Ð°ÐµÐ¼Ð¾Ð¼ Ð¼ÐµÑ‚Ð¾Ð´Ðµ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´Ð°
+     * @param array $params Ð”Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ñ‹
      * @return array / boolean Response array / boolean false on failure
      */
     public function request($method,$params = array()) {
         $this -> _errors = array();
-        if( empty($method) ) { // Ïðîâåðÿåì, óêàçàí ëè ñïîñîá ïëàòåæà
-            $this -> _errors = array('Íå óêàçàí ìåòîä ïåðåâîäà ñðåäñòâ');
+        if( empty($method) ) { // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼, ÑƒÐºÐ°Ð·Ð°Ð½ Ð»Ð¸ ÑÐ¿Ð¾ÑÐ¾Ð± Ð¿Ð»Ð°Ñ‚ÐµÐ¶Ð°
+            $this -> _errors = array('ÐÐµ ÑƒÐºÐ°Ð·Ð°Ð½ Ð¼ÐµÑ‚Ð¾Ð´ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´Ð° ÑÑ€ÐµÐ´ÑÑ‚Ð²');
             return false;
         }
 
-        // Ïàðàìåòðû íàøåãî çàïðîñà
+        // ÐŸÐ°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ñ‹ Ð½Ð°ÑˆÐµÐ³Ð¾ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°
         $requestParams = array(
                 'METHOD' => $method,
                 'VERSION' => $this -> _version
             ) + $this -> _credentials;
 
-        // Ñôîðìèðîâûâàåì äàííûå äëÿ NVP
+        // Ð¡Ñ„Ð¾Ñ€Ð¼Ð¸Ñ€Ð¾Ð²Ñ‹Ð²Ð°ÐµÐ¼ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð´Ð»Ñ NVP
         $request = http_build_query($requestParams + $params);
 
-        // Íàñòðàèâàåì cURL
+        // ÐÐ°ÑÑ‚Ñ€Ð°Ð¸Ð²Ð°ÐµÐ¼ cURL
         $curlOptions = array (
             CURLOPT_URL => $this -> _endPoint,
             CURLOPT_VERBOSE => 1,
             //CURLOPT_SSL_VERIFYPEER => true,
             //CURLOPT_SSL_VERIFYHOST => 2,
-            //CURLOPT_CAINFO => dirname(__FILE__) . '/cacert.pem', // Ôàéë ñåðòèôèêàòà
+            //CURLOPT_CAINFO => dirname(__FILE__) . '/cacert.pem', // Ð¤Ð°Ð¹Ð» ÑÐµÑ€Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð°
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_POST => 1,
             CURLOPT_POSTFIELDS => $request
@@ -96,7 +96,7 @@ class Paypal extends DbItem {
         $ch = curl_init();
         curl_setopt_array($ch,$curlOptions);
 
-        // Îòïðàâëÿåì íàø çàïðîñ, $response áóäåò ñîäåðæàòü îòâåò îò API
+        // ÐžÑ‚Ð¿Ñ€Ð°Ð²Ð»ÑÐµÐ¼ Ð½Ð°Ñˆ Ð·Ð°Ð¿Ñ€Ð¾Ñ, $response Ð±ÑƒÐ´ÐµÑ‚ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ñ‚ÑŒ Ð¾Ñ‚Ð²ÐµÑ‚ Ð¾Ñ‚ API
         $response = curl_exec($ch);
 
         $this->aData = array(
@@ -111,7 +111,7 @@ class Paypal extends DbItem {
         );
         $this->insert(array('purchase_id', 'account_id'));
 
-        // Ïðîâåðÿåì, íåòó ëè îøèáîê â èíèöèàëèçàöèè cURL
+        // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼, Ð½ÐµÑ‚Ñƒ Ð»Ð¸ Ð¾ÑˆÐ¸Ð±Ð¾Ðº Ð² Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ð¸ cURL
         if (curl_errno($ch)) {
             $this -> _errors[] = curl_error($ch);
             curl_close($ch);
@@ -119,7 +119,7 @@ class Paypal extends DbItem {
         } else  {
             curl_close($ch);
             $responseArray = array();
-            parse_str($response,$responseArray); // Ðàçáèâàåì äàííûå, ïîëó÷åííûå îò NVP â ìàññèâ
+            parse_str($response,$responseArray); // Ð Ð°Ð·Ð±Ð¸Ð²Ð°ÐµÐ¼ Ð´Ð°Ð½Ð½Ñ‹Ðµ, Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð½Ñ‹Ðµ Ð¾Ñ‚ NVP Ð² Ð¼Ð°ÑÑÐ¸Ð²
             return $responseArray;
         }
     }
@@ -190,7 +190,7 @@ class Paypal extends DbItem {
             ->setQuantity(1)
            // ->setTax(0)
             ->setPrice($aPurchase['amount']);
-        /*$item1->setName('¹'.$aPurchase['purchase_id'])
+        /*$item1->setName('â„–'.$aPurchase['purchase_id'])
             ->setDescription('')
             ->setCurrency($aPurchase['currency'])
             ->setQuantity(1)

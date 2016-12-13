@@ -12,7 +12,7 @@ $(function(){
 <div class="container content">
     <div class="row" style="margin-top: 82px;">
         <div class="col-sm-6 col-md-9 col-lg-12">
-            <div class="page-title">Настройки</div>
+            <div class="page-title">{$aPhrases['Settings']}</div>
         </div>
 
         {if $aErrors}<div class="error-block" style="margin-left: 30px;">{foreach from=$aErrors item=sError}{$sError}<br>{/foreach}</div>{/if}
@@ -24,40 +24,40 @@ $(function(){
                 <div class="inputs">
                     <div style="width: 48%;float: left;margin-right: 2%;">
                     <div class="input">
-                        <label for="inPhoto">Фото {if $aUserReg.image}<img src="/images/account/{$aUserReg.image}" height="26" /> {/if}</label>
+                        <label for="inPhoto">{$aPhrases['Photo']} {if $aUserReg.image}<img src="/images/account/{$aUserReg.image}" height="26" /> {/if}</label>
                         <input type="file" name="photo" id="inPhoto" style="width: 81%;" />
                     </div>
                     </div>
                     <div style="width: 48%;float: left;margin-left: 2%;">
                     <div class="input">
-                        <label for="inEmail">Почта</label>
+                        <label for="inEmail">{$aPhrases['Email']}</label>
                         {if $aAccount.status=='seller'}{$aAccount.email}{else}<input id="inEmail" type="text" name="aUser[email]" value="{$aUserReg.email}" style="width: 81%;" />{/if}
                     </div>
                     </div>
                     <div style="clear: both"></div>
                     <div style="width: 48%;float: left;margin-right: 2%;">
                         <div class="input">
-                            <label for="inName">Имя</label>
+                            <label for="inName">{$aPhrases['Name']}</label>
                             <input id="inName" type="text" name="aUser[fname]" value="{$aUserReg.fname}" style="width: 81%;" />
                         </div>
                     </div>
                     <div style="width: 48%;float: left;margin-left: 2%;">
                         <div class="input">
-                            <label for="inSex">Я</label>
+                            <label for="inSex">{$aPhrases['I']}</label>
                             <div class="select" style="width: 81%;">
                                 <select id="inSex" name="aUser[gender]">
-                                    <option value="0" {if $aUserReg.gender==0}selected{/if}>Мужчина</option>
-                                    <option value="1" {if $aUserReg.gender==1}selected{/if}>Женщина</option>
+                                    <option value="0" {if $aUserReg.gender==0}selected{/if}>{$aPhrases['Man']}</option>
+                                    <option value="1" {if $aUserReg.gender==1}selected{/if}>{$aPhrases['Female']}</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div style="clear: both"></div>
-                    <h2>Дата рождения</h2>
+                    <h2>{$aPhrases['Date of Birth']}</h2>
                     <div style="white-space: nowrap">
                         <div class="inputs-bday">
                             <div class="input">
-                                <label for="inName">Месяц</label>
+                                <label for="inName">{$aPhrases['Month']}</label>
                                 <div class="select">
                                     <select id="inMonth" name="bmonth" name="bmonth">
                                         <option value="0"></option>
@@ -68,7 +68,7 @@ $(function(){
                         </div>
                         <div class="inputs-bday">
                             <div class="input">
-                                <label for="inDay">День</label>
+                                <label for="inDay">{$aPhrases['Day']}</label>
                                 <div class="select">
                                     <select id="inDay" name="bday">
                                         <option value="00"></option>
@@ -90,31 +90,31 @@ $(function(){
                         </div>
                     </div>
                     <div style="clear: both; margin-bottom: 65px;"></div>
-                    <h2>Пароль</h2>
+                    <h2>{$aPhrases['Password']}</h2>
                     <div style="white-space: nowrap">
                             <div style="width: 48%;float: left;margin-right: 2%;">
                                 <div class="input">
-                                    <label for="inName">Пароль</label>
+                                    <label for="inName">{$aPhrases['Password']}</label>
                                     <input id="inName" type="password" name="pass" value="" style="width: 81%;" />
                                 </div>
                             </div>
                             <div style="width: 48%;float: left;margin-left: 2%;">
                                 <div class="input">
-                                    <label for="inSex">Еще раз</label>
+                                    <label for="inSex">{$aPhrases['Again']}</label>
                                     <input id="inName" type="password" name="pass_confirm" value="" style="width: 81%;" />
                                 </div>
                             </div>
                     </div>
 
+                    <button class="btn btn-green-white" type="button" onclick="$('#form-act').val('pass');$('#profile-form').submit();" style="margin-bottom: 40px;width: 210px">{$aPhrases['Save password']}</button>
 
 
-                    <button class="btn btn-green-white" type="button" onclick="$('#form-act').val('pass');$('#profile-form').submit();" style="margin-bottom: 40px;width: 210px">Сохранить пароль</button>
 
-                    <h2>Адрес доставки</h2>
+                    <h2>{$aPhrases['Delivery address']}</h2>
                     <div>
                         <div class="cols-1-2">
                             <div class="input">
-                                <label for="inCity">Город</label>
+                                <label for="inCity">{$aPhrases['City']}</label>
                                 <!--<div class="select">-->
                                     <input id="inCity" name="aUser[city]" value="{$aUserReg.city}">
                                     <!--<select id="inCity" name="aUser[city]" value="{$aUserReg.city}" >
@@ -130,7 +130,7 @@ $(function(){
                         </div>
                         <div class="cols-1-2">
                             <div class="input">
-                                <label for="inCountry">Страна</label>
+                                <label for="inCountry">{$aPhrases['Country']}</label>
                                 <div class="select">
                                     <select id="inCountry" name="aUser[country_id]">
                                         <option value="0"></option>
@@ -161,31 +161,31 @@ $(function(){
                     <div>
                         <div class="cols-1-2">
                             <div class="input">
-                                <label for="inStreet">Улица</label>
+                                <label for="inStreet">{$aPhrases['Street']}</label>
                                 <input id="inStreet" type="text" name="aUser[street]" value="{$aUserReg.street}"  />
                             </div>
                         </div>
                         <div class="cols-2">
                             <div class="input">
-                                <label for="inBuilding">Дом</label>
+                                <label for="inBuilding">{$aPhrases['House']}</label>
                                 <input id="inBuilding" type="text" name="aUser[building]" value="{$aUserReg.building}"  />
                             </div>
                         </div>
                         <div class="cols-2">
                             <div class="input">
-                                <label for="inBuildingPart">Корпус</label>
+                                <label for="inBuildingPart">{$aPhrases['Housing']}</label>
                                 <input id="inBuildingPart" type="text" name="aUser[housing]" value="{$aUserReg.housing}"  />
                             </div>
                         </div>
                         <div class="cols-2">
                             <div class="input">
-                                <label for="inFlat">Квартира</label>
+                                <label for="inFlat">{$aPhrases['Apartment']}</label>
                                 <input id="inFlat" type="text"  name="aUser[apartment]" value="{$aUserReg.apartment}"  />
                             </div>
                         </div>
                         <div class="cols-2">
                             <div class="input">
-                                <label for="inPhone">Телефон</label>
+                                <label for="inPhone">{$aPhrases['Phone']}</label>
                                 <input id="inPhone" type="text"  name="aUser[phone]" value="{$aUserReg.phone}"  />
                             </div>
                         </div>
@@ -194,7 +194,7 @@ $(function(){
             </div>
             <div class="col-sm-6 col-md-9 col-lg-3">
                 <div id="slider4" style="position: static;">
-                    <button type="submit" class="btn btn-green">Сохранить</button>
+                    <button type="submit" class="btn btn-green">{$aPhrases['Save']}</button>
                     <a href="/{$aLanguage.alias}/account/meetings/" class="cancel-link">{$aPhrases['Cancel']}</a>
                 </div>
             </div>
