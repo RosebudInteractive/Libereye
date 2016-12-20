@@ -58,7 +58,7 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                                 "subtype": "vertical"
                             },
                             "options": [
-                                {
+                                /*{
                                     "id": "tab1",
                                     "value": "Русский"
                                 },
@@ -69,12 +69,12 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                                 {
                                     "id": "tab3",
                                     "value": "Français"
-                                }
+                                }*/
                             ]
                         },
                         {
                             "cells": [
-                                {
+                                /*{
                                     "id": "tab1",
                                     "rows": [
                                         {
@@ -166,7 +166,7 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
                                         }
                                     ],
                                     "show": false
-                                }
+                                }*/
                             ]
                         },
                         {
@@ -203,6 +203,41 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
 
             ]
         }
+    }
+
+    for(var i in LANGUAGES) {
+        form.body.elements[0].rows[2].options.push({
+            "id": "tab"+LANGUAGES[i].language_id,
+            "value": LANGUAGES[i].title
+        });
+        form.body.elements[0].rows[3].cells.push({
+            "id": "tab"+LANGUAGES[i].language_id,
+            "rows": [
+                {
+                    "view": "text",
+                    "label": "Название",
+                    "name": "aShop[title]["+LANGUAGES[i].language_id+"]",
+                    "required": true,
+                    "invalidMessage": "Поле обязательное",
+                    "id": "title"+LANGUAGES[i].language_id
+                },
+                {
+                    "view": "textarea",
+                    "label": "Описание",
+                    "height": 100,
+                    "name": "aShop[description]["+LANGUAGES[i].language_id+"]",
+                    "id": "description"+LANGUAGES[i].language_id
+                },
+                {
+                    "view": "textarea",
+                    "label": "Описание брендов",
+                    "height": 100,
+                    "name": "aShop[brand_desc]["+LANGUAGES[i].language_id+"]",
+                    "id": "brand_desc"+LANGUAGES[i].language_id
+                }
+            ],
+            "show": LANGUAGES[i].is_default ? true : false
+        });
     }
 
 	return {
