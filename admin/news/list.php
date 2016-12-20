@@ -116,6 +116,8 @@ switch($oReq->getAction())
         echo '{ "id":"'.$iNewsId.'", "error":'.json_encode($aErrors).'}';
         exit;
         break;
+
+
     case 'destroy':
         $iNewsId = $oReq->getInt('id');
         if (!$oNews->delete($iNewsId)){

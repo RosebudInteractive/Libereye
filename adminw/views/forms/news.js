@@ -9,6 +9,7 @@ define(['helpers/record', 'helpers/grid'], function(record, grid){
         $$('news-form').clearValidation();
         $$('doclist').clearAll();
         $$('image').setValues({src:item.image && item.image!=""?('/images/news/'+item.image):null});
+        $$('news-form').setValues({id:item.news_id}, true);
 
         var translated = ['title', 'annotation', 'full_news'];
         for(var i in LANGUAGES) {
