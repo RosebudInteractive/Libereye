@@ -322,7 +322,7 @@
         {/literal}
         <form action="" id="registration" method="post">
             <div>{$aPhrases['Sign up using']} <a href="#" onclick="return fbQuery('register');">Facebook</a>, <a href="#" onclick="return vkQuery('register');">VK</a> {$aPhrases['or']} <a href="#" onclick="return googleQuery('register');">Google</a>.</div>
-            <div class="or"><span>или</span></div>
+            <div class="or"><span>{$aPhrases['or']}</span></div>
             <div class="inputs">
                 <div class="input">
                     <label for="inName">{$aPhrases['Name']}</label>
@@ -464,7 +464,7 @@
             <a href="#" class="btn btn-vk btn-green-white btn-overlay" onclick="return vkQuery('register');"><span></span>&nbsp;{$aPhrases['Sign up using Vkontakte']}</a>
             <a href="#" class="btn btn-g btn-green-white btn-overlay" onclick="return googleQuery('register');"><span></span>&nbsp;{$aPhrases['Sign up using Google']}</a>
         </div>
-        <div class="or or-short"><span>или</span></div>
+        <div class="or or-short"><span>{$aPhrases['or']}</span></div>
         <div class="email-registration-block"><a href="#" id="email-registration">{$aPhrases['Register by E-mail']}</a></div>
         <div class="overlay-line"></div>
         <div class="text-center">{$aPhrases['You already LiberEye?']} <a href="#" class="overlay-login-href">{$aPhrases['Login']}</a>
@@ -472,9 +472,6 @@
 </script>
 <script id="registration-success" type="text/x-jquery-tmpl">
         <div class="registration-success">
-
-            <span>Ура!</span>
-            Мы выслали на <strong>${email}</strong> письмо с дальнейшими инструкциями.
             {/literal}
             {$aPhrases['We sent a letter to Email']}
              {literal}
