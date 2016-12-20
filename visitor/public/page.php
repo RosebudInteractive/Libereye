@@ -45,10 +45,11 @@ switch ($sPage)
         switch ($oReq->getAction())
         {
             case 'getNews':
-                $iPage = $oReq->getInt('page');
-                list($aNews,) = $oNews->getList(array(), $iPage, 3, 'cdate desc');
+                $iPage = $oReq->getInt('page', 1);
+                list($aNews, $iNewsCnt) = $oNews->getList(array(), $iPage, 3, 'cdate desc');
                 $oTpl->assign(array(
                     'aNews' 	=> $aNews,
+                    'iNewsCnt' 	=> $iNewsCnt,
                 ));
                 echo $oTpl->fetch('blocks/news.html');
                 exit;
