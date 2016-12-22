@@ -1,6 +1,6 @@
 <?php
 /** ============================================================
- * Страница регистрации новых пользователей
+ * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  *   Area: visitor
  *   Part: private
  *   Sect: cart
@@ -32,7 +32,7 @@ $oProduct2purchase = new Product2purchase();
 $iShopSlotId = $oReq->getInt('id');
 $aPurchase = array();
 
-// доступна только продавцам
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 if ($aAccount['status'] != 'seller') {
     $oReq->forward('/');
 }
@@ -100,7 +100,7 @@ switch ($oReq->getAction())
                 );
                 if ($oProduct2purchase->insert()) {
 
-                    // пересчитываем сумму корзины и стоимость доставки
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     $iSum = $oProduct2purchase->getSum($aPurchase['purchase_id']);
                     $oPurchase->aData = array(
                         'purchase_id' => $aPurchase['purchase_id'],
@@ -128,7 +128,7 @@ switch ($oReq->getAction())
                if (!$oProduct2purchase->update())
                    $aErrors = $oProduct2purchase->getErrors();
 
-                // пересчитываем сумму корзины и стоимость доставки
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 $iSum = $oProduct2purchase->getSum($aPurchase['purchase_id']);
                 $oPurchase->aData = array(
                     'purchase_id' => $aPurchase['purchase_id'],
@@ -156,8 +156,8 @@ switch ($oReq->getAction())
                 $aDeliveryParams = array(
                     'price' => $aPurchase['price'],
                     'box_id' => $iBoxId,
-                    'region_id' => 1, // сделать выбор
-                    'carrier_id' => 1, // сделать выбор
+                    'region_id' => 1, // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+                    'carrier_id' => 1, // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
                     'weight' => $iWeight,
                 );
 
@@ -206,7 +206,7 @@ switch ($oReq->getAction())
                if (!$oProduct2purchase->update())
                    $aErrors = $oProduct2purchase->getErrors();
 
-                // пересчитываем сумму корзины и стоимость доставки
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 $iSum = $oProduct2purchase->getSum($aPurchase['purchase_id']);
                 $oPurchase->aData = array(
                     'purchase_id' => $aPurchase['purchase_id'],
@@ -243,6 +243,7 @@ switch ($oReq->getAction())
         if (!$aProduct['title']) $aErrors[] = Conf::format('Name is required');
         if (!$aPurchase['delivery_manual'] && !$aProduct['box_id']) $aErrors[] = Conf::format('Box is required');
         if (!$aPrice['price']) $aErrors[] = Conf::format('Price is required');
+        if (!$aProduct['brand_id']) unset($aProduct['brand_id']);
 
         if (!$aErrors) {
             if (!$aProduct['box_id']) $aProduct['box_id'] = 'NULL';
@@ -272,7 +273,7 @@ switch ($oReq->getAction())
                     'price_sum' => $aPrice['price'],
                 );
                 if ($oProduct2purchase->insert()) {
-                    // покупка
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     $oPurchase->aData = array(
                         'purchase_id' => $aPurchase['purchase_id'],
                         'currency_id' => $aPrice['currency_id'],
@@ -281,7 +282,7 @@ switch ($oReq->getAction())
                     );
                     $oPurchase->update();
 
-                    // прайс магазина
+                    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     $aPrice['product_id'] = $iProductId;
                     $oPrice->aData = $aPrice;
                     if (!$oPrice->insert())
@@ -327,7 +328,7 @@ $oCountry  	= new Country();
 $aErrors 	= array();
 $aUserReg 	= $aAccount;
 
-// Время со смещением временной зоны на сегодня
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 $sTimezoneOffset = isset($_COOKIE['timezone'])?$_COOKIE['timezone']:0;
 $nTime = time();
 $nUtcTime = $nTime + date("Z", $nTime);
